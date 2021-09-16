@@ -1,50 +1,63 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/car/car",
+			"path": "pages/login/Login",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/car/Car",
 			"style": {
 				"navigationBarTitleText": "租车"
 			}
+		}, {
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+
+		}, {
+			"path": "pages/center/index",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	    ,{
-            "path" : "pages/order/order",
+            "path" : "pages/car/CarDetail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "订单"
-            }
-            
-        }
-        ,{
-            "path" : "pages/center/center",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "个人中心",
+                "navigationBarTitleText": "车辆详情",
                 "enablePullDownRefresh": false
             }
             
         }
     ],
-	"tabBar":{
+	"tabBar": {
 		"color": "#7A7E83",
 		"selectedColor": "#007AFF",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/car/car",
+				"pagePath": "pages/car/Car",
 				"iconPath": "static/img/car.png",
-				"selectedIconPath": "static/img/car.png",
+				"selectedIconPath": "static/img/car_activate.png",
 				"text": "租车"
 			},
 			{
 				"pagePath": "pages/order/order",
 				"iconPath": "static/img/order.png",
-				"selectedIconPath": "static/img/order.png",
+				"selectedIconPath": "static/img/order_activate.png",
 				"text": "订单"
 			},
 			{
-				"pagePath": "pages/center/center",
+				"pagePath": "pages/center/index",
 				"iconPath": "static/img/center.png",
-				"selectedIconPath": "static/img/center.png",
+				"selectedIconPath": "static/img/center_active.png",
 				"text": "个人中心"
 			}
 		]
