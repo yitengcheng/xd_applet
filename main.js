@@ -2,6 +2,7 @@ import App from './App'
 import dictRequest from 'common/dict.js';
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import './static/icon/iconfont-weapp-icon.css';
 
 /**
  * 用于初始化字典，返回Promise实例

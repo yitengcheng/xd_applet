@@ -1,18 +1,6 @@
 <script>
 	export default {
 		onLaunch: () => {
-			uni.getSetting({
-				success: (res) => {
-					if (!res.authSetting.userInfo) {
-						uni.authorize({
-							scope: 'userInfo'
-						});
-					}
-				},
-				fail: (error) => {
-					console.log(error);
-				}
-			});
 			console.log('App Launch')
 		},
 		onShow: function() {
@@ -24,7 +12,9 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	@import './static/icon/iconfont-weapp-icon.css';
+
 	/*每个页面公共css */
 	.content {
 		display: flex;
