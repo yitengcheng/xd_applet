@@ -11,10 +11,10 @@
 		{
 			"path": "pages/car/Car",
 			"style": {
-				"navigationBarTitleText": "租车"
+				"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/order/order",
+			"path": "pages/order/Order",
 			"style": {
 				"navigationBarTitleText": "订单"
 			}
@@ -26,39 +26,48 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/car/CarDetail",
+			"style": {
+				"navigationBarTitleText": "车辆详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/center/PersonalInformation",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/center/Coupons",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/center/AboutUs",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
 		}
 	    ,{
-            "path" : "pages/car/CarDetail",
+            "path" : "pages/car/Map",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "车辆详情",
+                "navigationBarTitleText": "地图",
                 "enablePullDownRefresh": false
             }
             
         }
         ,{
-            "path" : "pages/center/PersonalInformation",
+            "path" : "pages/order/OrderDetail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "个人信息",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/center/Coupons",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "优惠券",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/center/AboutUs",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "关于我们",
+                "navigationBarTitleText": "订单详情",
                 "enablePullDownRefresh": false
             }
             
@@ -76,7 +85,7 @@
 				"text": "租车"
 			},
 			{
-				"pagePath": "pages/order/order",
+				"pagePath": "pages/order/Order",
 				"iconPath": "static/img/order.png",
 				"selectedIconPath": "static/img/order_activate.png",
 				"text": "订单"
@@ -95,14 +104,12 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"condition" : { //模式配置，仅开发期间生效
+	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "", //模式名称
-				"path": "/pages/center/Coupons", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
+		"list": [{
+			"name": "", //模式名称
+			"path": "/pages/center/Coupons", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }

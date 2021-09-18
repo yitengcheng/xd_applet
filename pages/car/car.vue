@@ -1,5 +1,12 @@
 <template>
 	<view>
+		<view class="custom_top" :style="{height: top_height + 40 + 'px'}">
+			<view class="map_Btn" @click="toMap">
+				<text class="map_icon t-icon t-icon-ditu"></text>
+				<text class="shop_name">{{shopName}}</text>
+			</view>
+			<text class="page_title">租车</text>
+		</view>
 		<uni-easyinput v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search"></uni-easyinput>
 		<WaterfallsFlow :wfList='list' @itemTap="itemTap" />
 	</view>
@@ -10,6 +17,14 @@
 	export default {
 		components: {
 			WaterfallsFlow,
+		},
+		onLoad(option) {
+			uni.getSystemInfo({
+				success: (res) => {
+					this.top_height = res.statusBarHeight;
+				}
+			});
+			option !== {} && this.changeShopName(option);
 		},
 		mounted() {
 			this.list = [{
@@ -48,6 +63,8 @@
 			return {
 				list: [],
 				keyword: '',
+				top_height: 0,
+				shopName: '叙利亚租车店'
 			}
 		},
 		methods: {
@@ -55,10 +72,46 @@
 				uni.navigateTo({
 					url: `/pages/car/CarDetail?${e.id}`,
 				})
+			},
+			changeShopName(shop){
+				this.shopName = shop.name;
+			},
+			toMap(){
+				uni.navigateTo({
+					url: '/pages/car/Map',
+				});
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.custom_top {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.map_Btn {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		flex: 1;
+		padding-left: 5px;
+		margin-top: 20px;
+	}
+	.shop_name {
+		flex: 1;
+		font-size: 12px;
+	}
+	.map_icon {
+		width: 24px;
+		height: 24px;
+	}
+	.page_title {
+		flex:1.2;
+		margin-top: 20px;
+		font-size: 13px;
+	}
 </style>
