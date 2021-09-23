@@ -1,19 +1,22 @@
 <template>
 	<view>
 		<view class="custom_top" :style="{height: top_height + 40 + 'px'}">
-			<view class="map_Btn" @click="toMap">
+			<view class="map_Btn" @click="toMap" v-show="!complanyId">
 				<text class="map_icon t-icon t-icon-ditu"></text>
 				<text class="shop_name">{{shopName}}</text>
 			</view>
 			<text class="page_title">租车</text>
 		</view>
-		<uni-easyinput v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search"></uni-easyinput>
+		<uni-easyinput v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search"></uni-easyinput>
+		<uni-data-checkbox :localdata="carTypeList" v-model="carType" @change="changeCarType" />
 		<WaterfallsFlow :wfList='list' @itemTap="itemTap" />
 	</view>
 </template>
 
 <script>
 	import WaterfallsFlow from '../../components/WaterfallsFlow/WaterfallsFlow.vue';
+	import api from '../../api/index.js';
+	import config from '../../common/config.js';
 	export default {
 		components: {
 			WaterfallsFlow,
@@ -24,47 +27,32 @@
 					this.top_height = res.statusBarHeight;
 				}
 			});
+			this.dictInit('car_type').then(res => {
+				this.carTypeList = uni.getStorageSync('car_type');
+			});
 			option !== {} && this.changeShopName(option);
 		},
 		mounted() {
-			this.list = [{
-					nickName: '测试',
-					image: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1743338427,2200622767&fm=26&gp=0.jpg',
-					id: 1
-				},
-				{
-					nickName: '测试',
-					image: 'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-					id: 2
-				},
-				{
-					nickName: '测试',
-					image: 'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg',
-					id: 3
-				},
-				{
-					nickName: '测试',
-					image: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1141259048,554497535&fm=26&gp=0.jpg',
-					id: 4
-				},
-				{
-					nickName: '测试',
-					image: 'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-					id: 5
-				},
-				{
-					nickName: '测试',
-					image: 'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1089874897,1268118658&fm=26&gp=0.jpg',
-					id: 6
-				},
-			];
+			this.getCarList(1, true);
+		},
+		onReachBottom() {
+			// 模拟触底刷新
+			this.getCarList(this.pageNo);
+		},
+		onPullDownRefresh() {
+			this.getCarList(1);
 		},
 		data() {
 			return {
 				list: [],
 				keyword: '',
 				top_height: 0,
-				shopName: '叙利亚租车店'
+				shopName: '叙利亚租车店',
+				complanyId: uni.getStorageSync('complanyId'),
+				pageNo: 1,
+				type: -1,
+				carTypeList: [],
+				carType: '',
 			}
 		},
 		methods: {
@@ -73,13 +61,59 @@
 					url: `/pages/car/CarDetail?${e.id}`,
 				})
 			},
-			changeShopName(shop){
+			changeShopName(shop) {
 				this.shopName = shop.name;
 			},
-			toMap(){
+			toMap() {
 				uni.navigateTo({
 					url: '/pages/car/Map',
 				});
+			},
+			search() {
+				this.getCarList(1);
+			},
+			getCarList(pageNo, init = false) {
+				let pageNum = pageNo || this.pageNo;
+				let type = this.carType === -1 ? undefined : this.carType;
+				api.carList({
+					complanyId: this.complanyId,
+					pageNum,
+					pageSize: 10,
+					keyword: this.keyword,
+					type,
+				}).then(res => {
+					let tmpList = [];
+					res.rows.forEach(o => {
+						let carPhotos = o.carPhotos.split(',');
+						tmpList.push({
+							nickName: o.carBrand,
+							image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
+								'/static/img/car_defalut.png',
+							type: o.type,
+						});
+					});
+					pageNum === 1 ? this.list = tmpList : this.list = this._.concat(this.list, tmpList);
+					pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
+					if (init) {
+						this.carTypeList = uni.getStorageSync('car_type');
+						this.$nextTick(() => {
+							let tmp = [];
+							this.list.forEach(o => {
+								tmp.push(this._.find(this.carTypeList, item => {
+									return item.value === o.type
+								}));
+							});
+							this.carTypeList = this._.concat([{
+								text: '全部',
+								value: -1
+							}], this._.uniqBy(tmp, 'value'));
+						});
+					}
+					uni.stopPullDownRefresh();
+				});
+			},
+			changeCarType(e) {
+				this.getCarList(1);
 			}
 		}
 	}
@@ -92,6 +126,7 @@
 		justify-content: center;
 		align-items: center;
 	}
+
 	.map_Btn {
 		display: flex;
 		flex-direction: row;
@@ -101,16 +136,19 @@
 		padding-left: 5px;
 		margin-top: 20px;
 	}
+
 	.shop_name {
 		flex: 1;
 		font-size: 12px;
 	}
+
 	.map_icon {
 		width: 24px;
 		height: 24px;
 	}
+
 	.page_title {
-		flex:1.2;
+		flex: 1.2;
 		margin-top: 20px;
 		font-size: 13px;
 	}
