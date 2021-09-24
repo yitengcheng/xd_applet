@@ -4,6 +4,9 @@ const car = {
 	carList:(data)=>{
 		return request.globalRequest('/system/car/api/waitcar', 'get', data);
 	},
+	carInfo: (id) => {
+		return request.globalRequest(`/system/car/api/${id}`, 'get');
+	}
 }
 
 

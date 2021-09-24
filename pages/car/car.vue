@@ -30,7 +30,7 @@
 			this.dictInit('car_type').then(res => {
 				this.carTypeList = uni.getStorageSync('car_type');
 			});
-			option !== {} && this.changeShopName(option);
+			(option || {}).shopName && this.changeShopName(option.shopName);
 		},
 		mounted() {
 			this.getCarList(1, true);
@@ -58,7 +58,7 @@
 		methods: {
 			itemTap(e) {
 				uni.navigateTo({
-					url: `/pages/car/CarDetail?${e.id}`,
+					url: `/pages/car/CarDetail?id=${e.id}`,
 				})
 			},
 			changeShopName(shop) {
@@ -66,7 +66,7 @@
 			},
 			toMap() {
 				uni.navigateTo({
-					url: '/pages/car/Map',
+					url: '/pages/car/Map?type=shop',
 				});
 			},
 			search() {
@@ -74,7 +74,7 @@
 			},
 			getCarList(pageNo, init = false) {
 				let pageNum = pageNo || this.pageNo;
-				let type = this.carType === -1 ? undefined : this.carType;
+				let type = this.carType === -1 ? '' : this.carType;
 				api.carList({
 					complanyId: this.complanyId,
 					pageNum,
@@ -90,6 +90,7 @@
 							image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
 								'/static/img/car_defalut.png',
 							type: o.type,
+							id: o.id,
 						});
 					});
 					pageNum === 1 ? this.list = tmpList : this.list = this._.concat(this.list, tmpList);

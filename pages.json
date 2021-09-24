@@ -56,12 +56,9 @@
 		}
 	    ,{
             "path" : "pages/car/Map",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "地图",
-                "enablePullDownRefresh": false
+            "style": {
+            	"navigationStyle": "custom"
             }
-            
         }
         ,{
             "path" : "pages/order/OrderDetail",

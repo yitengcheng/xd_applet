@@ -8,10 +8,11 @@ const headers = {}
 
 request.globalRequest = (url, method, data) => {
 	let header = {}
+	let complanyId = uni.getStorageSync('complanyId');
 
 	//接口公共参数
 	const obj = {
-		complanyIds: uni.getStorageSync('complanyIds'),
+		complanyId: complanyId ? complanyId : '',
 	}
 	let JSONParams = {
 		url: `${config.API_URL}${url}`,
