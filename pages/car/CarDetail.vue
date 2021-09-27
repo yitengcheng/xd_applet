@@ -82,7 +82,6 @@
 			},
 			getCarInfo(id) {
 				api.carInfo(id).then(res => {
-					console.log(res);
 					let {
 						data
 					} = res;
@@ -104,11 +103,11 @@
 						latitude: this.takeAddress,
 						subMchId: this.carInfo.complany.subMchId,
 						returnLatitude: this.returnAddress,
-						wantCarTime: this.dayjs(this.datetimerange[0]),
-						estimateReturnTime: this.dayjs(this.datetimerange[1]),
+						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:SS'),
+						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:SS'),
 						description: this.carInfo.carNum + this.carInfo.carBrand,
-					}).then(res => {
-						if(res.data !== {}){
+					}).then((res = {}) => {
+						if(res.data){
 							uni.navigateTo({
 								url:`/pages/order/OrderDetail?id=${res.data.id}`
 							})

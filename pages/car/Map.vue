@@ -11,6 +11,7 @@
 
 
 <script>
+	import api from '../../api/index.js';
 	export default {
 		data() {
 			return {
@@ -41,7 +42,7 @@
 					this.longitude = res.longitude;
 					this.latitude = res.latitude;
 					this.markers.push({
-						id: 0,
+						id: 'my',
 						latitude: res.latitude,
 						longitude: res.longitude,
 						callout: {
@@ -73,34 +74,41 @@
 				});
 			},
 			getShopData() {
-				this.markersData.forEach((o, index) => {
-					this.markers.push({
-						id: index + 1,
-						latitude: o.coordinates[1],
-						longitude: o.coordinates[0],
-						callout: {
-							content: o.name,
-							display: 'ALWAYS'
-						},
-						iconPath: '/static/img/shop_icon.png',
-						width: 36,
-						height: 36
-					})
+				api.companyList().then(res => {
+					let {data} = res;
+					if (data) {
+						data.forEach((o, index) => {
+							o.latitude && this.markers.push({
+								id: o.id,
+								longitude: o.latitude.split(',')[0],
+								latitude: o.latitude.split(',')[1],
+								callout: {
+									content: o.name,
+									display: 'ALWAYS'
+								},
+								iconPath: '/static/img/shop_icon.png',
+								width: 36,
+								height: 36
+							})
+						});
+					}
 				});
 			},
 			onMarker(e) {
 				let pages = getCurrentPages(); // 当前页面
 				let beforePage = pages[pages.length - 2]; // 前一个页面
+				let obj = this._.find(this.markers, o => { return o.id === e.detail.markerId });
+				obj ? uni.setStorageSync('complanyId', e.detail.markerId) : uni.setStorageSync('complanyId','');
 				uni.navigateBack({
 					success: () => {
 						beforePage.onLoad({
-							shopName: this.markersData[e.detail.markerId - 1]
+							shopName: obj,
 						});
 					}
 				});
 			},
 			addMarker(e) {
-				if(this.type !== 'shop'){
+				if (this.type !== 'shop') {
 					if (this.markers.length >= 2) {
 						this.markers = this._.dropRight(this.markers, this.markers.length - 1);
 					}
@@ -126,8 +134,8 @@
 	.map_box {
 		width: 100%;
 	}
-	
-	.back_icon{
+
+	.back_icon {
 		margin-top: 20px;
 	}
 

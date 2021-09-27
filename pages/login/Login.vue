@@ -9,6 +9,10 @@
 <script>
 	import api from '../../api/index.js';
 	export default {
+		onLoad(option) {
+			option.complanyId ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
+			option.complanyId && uni.setStorageSync('complanyId', option.complanyId);
+		},
 		mounted() {
 			uni.getUserInfo({
 				success: (res) => {
@@ -36,6 +40,7 @@
 							code: res.code
 						}).then(res => {
 							uni.setStorageSync('openid', res.data.openid);
+							uni.setStorageSync('userInfo', res.data.userInfo);
 							uni.switchTab({
 								url: '/pages/car/Car'
 							});

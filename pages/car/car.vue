@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<view class="custom_top" :style="{height: top_height + 40 + 'px'}">
-			<view class="map_Btn" @click="toMap" v-show="!complanyId">
+			<view class="map_Btn" @click="toMap" v-show="appletType === 1">
 				<text class="map_icon t-icon t-icon-ditu"></text>
 				<text class="shop_name">{{shopName}}</text>
 			</view>
-			<text class="page_title">租车</text>
+			<text class="page_title" :style="{textAlign: appletType === 2 ? 'center':''}">租车</text>
 		</view>
 		<uni-easyinput v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search"></uni-easyinput>
 		<uni-data-checkbox :localdata="carTypeList" v-model="carType" @change="changeCarType" />
@@ -30,7 +30,7 @@
 			this.dictInit('car_type').then(res => {
 				this.carTypeList = uni.getStorageSync('car_type');
 			});
-			(option || {}).shopName && this.changeShopName(option.shopName);
+			this.changeShopName(option.shopName);
 		},
 		mounted() {
 			this.getCarList(1, true);
@@ -47,8 +47,8 @@
 				list: [],
 				keyword: '',
 				top_height: 0,
-				shopName: '叙利亚租车店',
-				complanyId: uni.getStorageSync('complanyId'),
+				shopName: uni.getStorageSync('shopName'),
+				appletType: uni.getStorageSync('appletType'),
 				pageNo: 1,
 				type: -1,
 				carTypeList: [],
@@ -62,7 +62,11 @@
 				})
 			},
 			changeShopName(shop) {
-				this.shopName = shop.name;
+				shop ? this.shopName = shop.callout.content :  this.shopName = '';
+				this.$nextTick(() => {
+					uni.setStorageSync('shopName', this.shopName);
+					this.getCarList(1, true);
+				})
 			},
 			toMap() {
 				uni.navigateTo({
@@ -76,39 +80,40 @@
 				let pageNum = pageNo || this.pageNo;
 				let type = this.carType === -1 ? '' : this.carType;
 				api.carList({
-					complanyId: this.complanyId,
 					pageNum,
 					pageSize: 10,
 					keyword: this.keyword,
 					type,
-				}).then(res => {
-					let tmpList = [];
-					res.rows.forEach(o => {
-						let carPhotos = o.carPhotos.split(',');
-						tmpList.push({
-							nickName: o.carBrand,
-							image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
-								'/static/img/car_defalut.png',
-							type: o.type,
-							id: o.id,
-						});
-					});
-					pageNum === 1 ? this.list = tmpList : this.list = this._.concat(this.list, tmpList);
-					pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
-					if (init) {
-						this.carTypeList = uni.getStorageSync('car_type');
-						this.$nextTick(() => {
-							let tmp = [];
-							this.list.forEach(o => {
-								tmp.push(this._.find(this.carTypeList, item => {
-									return item.value === o.type
-								}));
+				}).then((res ={}) => {
+					if(res.rows){
+						let tmpList = [];
+						res.rows.forEach(o => {
+							let carPhotos = o.carPhotos.split(',');
+							tmpList.push({
+								nickName: o.carBrand,
+								image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
+									'/static/img/car_defalut.png',
+								type: o.type,
+								id: o.id,
 							});
-							this.carTypeList = this._.concat([{
-								text: '全部',
-								value: -1
-							}], this._.uniqBy(tmp, 'value'));
 						});
+						pageNum === 1 ? this.list = tmpList : this.list = this._.concat(this.list, tmpList);
+						pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
+						if (init) {
+							this.carTypeList = uni.getStorageSync('car_type');
+							this.$nextTick(() => {
+								let tmp = [];
+								this.list.forEach(o => {
+									tmp.push(this._.find(this.carTypeList, item => {
+										return item.value === o.type
+									}));
+								});
+								this.carTypeList = this._.concat([{
+									text: '全部',
+									value: -1
+								}], this._.uniqBy(tmp, 'value'));
+							});
+						}
 					}
 					uni.stopPullDownRefresh();
 				});
@@ -149,7 +154,7 @@
 	}
 
 	.page_title {
-		flex: 1.2;
+		flex:1.2;
 		margin-top: 20px;
 		font-size: 13px;
 	}

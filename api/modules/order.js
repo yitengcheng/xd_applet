@@ -2,10 +2,10 @@ import request from '../../common/request.js'
 
 const order = {
 	orderInfo: (id) => {
-		return request.globalRequest(`/tool/wxorder/${id}`, 'get');
+		return request.globalRequest(`/tool/wxorder/api/${id}`, 'get');
 	},
 	orderList: (data) => {
-		return request.globalRequest(`/tool/api/wxorder/list`, 'get', data);
+		return request.globalRequest(`/tool/wxorder/api/list`, 'get', data);
 	}
 }
 

@@ -1,10 +1,13 @@
 import request from '../../common/request.js'
 
-const car = {
+const pay = {
 	getPayInfo:(data)=>{
 		return request.globalRequest('/tool/pays/wx/createMiniOrder', 'post', data);
 	},
+	pay: (data) => {
+		return request.globalRequest('/tool/pays/mini/pay', 'post', data)
+	}
 }
 
 
-export default car
+export default pay

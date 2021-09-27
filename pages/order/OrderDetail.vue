@@ -6,34 +6,55 @@
 			</swiper-item>
 		</swiper>
 		<view class="car_info_box">
-			<text>车辆品牌</text>
-			<text>车辆颜色</text>
-			<text>车辆型号</text>
-			<text>车辆价值</text>
-			<text>车牌号</text>
-			<text>荷载人数</text>
-			<text>租金</text>
-			<text>下单时间</text>
-			<text>取车时间</text>
+			<text>车辆品牌:{{info.car.carBrand || '无'}}</text>
+			<text>车辆颜色: {{info.car.color || '无'}}</text>
+			<text>车牌号: {{info.car.carNum || '无'}}</text>
+			<text>荷载人数: {{info.car.maxManned || '未知'}}</text>
+			<text>下单时间: {{dayjs(info.createTime).format('YYYY-MM-DD')}}</text>
+			<text>总价：{{info.totalMoney || '未知'}}</text>
+			<text>优惠券：{{info.coupon || '无'}}</text>
+			<text>应付：{{info.shouldMoney || '未知'}}</text>
 		</view>
+		<button class="pay_btn" type="primary" @click="toPay">{{buttonText}}</button>
 	</view>
 </template>
 
 <script>
 	import api from '../../api/index.js';
+	import config from '../../common/config.js';
 	export default {
 		data() {
 			return {
-				photos: [
-					'https://dss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1743338427,2200622767&fm=26&gp=0.jpg',
-					'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg'
-				],
+				photos: [],
+				info: {},
+				buttonText: '实际付款：￥'
 			};
+		},
+		onLoad(option) {
+			option.id && this.getOrderInfo(option.id);
 		},
 		methods:{
 			getOrderInfo(id){
-				api.orderInfo(id).then(res => {
-					
+				api.orderInfo(id).then((res = {}) => {
+					let { data } = res;
+					if(data){
+						let tmp = data.car.carPhotos.split(',');
+						tmp.forEach(o => {
+							this.photos.push(`${config.IMG_URL}${o}`);
+						});
+						this.info = data;
+						this.buttonText = `实际付款：￥${data.shouldMoney || '未知金额'}`;
+					}
+				});
+			},
+			toPay(){
+				api.pay({
+					orderId: this.info.orderId,
+					couponId: this.info.couponId,
+					subMchId: this.info.complany.subMchId,
+					couponType: '',
+				}).then(res => {
+					console.log(res);
 				});
 			}
 		}
@@ -58,7 +79,12 @@
 		align-items: flex-start;
 		margin: 10px;
 		width: 100%;
-		margin-left: 20px;
+		margin-left: 50px;
 		margin-top: 20px;
+	}
+	
+	.pay_btn {
+		margin-top: 50rpx;
+		width: 60%;
 	}
 </style>

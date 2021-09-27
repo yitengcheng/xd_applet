@@ -11,12 +11,14 @@
 		{
 			"path": "pages/car/Car",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/order/Order",
 			"style": {
-				"navigationBarTitleText": "订单"
+				"navigationBarTitleText": "订单",
+				"enablePullDownRefresh": true
 			}
 
 		}, {
@@ -104,8 +106,8 @@
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [{
-			"name": "", //模式名称
-			"path": "/pages/center/Coupons", //启动页面，必选
+			"name": "订单详情", //模式名称
+			"path": "/pages/order/OrderDetail", //启动页面，必选
 			"query": "" //启动参数，在页面的onLoad函数里面得到
 		}]
 	}
