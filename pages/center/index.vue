@@ -40,6 +40,11 @@
 						path: '/pages/center/Coupons',
 					},
 					{
+						icon: 'icon-shoucangjia',
+						title: '我的收藏',
+						path: '/pages/center/Collection',
+					},
+					{
 						icon: 'icon-guanyuwomen',
 						title: '关于我们',
 						path: '/pages/center/AboutUs',

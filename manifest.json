@@ -63,7 +63,13 @@
             "scope.userLocation" : {
                 "desc" : "你的位置信息将用于小程序位置接口的效果展示"
             }
-        }
+        },
+		"plugins": {
+		    "qyssdk-plugin": {
+		      "version": "1.0.17",
+		      "provider": "wxaf8f505686ddf66a"
+		    }
+		  }
     },
     "mp-alipay" : {
         "usingComponents" : true

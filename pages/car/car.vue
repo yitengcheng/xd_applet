@@ -30,7 +30,7 @@
 			this.dictInit('car_type').then(res => {
 				this.carTypeList = uni.getStorageSync('car_type');
 			});
-			this.changeShopName(option.shopName);
+			this.changeShopName(option.shop);
 		},
 		mounted() {
 			this.getCarList(1, true);
@@ -62,7 +62,8 @@
 				})
 			},
 			changeShopName(shop) {
-				shop ? this.shopName = shop.callout.content :  this.shopName = '';
+				let obj = shop ? JSON.parse(shop) : undefined;
+				obj ? this.shopName = obj.callout.content :  this.shopName = '';
 				this.$nextTick(() => {
 					uni.setStorageSync('shopName', this.shopName);
 					this.getCarList(1, true);

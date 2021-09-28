@@ -4,35 +4,73 @@
 			<view class="card_box_left">
 				<view class="card_title">{{card.title}}</view>
 				<view class="card_expiration">{{card.expirationTime}}到期</view>
-				<view class="card_rule">使用规则></view>
+				<view class="card_rule">{{`满${card.conditions}元可使用`}}</view>
 			</view>
 			<view class="card_box_right">
 				<view class="card_price">￥{{card.preferentialPrice}}</view>
-				<view class="card_use">去使用</view>
+				<button class="card_use" :disabled="card.disabled" @click="toUse(card.id)">去使用</button>
 			</view>
 		</view>
 	</scroll-view>
 </template>
 
 <script>
+	import api from '../../api/index.js';
 	export default {
 		data() {
 			return {
-				cardList: [{
-					title: '测试优惠券',
-					expirationTime: this.dayjs().format('YYYY年MM月DD日'),
-					preferentialPrice: '200',
-				}, {
-					title: '测试优惠券',
-					expirationTime: this.dayjs().format('YYYY年MM月DD日'),
-					preferentialPrice: '20',
-				}, {
-					title: '测试优惠券',
-					expirationTime: this.dayjs().format('YYYY年MM月DD日'),
-					preferentialPrice: '20',
-				}, ]
+				pageNo: 1,
+				cardList: []
 			};
-		}
+		},
+		mounted() {
+			this.getCouponsList();
+		},
+		onReachBottom() {
+			// 模拟触底刷新
+			this.getCouponsList(this.pageNo);
+		},
+		onPullDownRefresh() {
+			this.getCouponsList(1);
+		},
+		methods:{
+			toUse(id){
+				uni.setStorageSync('complanyId', id);
+				let shop = {
+					callout:{
+						content: '优惠券跳转',
+					}
+				}
+				uni.reLaunch({
+					url: `/pages/car/Car?shop=${JSON.stringify(shop)}`
+				});
+			},
+			getCouponsList(pageNo){
+				let pageNum = pageNo || this.pageNo;
+				api.couponsList({
+					pageNum,
+					pageSize: 10,
+					openid: uni.getStorageSync('openid'),
+				}).then(res => {
+					let tmpList = [];
+					if(res.rows){
+						res.rows.forEach((o,index) => {
+							tmpList.push({
+								title: o.title,
+								expirationTime: this.dayjs(o.endTime).format('YYYY年MM月DD日'),
+								preferentialPrice: o.price,
+								conditions: o.strip,
+								disabled: this.dayjs().isAfter(this.dayjs(o.endTime)),
+								id: o.complanyId,
+							});
+						});
+						pageNum === 1 ? this.cardList = tmpList : this.cardList = this._.concat(this.cardList, tmpList);
+						pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
+					}
+					uni.stopPullDownRefresh();
+				});
+			}
+		},
 	}
 </script>
 
@@ -88,5 +126,7 @@
 		color: white;
 		padding: 5px;
 		border-radius: 8px;
+		height: 35px;
+		line-height: 25px;
 	}
 </style>

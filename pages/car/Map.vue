@@ -102,7 +102,7 @@
 				uni.navigateBack({
 					success: () => {
 						beforePage.onLoad({
-							shopName: obj,
+							shop: JSON.stringify(obj),
 						});
 					}
 				});

@@ -46,7 +46,7 @@
 			"path": "pages/center/Coupons",
 			"style": {
 				"navigationBarTitleText": "优惠券",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
 		}, {
@@ -67,6 +67,15 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "订单详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/center/Collection",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的收藏",
                 "enablePullDownRefresh": false
             }
             
