@@ -80,6 +80,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/center/ScanQRcode",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "扫描电子合同",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 		"color": "#7A7E83",

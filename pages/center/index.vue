@@ -45,6 +45,11 @@
 						path: '/pages/center/Collection',
 					},
 					{
+						icon: 'icon-dianzihetongyuedingshu',
+						title: '合同扫码',
+						path: '/pages/center/ScanQRcode',
+					},
+					{
 						icon: 'icon-guanyuwomen',
 						title: '关于我们',
 						path: '/pages/center/AboutUs',

@@ -1,6 +1,6 @@
 <template>
 	<scroll-view>
-		<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate"></uni-datetime-picker>
+		<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间" end-placeholder="结束时间"></uni-datetime-picker>
 		<uni-list>
 			<uni-list-item v-for="(item,index) in data" :title="item.title" :note="item.note" :thumb="item.thumb"
 				thumbSize="lg" :rightText="item.rightText" :clickable="true" @click="onClick(item)" :key="index"></uni-list-item>

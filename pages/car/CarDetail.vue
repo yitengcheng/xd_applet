@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" :enable-flex="true">
 		<swiper class="swiper_box" :indicator-dots='true' :autoplay='true'>
 			<swiper-item v-for="(item, index) in photos" :key="index">
 				<image :src="item" class="swiper_img" mode="aspectFit"></image>
@@ -34,8 +34,12 @@
 				<text>身份证：</text>
 				<uni-easyinput :value="idcard" placeholder="请输入身份证号"></uni-easyinput>
 			</view>
+			<view class="info">
+				<text>优惠券：</text>
+				<uni-data-picker :value="idcard" placeholder="请选择优惠券" :v-model="couponId" :localdata="couponList" @change='changeCoupon'></uni-data-picker>
+			</view>
 			<view class="datePick">
-				<uni-datetime-picker ref="datetime" v-model="datetimerange" type="datetimerange" :start="start"
+				<uni-datetime-picker ref="datetime" :v-model="datetimerange" type="datetimerange" :start="start"
 					start-placeholder="租车时间" end-placeholder="还车时间" @change="changeDate" @close="close" />
 				<text v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
 			</view>
@@ -55,7 +59,6 @@
 				this.fuelNumber = uni.getStorageSync('fuel_number');
 			});
 			(option || {}).id && this.getCarInfo(option.id);
-			(option || {}).address && this.selectAddress(option);
 		},
 		data() {
 			return {
@@ -67,18 +70,43 @@
 				rangeSeparator: '',
 				carInfo: {},
 				takeAddress: '点击选择取车地址',
+				takeLatlon: '',
 				returnAddress: '点击选择还车地址',
+				returnLatlon: '',
 				name: '',
 				idcard: '',
 				phone: '',
+				couponId: '',
+				couponList: [],
 			};
 		},
 		methods: {
 			selectAddress(option){
-				let latitude = option.address.latitude;
-				let longitude = option.address.longitude;
+				let latitude = option.latitude;
+				let longitude = option.longitude;
 				let latlon = this._.ceil(longitude, 5)  + ',' + this._.ceil(latitude, 5);
-				option.type === 'return' ? this.returnAddress = latlon : this.takeAddress = latlon;
+				option.type === 'return' ? this.returnLatlon = latlon : this.takeLatlon = latlon;
+				option.type === 'return' ? this.returnAddress = option.name : this.takeAddress = option.name;
+			},
+			changeCoupon( {detail: {value}}){
+				this.couponId = value;
+			},
+			initCoupon(){
+				api.coupons({
+					openid: uni.getStorageSync('openid'),
+					complanyId: this.carInfo.complanyId,
+				}).then((res = {}) => {
+					let { rows } = res;
+					if(rows){
+						rows.forEach((o, index) => {
+							this.couponList.push({
+								text: `${o.title} 满${o.strip}元可以使用，抵扣${o.price}元`,
+								value: o.id,
+								disable: this.dayjs().isAfter(this.dayjs(o.endTime))
+							})
+						});
+					}
+				});
 			},
 			getCarInfo(id) {
 				api.carInfo(id).then(res => {
@@ -90,6 +118,9 @@
 						this.photos.push(`${config.IMG_URL}${o}`);
 					});
 					this.carInfo = data;
+					this.$nextTick(()=>{
+						this.initCoupon();
+					})
 				});
 			},
 			appointment() {
@@ -97,12 +128,12 @@
 					api.getPayInfo({
 						carId: this.carInfo.id,
 						complanyId: this.carInfo.complanyId,
-						couponId: '',
+						couponId: this.couponId,
 						openid: uni.getStorageSync('openid'),
 						rentCarDays: this.rangeSeparator,
-						latitude: this.takeAddress,
+						latitude: this.takeLatlon,
 						subMchId: this.carInfo.complany.subMchId,
-						returnLatitude: this.returnAddress,
+						returnLatitude: this.returnLatlon,
 						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:SS'),
 						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:SS'),
 						description: this.carInfo.carNum + this.carInfo.carBrand,
@@ -127,9 +158,11 @@
 				}
 			},
 			toMap(type){
-				uni.navigateTo({
-					url: `/pages/car/Map?type=${type}`,
-				});
+				uni.chooseLocation({
+					success: (res) => {
+						this.selectAddress({type, ...res});
+					}
+				})
 			},
 			changeDate(e) {
 				let endDate = this.dayjs(e[1]);

@@ -19,13 +19,6 @@
 				longitude: 0, // 中心经度
 				latitude: 0, // 中心纬度
 				markers: [], // marker点位
-				markersData: [{
-					name: '阿富汗租车店',
-					coordinates: [106.628372, 26.609795],
-				}, {
-					name: '叙利亚租车店',
-					coordinates: [106.625102, 26.6065],
-				}, ],
 				type: '',
 				top_height: 0,
 			}
@@ -61,18 +54,6 @@
 			this.type === 'shop' && this.getShopData();
 		},
 		methods: {
-			backPress() {
-				let pages = getCurrentPages(); // 当前页面
-				let beforePage = pages[pages.length - 2]; // 前一个页面
-				uni.navigateBack({
-					success: () => {
-						beforePage.onLoad({
-							address: this.markers[1],
-							type: this.type,
-						});
-					}
-				});
-			},
 			getShopData() {
 				api.companyList().then(res => {
 					let {data} = res;
