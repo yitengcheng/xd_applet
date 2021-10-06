@@ -15,7 +15,7 @@
 			<text>优惠券：{{info.coupon || '无'}}</text>
 			<text>应付：{{info.shouldMoney/100 || '未知'}}</text>
 		</view>
-		<button class="pay_btn" type="primary" @click="toPay" v-show="info.payStatus === 'NOTPAY'">{{buttonText}}</button>
+		<button class="pay_btn" type="primary" @click="toPay" v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
 	</view>
 </template>
 
