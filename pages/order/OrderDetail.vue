@@ -11,11 +11,11 @@
 			<text>车牌号: {{info.car.carNum || '无'}}</text>
 			<text>荷载人数: {{info.car.maxManned || '未知'}}</text>
 			<text>下单时间: {{dayjs(info.createTime).format('YYYY-MM-DD')}}</text>
-			<text>总价：{{info.totalMoney || '未知'}}</text>
+			<text>总价：{{info.totalMoney/100 || '未知'}}</text>
 			<text>优惠券：{{info.coupon || '无'}}</text>
-			<text>应付：{{info.shouldMoney || '未知'}}</text>
+			<text>应付：{{info.shouldMoney/100 || '未知'}}</text>
 		</view>
-		<button class="pay_btn" type="primary" @click="toPay">{{buttonText}}</button>
+		<button class="pay_btn" type="primary" @click="toPay" v-show="info.payStatus === 'NOTPAY'">{{buttonText}}</button>
 	</view>
 </template>
 
@@ -43,19 +43,54 @@
 							this.photos.push(`${config.IMG_URL}${o}`);
 						});
 						this.info = data;
-						this.buttonText = `实际付款：￥${data.shouldMoney || '未知金额'}`;
+						this.buttonText = `实际付款：￥${data.shouldMoney/100 || '未知金额'}`;
 					}
 				});
 			},
 			toPay(){
-				api.pay({
-					orderId: this.info.orderId,
-					couponId: this.info.couponId,
-					subMchId: this.info.complany.subMchId,
-					couponType: '',
-				}).then(res => {
-					console.log(res);
-				});
+				// #ifdef MP-WEIXIN
+					wx.login({
+						success:({code}) => {
+							if(code){
+								api.pay({
+									orderId: this.info.orderId,
+									couponId: this.info.couponId,
+									subMchId: this.info.complany.subMchId,
+									code,
+									couponType: '',
+								}).then(res => {
+									uni.getProvider({
+										service: 'payment',
+										success: ({provider} = e) => {
+											// #ifdef MP-WEIXIN
+												delete res.data.appId;
+												wx.requestPayment({
+													...res.data,
+													success: (payRes) => {
+														console.log(payRes);
+														uni.showToast({
+															title:'支付成功',
+															icon: 'none',
+															success: () => {
+																uni.switchTab({
+																	url: '/pages/car/Car'
+																})
+															}
+														})
+													},
+													fail: (payErr) => {
+														console.log(payErr)
+													}
+												})
+											// #endif
+										}
+									}) 
+								});
+							}
+						}
+					})
+				// #endif
+				
 			}
 		}
 	}

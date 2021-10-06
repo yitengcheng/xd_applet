@@ -37,13 +37,11 @@ request.globalRequest = (url, method, data) => {
 			}
 		}
 	}).catch(params => {
-		// #ifdef MP-WEIXIN
-		wx.showToast({
+		uni.showToast({
 			title: params.msg || '',
 			icon: 'none',
 			duration: 2000,
 		});
-		// #endif
 	})
 }
 

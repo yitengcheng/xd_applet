@@ -1,4 +1,4 @@
-import en from './en.json'
+import en from './zh-Hans.json'
 import zhHans from './zh-Hans.json'
 import zhHant from './zh-Hant.json'
 export default {

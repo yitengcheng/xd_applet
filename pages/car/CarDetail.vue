@@ -134,13 +134,13 @@
 						latitude: this.takeLatlon,
 						subMchId: this.carInfo.complany.subMchId,
 						returnLatitude: this.returnLatlon,
-						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:SS'),
-						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:SS'),
+						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:ss'),
+						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:ss'),
 						description: this.carInfo.carNum + this.carInfo.carBrand,
 					}).then((res = {}) => {
 						if(res.data){
 							uni.navigateTo({
-								url:`/pages/order/OrderDetail?id=${res.data.id}`
+								url:`/pages/order/OrderDetail?id=${res.data.orderId}`
 							})
 						}else {
 							uni.showToast({
@@ -175,6 +175,7 @@
 						duration: 2000,
 					})
 				} else {
+					this.datetimerange = e;
 					this.rangeSeparator = diffDate;
 				}
 			},

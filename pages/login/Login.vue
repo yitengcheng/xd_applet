@@ -10,8 +10,9 @@
 	import api from '../../api/index.js';
 	export default {
 		onLoad(option) {
-			option.complanyId ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
-			option.complanyId && uni.setStorageSync('complanyId', option.complanyId);
+			let url = option.q ? decodeURIComponent(option.q) : undefined;
+			url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
+			url && uni.setStorageSync('complanyId', url.split('=')[1]);
 		},
 		mounted() {
 			uni.getUserInfo({
