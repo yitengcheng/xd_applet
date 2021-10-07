@@ -62,6 +62,7 @@
 				})
 			},
 			changeShopName(shop) {
+				console.log(shop);
 				let obj = shop ? JSON.parse(shop) : undefined;
 				obj ? this.shopName = obj.callout.content :  this.shopName = '';
 				this.$nextTick(() => {

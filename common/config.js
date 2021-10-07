@@ -3,9 +3,10 @@ let IMG_URL = ""
 //默认路径应与 manifest.json 一致，同时修改
 let DEVELOPMENT_API_URL = "https://xd.qiantur.com/stage-api";
 // let DEVELOPMENT_API_URL = "http://192.168.0.45:8080";
-let PRODUCT_API_URL = "https://xd.qiantur.com/prod-api/";
+// let PRODUCT_API_URL = "https://xd.qiantur.com/prod-api/";
+let PRODUCT_API_URL = "https://xd.qiantur.com/stage-api";
 let DEFAULT_IMG_URL = 'http://116.62.54.239:9000';
-let PRODUCT_IMG_URL = 'https://xd.qiantur.com/';
+let PRODUCT_IMG_URL = 'http://116.62.54.239:9000';
 
 if (process.env.NODE_ENV === 'development') {
 	// #ifdef H5

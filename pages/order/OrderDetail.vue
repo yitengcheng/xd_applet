@@ -49,46 +49,39 @@
 			},
 			toPay(){
 				// #ifdef MP-WEIXIN
-					wx.login({
-						success:({code}) => {
-							if(code){
-								api.pay({
-									orderId: this.info.orderId,
-									couponId: this.info.couponId,
-									subMchId: this.info.complany.subMchId,
-									code,
-									couponType: '',
-								}).then(res => {
-									uni.getProvider({
-										service: 'payment',
-										success: ({provider} = e) => {
-											// #ifdef MP-WEIXIN
-												delete res.data.appId;
-												wx.requestPayment({
-													...res.data,
-													success: (payRes) => {
-														console.log(payRes);
-														uni.showToast({
-															title:'支付成功',
-															icon: 'none',
-															success: () => {
-																uni.switchTab({
-																	url: '/pages/car/Car'
-																})
-															}
-														})
-													},
-													fail: (payErr) => {
-														console.log(payErr)
-													}
-												})
-											// #endif
+					api.pay({
+						orderId: this.info.orderId,
+						couponId: this.info.couponId,
+						subMchId: this.info.complany.subMchId,
+						couponType: '',
+					}).then(res => {
+						uni.getProvider({
+							service: 'payment',
+							success: ({provider} = e) => {
+								// #ifdef MP-WEIXIN
+									delete res.data.appId;
+									wx.requestPayment({
+										...res.data,
+										success: (payRes) => {
+											console.log(payRes);
+											uni.showToast({
+												title:'支付成功',
+												icon: 'none',
+												success: () => {
+													uni.switchTab({
+														url: '/pages/car/Car'
+													})
+												}
+											})
+										},
+										fail: (payErr) => {
+											console.log(payErr)
 										}
-									}) 
-								});
+									})
+								// #endif
 							}
-						}
-					})
+						}) 
+					});
 				// #endif
 				
 			}
