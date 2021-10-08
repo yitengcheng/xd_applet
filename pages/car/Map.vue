@@ -78,8 +78,8 @@
 			onMarker(e) {
 				let pages = getCurrentPages(); // 当前页面
 				let beforePage = pages[pages.length - 2]; // 前一个页面
-				let obj = this._.find(this.markers, o => { return o.id === e.detail.markerId });
-				obj ? uni.setStorageSync('complanyId', e.detail.markerId) : uni.setStorageSync('complanyId','');
+				let obj = e.detail.markerId !== 'my' ? this._.find(this.markers, o => { return o.id === e.detail.markerId }) : undefined;
+				(e.detail.markerId === 'my' || e.detail.markerId === 900000000) ? uni.setStorageSync('complanyId','') : uni.setStorageSync('complanyId', e.detail.markerId);
 				uni.navigateBack({
 					success: () => {
 						beforePage.onLoad({

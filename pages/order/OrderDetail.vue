@@ -15,7 +15,12 @@
 			<text>优惠券：{{info.coupon || '无'}}</text>
 			<text>应付：{{info.shouldMoney/100 || '未知'}}</text>
 		</view>
-		<button class="pay_btn" type="primary" @click="toPay" v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
+		<button class="pay_btn" type="primary" @click="toPay"
+			v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
+		<button class="refund_btn" type="warn" @click="toRefund" v-show="info.payStatus === 'SUCCESS'">退款申请</button>
+		<uni-popup ref="popup" type="dialog">
+		    <uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
@@ -33,11 +38,13 @@
 		onLoad(option) {
 			option.id && this.getOrderInfo(option.id);
 		},
-		methods:{
-			getOrderInfo(id){
+		methods: {
+			getOrderInfo(id) {
 				api.orderInfo(id).then((res = {}) => {
-					let { data } = res;
-					if(data){
+					let {
+						data
+					} = res;
+					if (data) {
 						let tmp = data.car.carPhotos.split(',');
 						tmp.forEach(o => {
 							this.photos.push(`${config.IMG_URL}${o}`);
@@ -47,43 +54,59 @@
 					}
 				});
 			},
-			toPay(){
+			toRefund() {
+				this.$refs.popup.open();
+			},
+			confirm(e){
+				if(e){
+					return uni.showToast({
+						title:'请输入退款缘由',
+						icon: 'none',
+					})
+				}
+				api.refund({
+					orderId: this.info.orderId,
+					remark: e,
+				}).then(res => {
+					console.log(res);
+				});
+			},
+			toPay() {
 				// #ifdef MP-WEIXIN
-					api.pay({
-						orderId: this.info.orderId,
-						couponId: this.info.couponId,
-						subMchId: this.info.complany.subMchId,
-						couponType: '',
-					}).then(res => {
-						uni.getProvider({
-							service: 'payment',
-							success: ({provider} = e) => {
-								// #ifdef MP-WEIXIN
-									delete res.data.appId;
-									wx.requestPayment({
-										...res.data,
-										success: (payRes) => {
-											console.log(payRes);
-											uni.showToast({
-												title:'支付成功',
-												icon: 'none',
-												success: () => {
-													uni.switchTab({
-														url: '/pages/car/Car'
-													})
-												}
+				api.pay({
+					orderId: this.info.orderId,
+					couponId: this.info.couponId,
+					subMchId: this.info.complany.subMchId,
+					openid: uni.getStorageSync('openid'),
+					couponType: '',
+				}).then(res => {
+					uni.getProvider({
+						service: 'payment',
+						success: ({
+							provider
+						} = e) => {
+							delete res.data.appId;
+							wx.requestPayment({
+								...res.data,
+								success: (payRes) => {
+									uni.showToast({
+										title: '支付成功',
+										icon: 'none',
+										success: () => {
+											uni.switchTab({
+												url: '/pages/car/Car'
 											})
-										},
-										fail: (payErr) => {
-											console.log(payErr)
 										}
 									})
-								// #endif
-							}
-						}) 
-					});
+								},
+								fail: (payErr) => {
+									console.log(payErr)
+								}
+							})
+						}
+					})
+				});
 				// #endif
-				
 			}
 		}
 	}
@@ -110,8 +133,13 @@
 		margin-left: 50px;
 		margin-top: 20px;
 	}
-	
+
 	.pay_btn {
+		margin-top: 50rpx;
+		width: 60%;
+	}
+
+	.refund_btn {
 		margin-top: 50rpx;
 		width: 60%;
 	}

@@ -22,7 +22,7 @@
 				<text>还车点：{{returnAddress}}</text>
 				<text class="map_icon t-icon t-icon-ditu"></text>
 			</view>
-			<view class="info">
+			<!-- <view class="info">
 				<text>姓名：</text>
 				<uni-easyinput :value="name" placeholder="请输入姓名"></uni-easyinput>
 			</view>
@@ -33,7 +33,7 @@
 			<view class="info">
 				<text>身份证：</text>
 				<uni-easyinput :value="idcard" placeholder="请输入身份证号"></uni-easyinput>
-			</view>
+			</view> -->
 			<view class="info">
 				<text>优惠券：</text>
 				<uni-data-picker :value="idcard" placeholder="请选择优惠券" :v-model="couponId" :localdata="couponList" @change='changeCoupon'></uni-data-picker>
@@ -58,6 +58,22 @@
 				this.carType = uni.getStorageSync('car_type');
 				this.fuelNumber = uni.getStorageSync('fuel_number');
 			});
+			let user = uni.getStorageSync('userInfo');
+			if(!user){
+				uni.showModal({
+					title: '您尚未绑定个人驾驶信息，请前往个人中心的个人信息页面进行绑定',
+					icon: 'none',
+					success: (e) => {
+						if(e.confirm){
+							uni.navigateTo({
+								url: '../center/PersonalInformation',
+							})
+						}else{
+							uni.navigateBack();
+						}
+					}
+				});
+			}
 			(option || {}).id && this.getCarInfo(option.id);
 		},
 		data() {

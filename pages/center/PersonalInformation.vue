@@ -96,7 +96,8 @@
 						name: 'file',
 						success: (res) => {
 							let result = JSON.parse(res.data);
-							if (result.data.error_code === 282103) {
+							console.log(result)
+							if (result.data.ocr.error_code === 282103) {
 								uni.showToast({
 									title: '请上传正确的驾驶证主页',
 									icon: 'none',
