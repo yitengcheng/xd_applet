@@ -31,6 +31,11 @@
 				this.carTypeList = uni.getStorageSync('car_type');
 			});
 			this.changeShopName(option.shop);
+			uni.$on('refresh',()=>{
+				setTimeout(()=>{
+					this.getCarList(1, true);
+				}, 2000);
+			});
 		},
 		mounted() {
 			this.getCarList(1, true);
@@ -62,7 +67,6 @@
 				})
 			},
 			changeShopName(shop) {
-				console.log(shop);
 				let obj = shop ? JSON.parse(shop) : undefined;
 				obj ? this.shopName = obj.callout.content :  this.shopName = '';
 				this.$nextTick(() => {

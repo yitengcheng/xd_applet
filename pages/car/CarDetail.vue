@@ -59,7 +59,7 @@
 				this.fuelNumber = uni.getStorageSync('fuel_number');
 			});
 			let user = uni.getStorageSync('userInfo');
-			if(!user){
+			if(!user.idcard && !user.phoneNumber){
 				uni.showModal({
 					title: '您尚未绑定个人驾驶信息，请前往个人中心的个人信息页面进行绑定',
 					icon: 'none',
@@ -140,6 +140,18 @@
 				});
 			},
 			appointment() {
+				if(!this.carInfo.complany.subMchId){
+					uni.showModal({
+						title: '此车辆无法进行线上支付，是否继续预约',
+						icon: 'error',
+						success: (e) => {
+							if(e.confirm){
+								
+							}
+						}
+					});
+					return;
+				}
 				if (this.datetimerange.length === 2 && this.rangeSeparator !== '') {
 					api.getPayInfo({
 						carId: this.carInfo.id,

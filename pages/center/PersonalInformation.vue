@@ -6,27 +6,28 @@
 			<uni-file-picker @select="upload" :limit="1" file-mediatype="image" v-model="license"></uni-file-picker>
 		</view>
 		<view class="form_item">
-			<view class="form_item_title">姓名</view>
-			<uni-easyinput placeholder="请输入姓名" v-model="name"></uni-easyinput>
+			<view class="form_item_title">电话号码<space style="color: red;">*</space></view>
+			<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber"></uni-easyinput>
 		</view>
 		<view class="form_item">
-			<view class="form_item_title">电话号码</view>
-			<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber"></uni-easyinput>
+			<view class="form_item_title">驾驶证号<space style="color: red;">*</space></view>
+			<uni-easyinput placeholder="请输入驾驶证号" v-model="idcard"></uni-easyinput>
+		</view>
+		<view class="form_item">
+			<view class="form_item_title">姓名</view>
+			<uni-easyinput placeholder="请输入姓名" v-model="name"></uni-easyinput>
 		</view>
 		<view class="form_item">
 			<view class="form_item_title">性别</view>
 			<uni-data-checkbox :localdata="range" placeholder="请选择性别" v-model="sex"></uni-data-checkbox>
 		</view>
-		<view class="form_item">
-			<view class="form_item_title">驾驶证号</view>
-			<uni-easyinput placeholder="请输入驾驶证号" v-model="idcard"></uni-easyinput>
-		</view>
+		
 		<view class="form_item">
 			<view class="form_item_title">准驾车型</view>
 			<uni-easyinput placeholder="请输入准驾车型" v-model="driverType"></uni-easyinput>
 		</view>
 		<view class="form_item">
-			<view class="form_item_title">有效期</view>
+			<view class="form_item_title">证件有效期</view>
 			<uni-datetime-picker placeholder="请选择驾照有效期" type="dateranger" v-model="invalidCarTime">
 			</uni-datetime-picker>
 		</view>
@@ -96,7 +97,6 @@
 						name: 'file',
 						success: (res) => {
 							let result = JSON.parse(res.data);
-							console.log(result)
 							if (result.data.ocr.error_code === 282103) {
 								uni.showToast({
 									title: '请上传正确的驾驶证主页',
@@ -111,7 +111,7 @@
 							if (words_result) {
 								this.name = words_result.姓名.words;
 								this.sex = this._.find(this.range, o => o.text === words_result.性别.words)
-								.value;
+									.value;
 								this.idcard = words_result.证号.words;
 								this.driverType = words_result.准驾车型.words;
 								this.invalidCarTime = [this.dayjs(words_result.有效起始日期.words).format(
@@ -131,40 +131,16 @@
 					});
 				}
 			},
-			onSumbit() {
-				if (!this.name) {
-					return uni.showToast({
-						title: '请输入姓名',
-						icon: 'none'
-					})
-				}
-				if (!this.sex) {
-					return uni.showToast({
-						title: '请选择性别',
-						icon: 'none'
-					})
-				}
+			onSumbit(e) {
 				if (!this.idcard) {
 					return uni.showToast({
 						title: '请输入驾驶证号',
 						icon: 'none'
 					})
 				}
-				if (!this.driverType) {
-					return uni.showToast({
-						title: '请输入准驾车型',
-						icon: 'none'
-					})
-				}
 				if (!this.phoneNumber) {
 					return uni.showToast({
 						title: '请输入手机号码',
-						icon: 'none'
-					})
-				}
-				if (this.invalidCarTime.length !== 2) {
-					return uni.showToast({
-						title: '请选择证件有效期',
 						icon: 'none'
 					})
 				}
@@ -178,7 +154,7 @@
 					invalidCarTime: this.invalidCarTime.toString(','),
 					openid: uni.getStorageSync('openid'),
 				}).then(res => {
-					if(!res.data){
+					if (!res.data) {
 						api.getUserInfo(uni.getStorageSync('openid')).then(res => {
 							uni.setStorageSync('userInfo', res.data);
 							uni.navigateBack();

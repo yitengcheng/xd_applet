@@ -58,7 +58,7 @@
 				this.$refs.popup.open();
 			},
 			confirm(e){
-				if(e){
+				if(!e){
 					return uni.showToast({
 						title:'请输入退款缘由',
 						icon: 'none',
@@ -68,7 +68,7 @@
 					orderId: this.info.orderId,
 					remark: e,
 				}).then(res => {
-					console.log(res);
+					uni.navigateBack();
 				});
 			},
 			toPay() {
@@ -94,8 +94,11 @@
 										icon: 'none',
 										success: () => {
 											uni.switchTab({
-												url: '/pages/car/Car'
-											})
+												url: '/pages/car/Car',
+												success: (res) => {
+													uni.$emit('refresh');
+												}
+											});
 										}
 									})
 								},

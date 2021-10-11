@@ -2,7 +2,7 @@
 	<view class="content">
 		<image :src="avatar" class="avatarImg"></image>
 		<text>{{name}}</text>
-		<button type="primary" class="loginBtn" @click="login">登录</button>
+		<button type="primary" class="loginBtn" open-type="getPhoneNumber" @getphonenumber="login">授权登录</button>
 	</view>
 </template>
 
@@ -33,11 +33,13 @@
 			};
 		},
 		methods: {
-			login() {
+			login(e) {
 				uni.login({
 					onlyAuthorize: true,
 					success: (res) => {
 						!!res.code && api.login({
+							encryptedData: e.detail.encryptedData,
+							iv: e.detail.iv,
 							code: res.code
 						}).then(res => {
 							uni.setStorageSync('openid', res.data.openid);
