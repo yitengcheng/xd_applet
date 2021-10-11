@@ -1,9 +1,5 @@
 <template>
-	<view class="content">
-		<image :src="avatar" class="avatarImg"></image>
-		<text>{{name}}</text>
-		<button type="primary" class="loginBtn" open-type="getPhoneNumber" @getphonenumber="login">授权登录</button>
-	</view>
+	
 </template>
 
 <script>
@@ -13,45 +9,19 @@
 			let url = option.q ? decodeURIComponent(option.q) : undefined;
 			url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
 			url && uni.setStorageSync('complanyId', url.split('=')[1]);
-		},
-		mounted() {
-			uni.getUserInfo({
+			uni.login({
+				onlyAuthorize: true,
 				success: (res) => {
-					this.name = res.userInfo.nickName;
-					this.avatar = res.userInfo.avatarUrl;
+					!!res.code && api.login(res.code).then(res => {
+						uni.setStorageSync('openid', res.data.openid);
+						uni.setStorageSync('userInfo', res.data.userInfo);
+						uni.switchTab({
+							url: '/pages/car/Car'
+						});
+					});
 				}
 			});
-			let openid = uni.getStorageSync('openid');
-			!!openid && uni.switchTab({
-				url: '/pages/car/Car'
-			});
 		},
-		data() {
-			return {
-				name: '',
-				avatar: '',
-			};
-		},
-		methods: {
-			login(e) {
-				uni.login({
-					onlyAuthorize: true,
-					success: (res) => {
-						!!res.code && api.login({
-							encryptedData: e.detail.encryptedData,
-							iv: e.detail.iv,
-							code: res.code
-						}).then(res => {
-							uni.setStorageSync('openid', res.data.openid);
-							uni.setStorageSync('userInfo', res.data.userInfo);
-							uni.switchTab({
-								url: '/pages/car/Car'
-							});
-						});
-					}
-				});
-			}
-		}
 	}
 </script>
 

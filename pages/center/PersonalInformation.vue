@@ -7,7 +7,11 @@
 		</view>
 		<view class="form_item">
 			<view class="form_item_title">电话号码<space style="color: red;">*</space></view>
-			<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber"></uni-easyinput>
+			<view class="form_item_phone">
+				<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber" class="form_item_phone_input"></uni-easyinput>
+				<button open-type="getPhoneNumber" @getphonenumber="getUserInfo" size="mini" class="form_item_phone_btn">获取手机号</button>
+			</view>
+			
 		</view>
 		<view class="form_item">
 			<view class="form_item_title">驾驶证号<space style="color: red;">*</space></view>
@@ -21,7 +25,6 @@
 			<view class="form_item_title">性别</view>
 			<uni-data-checkbox :localdata="range" placeholder="请选择性别" v-model="sex"></uni-data-checkbox>
 		</view>
-		
 		<view class="form_item">
 			<view class="form_item_title">准驾车型</view>
 			<uni-easyinput placeholder="请输入准驾车型" v-model="driverType"></uni-easyinput>
@@ -65,6 +68,22 @@
 			};
 		},
 		methods: {
+			getUserInfo(e){
+				uni.login({
+					onlyAuthorize: true,
+					success: (res) => {
+						!!res.code && api.getInfo({
+							encryptedData: e.detail.encryptedData,
+							iv: e.detail.iv,
+							code: res.code
+						}).then(res => {
+							uni.setStorageSync('openid', res.data.openid);
+							uni.setStorageSync('userInfo', res.data.userInfo);
+							this.setInitInfo();
+						});
+					}
+				});
+			},
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
 				if (userInfo) {
@@ -187,5 +206,20 @@
 
 	.sumbit_btn {
 		margin-top: 20rpx;
+	}
+	
+	.form_item_phone {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	
+	.form_item_phone_input {
+		flex: 1;
+		margin-right: 10px;
+	}
+	
+	.form_item_phone_btn {
+		margin: 0;
 	}
 </style>
