@@ -1,5 +1,8 @@
 <template>
-	
+	<view>
+		<text>即将进入优行小滴，页面自动跳转请稍后,若页面无自动跳转，请点击进入页面</text>
+		<button @click="enter" type="primary">跳转</button>
+	</view>
 </template>
 
 <script>
@@ -22,6 +25,22 @@
 				}
 			});
 		},
+		methods:{
+			enter(){
+				uni.login({
+					onlyAuthorize: true,
+					success: (res) => {
+						!!res.code && api.login(res.code).then(res => {
+							uni.setStorageSync('openid', res.data.openid);
+							uni.setStorageSync('userInfo', res.data.userInfo);
+							uni.switchTab({
+								url: '/pages/car/Car'
+							});
+						});
+					}
+				});
+			}
+		}
 	}
 </script>
 

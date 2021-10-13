@@ -13,7 +13,6 @@
 			<text>下单时间: {{dayjs(info.createTime).format('YYYY-MM-DD')}}</text>
 			<text>总价：{{info.totalMoney/100 || '未知'}}</text>
 			<text>优惠券：{{info.coupon || '无'}}</text>
-			<text>应付：{{info.shouldMoney/100 || '未知'}}</text>
 		</view>
 		<button class="pay_btn" type="primary" @click="toPay"
 			v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
@@ -50,7 +49,7 @@
 							this.photos.push(`${config.IMG_URL}${o}`);
 						});
 						this.info = data;
-						this.buttonText = `实际付款：￥${data.shouldMoney/100 || '未知金额'}`;
+						this.buttonText = `实际付款：￥${data.totalMoney/100 || '未知金额'}`;
 					}
 				});
 			},
