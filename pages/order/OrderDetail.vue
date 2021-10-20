@@ -10,9 +10,13 @@
 			<text>车辆颜色: {{info.car.color || '无'}}</text>
 			<text>车牌号: {{info.car.carNum || '无'}}</text>
 			<text>荷载人数: {{info.car.maxManned || '未知'}}</text>
-			<text>下单时间: {{dayjs(info.createTime).format('YYYY-MM-DD')}}</text>
+			<text>取车时间: {{info.time}}</text>
+			<text>租车费：{{info.shouldMoney/100 || '未知'}}</text>
+			<text>平台服务费：{{info.serviceMoney/100 || '未知'}}</text>
+			<text>保险费：{{info.insureMoney/100 || '未知'}}</text>
 			<text>总价：{{info.totalMoney/100 || '未知'}}</text>
-			<text>优惠券：{{info.coupon || '无'}}</text>
+			<text>优惠券：{{info.coupon.title || '无'}}</text>
+			<text>优惠金额：{{info.coupon.price || '无'}}</text>
 		</view>
 		<button class="pay_btn" type="primary" @click="toPay"
 			v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
@@ -45,10 +49,12 @@
 					} = res;
 					if (data) {
 						let tmp = data.car.carPhotos.split(',');
+						let time = this.dayjs().format('YYYY-MM-DD');
 						tmp.forEach(o => {
 							this.photos.push(`${config.IMG_URL}${o}`);
 						});
-						this.info = data;
+						delete data.wantCarTime;
+						this.info = {time, ...data};
 						this.buttonText = `实际付款：￥${data.totalMoney/100 || '未知金额'}`;
 					}
 				});

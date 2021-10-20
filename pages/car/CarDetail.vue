@@ -15,25 +15,13 @@
 			<text>租车单价：{{ carInfo.unitPrice || '无' }} 元/天</text>
 			<text>超过里程收取金额：{{ carInfo.maxMileagePrice || '无' }} 每日</text>
 			<view class="info" @click="toMap">
-				<text>取车点：{{takeAddress}}</text>
+				<text>取车点：{{takeAddress || '点击选择取车地址'}}</text>
 				<text class="map_icon t-icon t-icon-ditu" ></text>
 			</view>
 			<view class="info" @click="toMap('return')">
-				<text>还车点：{{returnAddress}}</text>
+				<text>还车点：{{returnAddress || '点击选择还车地址'}}</text>
 				<text class="map_icon t-icon t-icon-ditu"></text>
 			</view>
-			<!-- <view class="info">
-				<text>姓名：</text>
-				<uni-easyinput :value="name" placeholder="请输入姓名"></uni-easyinput>
-			</view>
-			<view class="info">
-				<text>电话：</text>
-				<uni-easyinput :value="phone" placeholder="请输入手机号"></uni-easyinput>
-			</view>
-			<view class="info">
-				<text>身份证：</text>
-				<uni-easyinput :value="idcard" placeholder="请输入身份证号"></uni-easyinput>
-			</view> -->
 			<view class="info">
 				<text>优惠券：</text>
 				<uni-data-picker :value="idcard" placeholder="请选择优惠券" :v-model="couponId" :localdata="couponList" @change='changeCoupon'></uni-data-picker>
@@ -42,6 +30,7 @@
 				<uni-datetime-picker ref="datetime" :v-model="datetimerange" type="datetimerange" :start="start"
 					start-placeholder="租车时间" end-placeholder="还车时间" @change="changeDate" @close="close" />
 				<text v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
+				<text v-show="rangeMoney">租车金额：{{rangeMoney}}元</text>
 			</view>
 			
 		</view>
@@ -84,10 +73,11 @@
 				datetimerange: [],
 				start: this.dayjs().format('YYYY-MM-DD HH:mm'),
 				rangeSeparator: '',
+				rangeMoney: '',
 				carInfo: {},
-				takeAddress: '点击选择取车地址',
+				takeAddress: '',
 				takeLatlon: '',
-				returnAddress: '点击选择还车地址',
+				returnAddress: '',
 				returnLatlon: '',
 				name: '',
 				idcard: '',
@@ -104,8 +94,8 @@
 				option.type === 'return' ? this.returnLatlon = latlon : this.takeLatlon = latlon;
 				option.type === 'return' ? this.returnAddress = option.name : this.takeAddress = option.name;
 			},
-			changeCoupon( {detail: {value}}){
-				this.couponId = value;
+			changeCoupon(e){
+				this.couponId = e.detail.value[0].value;
 			},
 			initCoupon(){
 				api.coupons({
@@ -118,7 +108,8 @@
 							this.couponList.push({
 								text: `${o.title} 满${o.strip}元可以使用，抵扣${o.price}元`,
 								value: o.id,
-								disable: this.dayjs().isAfter(this.dayjs(o.endTime))
+								disable: this.dayjs().isAfter(this.dayjs(o.endTime)),
+								item: o,
 							})
 						});
 					}
@@ -153,6 +144,14 @@
 					return;
 				}
 				if (this.datetimerange.length === 2 && this.rangeSeparator !== '') {
+					let coupon = this._.find(this.couponList, o => {return o.value == this.couponId});
+					if(typeof coupon !== 'undefined' && this.rangeMoney < ((coupon || {}).item || {}).strip){
+						uni.showToast({
+							title: '租车金额不符合优惠券使用条件',
+							icon: 'none',
+						});
+						return;
+					}
 					api.getPayInfo({
 						carId: this.carInfo.id,
 						complanyId: this.carInfo.complanyId,
@@ -165,6 +164,8 @@
 						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:ss'),
 						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:ss'),
 						description: this.carInfo.carNum + this.carInfo.carBrand,
+						address: this.takeAddress,
+						returnAddress:this.returnAddress,
 					}).then((res = {}) => {
 						if(res.data){
 							uni.navigateTo({
@@ -205,6 +206,7 @@
 				} else {
 					this.datetimerange = e;
 					this.rangeSeparator = diffDate;
+					this.rangeMoney = diffDate * this.carInfo.unitPrice;
 				}
 			},
 		}

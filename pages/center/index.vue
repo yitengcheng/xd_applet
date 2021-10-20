@@ -13,16 +13,32 @@
 
 <script>
 	export default {
-		mounted() {
-			uni.getUserInfo({
-				success: (user) => {
-					let {
-						userInfo
-					} = user;
-					this.name = userInfo.nickName;
-					this.head = userInfo.avatarUrl;
+		onReady() {
+			uni.showModal({
+				title: '温馨提示',
+				content: '亲，授权微信登录后才能正常使用小程序功能',
+				success:(e) =>{
+					if(e.confirm){
+						uni.getUserProfile({
+							desc: '获取你的昵称、头像、地区及性别',
+							lang: 'zh_CN',
+							success: (user) => {
+								let rawData = JSON.parse(user.rawData);
+								this.name = rawData.nickName;
+								this.head = rawData.avatarUrl;
+							},
+							fail: (err) => {
+								console.log(err);
+							},
+						})
+					} else {
+						uni.reLaunch({
+							url: '/pages/car/Car'
+						})
+					}
 				}
 			})
+			
 		},
 		data() {
 			return {
@@ -57,7 +73,7 @@
 			}
 		},
 		methods: {
-			goToPage(url){
+			goToPage(url) {
 				uni.navigateTo({
 					url,
 				})
