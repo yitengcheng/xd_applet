@@ -24,7 +24,7 @@ request.globalRequest = (url, method, data) => {
 		header: header,
 		sslVerify: "false",
 	}
-
+	console.log('request:', JSONParams);
 	return uni.request(JSONParams).then(res => {
 		console.log('response:', res.length > 1 ? JSON.parse(res[1].data) : JSON.parse(res));
 		if (res[1]) {

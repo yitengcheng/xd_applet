@@ -50,11 +50,11 @@
 							let tmpImg = '';
 							let tmpList = [];
 							res.rows.forEach(o => {
-								let carPhotos = o.car.carPhotos.split(',');
+								let carPhotos = ((o.car || {}).carPhotos || '').split(',');
 								tmpImg = carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` : '/static/img/car_defalut.png';
 								tmpList.push({
-									title: o.car.carBrand,
-									note: `${o.car.color},租期：${o.rentCarDays}天`,
+									title: (o.car || {}).carBrand,
+									note: `${(o.car || {}).color},租期：${o.rentCarDays}天`,
 									thumb: tmpImg,
 									rightText: `取车时间：${this.dayjs(o.wantCarTime).format('YYYY-MM-DD')}`,
 									id: o.orderId,

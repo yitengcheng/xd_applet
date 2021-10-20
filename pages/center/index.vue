@@ -8,7 +8,6 @@
 				<text class="btn_title">{{item.title}}</text>
 			</view>
 		</view>
-
 	</view>
 </template>
 

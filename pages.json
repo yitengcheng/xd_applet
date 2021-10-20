@@ -17,7 +17,8 @@
 			"path": "pages/order/Order",
 			"style": {
 				"navigationBarTitleText": "订单",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 100
 			}
 
 		}, {
