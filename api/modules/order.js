@@ -6,7 +6,10 @@ const order = {
 	},
 	orderList: (data) => {
 		return request.globalRequest(`/tool/wxorder/api/list`, 'get', data);
-	}
+	},
+	offLineOrder: (data) => {
+		return request.globalRequest(`/system/wxorder/create`, 'post', data);
+	},
 }
 
 

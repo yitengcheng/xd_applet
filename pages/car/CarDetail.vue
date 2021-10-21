@@ -14,20 +14,22 @@
 			<text>燃油类型：{{ _.find(carType, o => {return o.value == carInfo.fuelType}).text || '汽油' }}</text>
 			<text>租车单价：{{ carInfo.unitPrice || '无' }} 元/天</text>
 			<text>超过里程收取金额：{{ carInfo.maxMileagePrice || '无' }} 每日</text>
-			<view class="info" @click="toMap">
-				<text>取车点：{{takeAddress || '点击选择取车地址'}}</text>
-				<text class="map_icon t-icon t-icon-ditu" ></text>
+			<view class="info" >
+				取车
+				<uni-easyinput :value="takeAddress" :inputBorder="false"/>
+				<SelectSwitch :switchList="['到店', '上门']" @change="toMapTake" :defaultSwitch="takeChecked"/>
 			</view>
-			<view class="info" @click="toMap('return')">
-				<text>还车点：{{returnAddress || '点击选择还车地址'}}</text>
-				<text class="map_icon t-icon t-icon-ditu"></text>
+			<view class="info">
+				还车
+				<uni-easyinput :value="returnAddress" :inputBorder="false"/>
+				<SelectSwitch :switchList="['到店', '上门']" @change="toMapReturn" :defaultSwitch="returnChecked"/>
 			</view>
 			<view class="info">
 				<text>优惠券：</text>
 				<uni-data-picker :value="idcard" placeholder="请选择优惠券" :v-model="couponId" :localdata="couponList" @change='changeCoupon'></uni-data-picker>
 			</view>
 			<view class="datePick">
-				<uni-datetime-picker ref="datetime" :v-model="datetimerange" type="datetimerange" :start="start"
+				<uni-datetime-picker ref="datetime" :value="datetimerange" type="datetimerange" :start="start"
 					start-placeholder="租车时间" end-placeholder="还车时间" @change="changeDate" @close="close" />
 				<text v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
 				<text v-show="rangeMoney">租车金额：{{rangeMoney}}元</text>
@@ -41,20 +43,24 @@
 <script>
 	import api from '../../api/index.js';
 	import config from '../../common/config.js';
+	import SelectSwitch from "@/components/xuan-switch/xuan-switch.vue";
 	export default {
+		components:{
+			SelectSwitch,
+		},
 		onLoad(option) {
 			this.dictInit('car_type', 'fuel_number').then(() => {
 				this.carType = uni.getStorageSync('car_type');
 				this.fuelNumber = uni.getStorageSync('fuel_number');
 			});
 			let user = uni.getStorageSync('userInfo');
-			if(!user.idcard && !user.phoneNumber){
+			if(typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string'){
 				uni.showModal({
 					title: '您尚未绑定个人驾驶信息，请前往个人中心的个人信息页面进行绑定',
 					icon: 'none',
 					success: (e) => {
 						if(e.confirm){
-							uni.navigateTo({
+							uni.reLaunch({
 								url: '../center/PersonalInformation',
 							})
 						}else{
@@ -70,9 +76,9 @@
 				photos: [],
 				carType: [],
 				fuelNumber: [],
-				datetimerange: [],
+				datetimerange: [this.dayjs().format('YYYY-MM-DD HH:mm'),this.dayjs().add(1, 'day').format('YYYY-MM-DD HH:mm')],
 				start: this.dayjs().format('YYYY-MM-DD HH:mm'),
-				rangeSeparator: '',
+				rangeSeparator: 1,
 				rangeMoney: '',
 				carInfo: {},
 				takeAddress: '',
@@ -84,6 +90,8 @@
 				phone: '',
 				couponId: '',
 				couponList: [],
+				takeChecked: true,
+				returnChecked: true,
 			};
 		},
 		methods: {
@@ -125,6 +133,11 @@
 						this.photos.push(`${config.IMG_URL}${o}`);
 					});
 					this.carInfo = data;
+					this.takeAddress  = data.complany.complanyAddress;
+					this.takeLatlon  = data.complany.latitude;
+					this.returnAddress  = data.complany.complanyAddress;
+					this.returnLatlon  = data.complany.latitude;
+					this.rangeMoney = data.unitPrice;
 					this.$nextTick(()=>{
 						this.initCoupon();
 					})
@@ -137,7 +150,30 @@
 						icon: 'error',
 						success: (e) => {
 							if(e.confirm){
-								
+								api.offLineOrder({
+									carId: this.carInfo.id,
+									complanyId: this.carInfo.complanyId,
+									couponId: this.couponId,
+									openid: uni.getStorageSync('openid'),
+									rentCarDays: this.rangeSeparator,
+									latitude: this.takeLatlon,
+									returnLatitude: this.returnLatlon,
+									wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:ss'),
+									estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:ss'),
+									description: this.carInfo.carNum + this.carInfo.carBrand,
+									address: this.takeAddress,
+									returnAddress:this.returnAddress,
+								}).then((res = {}) => {
+									if(res){
+										uni.showToast({
+											title: '预约完成，请等待商户联系',
+											icon: 'success',
+											success: () => {
+												uni.navigateBack();
+											}
+										})
+									}
+								})
 							}
 						}
 					});
@@ -186,12 +222,37 @@
 					})
 				}
 			},
-			toMap(type){
-				uni.chooseLocation({
-					success: (res) => {
-						this.selectAddress({type, ...res});
-					}
-				})
+			toMapTake(flag){
+				this.takeChecked = flag;
+				if(flag){
+					this.takeAddress  = this.carInfo.complany.complanyAddress;
+					this.takeLatlon  = this.carInfo.complany.latitude;
+				} else {
+					uni.chooseLocation({
+						success: (res) => {
+							this.selectAddress({type:'take', ...res});
+						},
+						fail: (res) => {
+							this.takeChecked = true;
+						}
+					})
+				}
+			},
+			toMapReturn(flag){
+				this.returnChecked = flag
+				if(flag){
+					this.returnAddress  = this.carInfo.complany.complanyAddress;
+					this.returnLatlon  = this.carInfo.complany.latitude;
+				} else {
+					uni.chooseLocation({
+						success: (res) => {
+							this.selectAddress({type:'return', ...res});
+						},
+						fail: (res) => {
+							this.returnChecked = true;
+						}
+					})
+				}
 			},
 			changeDate(e) {
 				let endDate = this.dayjs(e[1]);

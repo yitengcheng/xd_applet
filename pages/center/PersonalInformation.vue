@@ -18,7 +18,7 @@
 			<uni-easyinput placeholder="请输入驾驶证号" v-model="idcard"></uni-easyinput>
 		</view>
 		<view class="form_item">
-			<view class="form_item_title">姓名</view>
+			<view class="form_item_title">姓名<space style="color: red;">*</space></view>
 			<uni-easyinput placeholder="请输入姓名" v-model="name"></uni-easyinput>
 		</view>
 		<view class="form_item">
@@ -86,9 +86,10 @@
 			},
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
+				console.log(userInfo);
 				if (userInfo) {
-					let extname = userInfo.licenseMainUrl.substring(userInfo.licenseMainUrl.lastIndexOf('.') + 1);
-					let name = userInfo.licenseMainUrl.substring(userInfo.licenseMainUrl.lastIndexOf('/') + 1);
+					let extname = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('.') + 1);
+					let name = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('/') + 1);
 					this.license = [{
 							name,
 							extname,
@@ -99,7 +100,7 @@
 					this.sex = userInfo.sex;
 					this.idcard = userInfo.idcard;
 					this.driverType = userInfo.driveType;
-					this.invalidCarTime = userInfo.invalidCarTime.split(',');
+					this.invalidCarTime = (userInfo.invalidCarTime || '').split(',');
 					this.phoneNumber = userInfo.phoneNumber;
 				}
 			},
@@ -154,6 +155,12 @@
 				if (!this.idcard) {
 					return uni.showToast({
 						title: '请输入驾驶证号',
+						icon: 'none'
+					})
+				}
+				if (!this.name) {
+					return uni.showToast({
+						title: '请输入姓名',
 						icon: 'none'
 					})
 				}
