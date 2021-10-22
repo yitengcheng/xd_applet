@@ -79,14 +79,13 @@
 						}).then(res => {
 							uni.setStorageSync('openid', res.data.openid);
 							uni.setStorageSync('userInfo', res.data.userInfo);
-							this.setInitInfo();
+							this.phoneNumber = res.data.userInfo.phoneNumber;
 						});
 					}
 				});
 			},
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
-				console.log(userInfo);
 				if (userInfo) {
 					let extname = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('.') + 1);
 					let name = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('/') + 1);
@@ -174,7 +173,7 @@
 					name: this.name,
 					sex: this.sex,
 					idcard: this.idcard,
-					driverType: this.driverType,
+					driveType: this.driverType,
 					phoneNumber: this.phoneNumber,
 					licenseMainUrl: this.licenseUrl,
 					invalidCarTime: this.invalidCarTime.toString(','),
@@ -183,7 +182,9 @@
 					if (!res.data) {
 						api.getUserInfo(uni.getStorageSync('openid')).then(res => {
 							uni.setStorageSync('userInfo', res.data);
-							uni.navigateBack();
+							uni.reLaunch({
+								url: '/pages/center/index'
+							});
 						});
 					}
 				});
