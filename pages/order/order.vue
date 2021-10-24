@@ -62,8 +62,8 @@
 							});
 							pageNum === 1 ? this.data = tmpList : this.data = this._.concat(this.data, tmpList);
 							pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
-							uni.stopPullDownRefresh();
 						}
+						uni.stopPullDownRefresh();
 					});
 				} else {
 					uni.showToast({

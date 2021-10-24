@@ -89,6 +89,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/order/PreviewPact",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "预览合同",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 		"color": "#7A7E83",

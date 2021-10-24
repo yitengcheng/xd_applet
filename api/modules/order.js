@@ -10,6 +10,9 @@ const order = {
 	offLineOrder: (data) => {
 		return request.globalRequest(`/system/wxorder/create`, 'post', data);
 	},
+	previe: (id) => {
+		return request.globalRequest(`/qys/view?contractId=${id}`, 'get');
+	},
 }
 
 

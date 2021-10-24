@@ -37,6 +37,7 @@
 			
 		</view>
 		<button type="primary" class="appointmentBtn" @click="appointment">预约用车</button>
+		<button v-if="type" type="primary" class="button" @click="goBack">回到店铺首页</button>
 	</view>
 </template>
 
@@ -53,6 +54,7 @@
 				this.carType = uni.getStorageSync('car_type');
 				this.fuelNumber = uni.getStorageSync('fuel_number');
 			});
+			this.type = option.type;
 			let user = uni.getStorageSync('userInfo');
 			if(typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string'){
 				uni.showModal({
@@ -92,6 +94,7 @@
 				couponList: [],
 				takeChecked: true,
 				returnChecked: true,
+				type: ''
 			};
 		},
 		methods: {
@@ -145,38 +148,30 @@
 			},
 			appointment() {
 				if(!this.carInfo.complany.subMchId){
-					uni.showModal({
-						title: '此车辆无法进行线上支付，是否继续预约',
-						icon: 'error',
-						success: (e) => {
-							if(e.confirm){
-								api.offLineOrder({
-									carId: this.carInfo.id,
-									complanyId: this.carInfo.complanyId,
-									couponId: this.couponId,
-									openid: uni.getStorageSync('openid'),
-									rentCarDays: this.rangeSeparator,
-									latitude: this.takeLatlon,
-									returnLatitude: this.returnLatlon,
-									wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:ss'),
-									estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:ss'),
-									description: this.carInfo.carNum + this.carInfo.carBrand,
-									address: this.takeAddress,
-									returnAddress:this.returnAddress,
-								}).then((res = {}) => {
-									if(res){
-										uni.showToast({
-											title: '预约完成，请等待商户联系',
-											icon: 'success',
-											success: () => {
-												uni.navigateBack();
-											}
-										})
-									}
-								})
-							}
+					api.offLineOrder({
+						carId: this.carInfo.id,
+						complanyId: this.carInfo.complanyId,
+						couponId: this.couponId,
+						openid: uni.getStorageSync('openid'),
+						rentCarDays: this.rangeSeparator,
+						latitude: this.takeLatlon,
+						returnLatitude: this.returnLatlon,
+						wantCarTime: this.dayjs(this.datetimerange[0]).format('YYYY-MM-DD HH:mm:ss'),
+						estimateReturnTime: this.dayjs(this.datetimerange[1]).format('YYYY-MM-DD HH:mm:ss'),
+						description: this.carInfo.carNum + this.carInfo.carBrand,
+						address: this.takeAddress,
+						returnAddress:this.returnAddress,
+					}).then((res = {}) => {
+						if(res){
+							uni.showToast({
+								title: '预约完成，请等待商户联系',
+								icon: 'success',
+								success: () => {
+									uni.navigateBack();
+								}
+							})
 						}
-					});
+					})
 					return;
 				}
 				if (this.datetimerange.length === 2 && this.rangeSeparator !== '') {
@@ -270,6 +265,11 @@
 					this.rangeMoney = diffDate * this.carInfo.unitPrice;
 				}
 			},
+			goBack(){
+				uni.switchTab({
+					url: '/pages/car/Car'
+				})
+			}
 		}
 	}
 </script>
@@ -296,6 +296,10 @@
 		width: 60%;
 		margin-top: 50rpx;
 		margin-bottom: 50rpx;
+	}
+	
+	.button {
+		width: 60%;
 	}
 
 	.datePick {

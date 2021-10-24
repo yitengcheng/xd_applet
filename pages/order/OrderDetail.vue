@@ -21,6 +21,7 @@
 		<button class="pay_btn" type="primary" @click="toPay"
 			v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
 		<button class="refund_btn" type="warn" @click="toRefund" v-show="info.payStatus === 'SUCCESS'">退款申请</button>
+		<button class="refund_btn" type="primary" @click="showPact" v-show="pactFlag">退款申请</button>
 		<uni-popup ref="popup" type="dialog">
 		    <uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
 		</uni-popup>
@@ -35,7 +36,8 @@
 			return {
 				photos: [],
 				info: {},
-				buttonText: '实际付款：￥'
+				buttonText: '实际付款：￥',
+				pactFlag: false,
 			};
 		},
 		onLoad(option) {
@@ -54,6 +56,7 @@
 							this.photos.push(`${config.IMG_URL}${o}`);
 						});
 						delete data.wantCarTime;
+						data.contract ? this.pactFlag = true : this.pactFlag = false;
 						this.info = {time, ...data};
 						this.buttonText = `实际付款：￥${data.totalMoney/100 || '未知金额'}`;
 					}
@@ -61,6 +64,18 @@
 			},
 			toRefund() {
 				this.$refs.popup.open();
+			},
+			showPact(){
+				let index = this.info.contract.findIndex('/');
+				if(index === -1){
+					uni.navigateTo({
+						url: `/pages/order/PreviewPact?isImage=1&param=${this.info.contract}`
+					})
+				} else {
+					uni.navigateTo({
+						url: `/pages/order/PreviewPact?isImage=0&param=${this.info.contract}`
+					})
+				}
 			},
 			confirm(e){
 				if(!e){
