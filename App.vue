@@ -15,6 +15,7 @@
 
 <style lang="scss">
 	@import './static/icon/iconfont-weapp-icon.css';
+	@import "uview-ui/index.scss";
 
 	/*每个页面公共css */
 	.content {

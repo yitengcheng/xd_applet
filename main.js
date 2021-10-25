@@ -3,6 +3,7 @@ import dictRequest from 'common/dict.js';
 import _ from 'lodash';
 import dayjs from 'dayjs';
 import './static/icon/iconfont-weapp-icon.css';
+import uView from "uview-ui";
 
 /**
  * 用于初始化字典，返回Promise实例
@@ -26,6 +27,7 @@ Vue.prototype.dictInit = dictInit;
 Vue.prototype._ = _;
 Vue.prototype.dayjs = dayjs;
 App.mpType = 'app'
+Vue.use(uView);
 const app = new Vue({
     ...App
 })

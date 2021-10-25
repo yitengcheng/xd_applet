@@ -20,8 +20,8 @@
 		</view>
 		<button class="pay_btn" type="primary" @click="toPay"
 			v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</button>
-		<button class="refund_btn" type="warn" @click="toRefund" v-show="info.payStatus === 'SUCCESS'">退款申请</button>
-		<button class="refund_btn" type="primary" @click="showPact" v-show="pactFlag">退款申请</button>
+		<button class="refund_btn" type="warn" @click="toRefund" v-show="info.payStatus === 'SUCCESS' && !info.crvTime">退款申请</button>
+		<button class="refund_btn" type="primary" @click="showPact" v-show="pactFlag">合同预览</button>
 		<uni-popup ref="popup" type="dialog">
 		    <uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
 		</uni-popup>
@@ -66,14 +66,14 @@
 				this.$refs.popup.open();
 			},
 			showPact(){
-				let index = this.info.contract.findIndex('/');
+				let index = this.info.contract.indexOf('/');
 				if(index === -1){
 					uni.navigateTo({
-						url: `/pages/order/PreviewPact?isImage=1&param=${this.info.contract}`
+						url: `/pages/order/PreviewPact?isImage=0&param=${this.info.contract}`
 					})
 				} else {
 					uni.navigateTo({
-						url: `/pages/order/PreviewPact?isImage=0&param=${this.info.contract}`
+						url: `/pages/order/PreviewPact?isImage=1&param=${this.info.contract}`
 					})
 				}
 			},

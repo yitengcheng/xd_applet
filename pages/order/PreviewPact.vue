@@ -10,18 +10,35 @@
 	import api from '../../api/index.js';
 	export default {
 		onLoad(option) {
-			if(option.image === '1'){
+			if (option.isImage === '1') {
 				this.image = true;
 				this.pact = `${config.IMG_URL}${option.param}`;
+
 			} else {
 				this.image = false;
-				api.previe(option.param).then((res = {})=>{
-					if(res.data){
-						this.pact = res.data;
+				let user = uni.getStorageSync('userInfo');
+				api.getTicket({
+					contractId: option.param,
+					phone: user.phoneNumber,
+				}).then(res => {
+					let { data } = res;
+					if(data){
+						// 跳转合同签署
+						// #ifdef MP-WEIXIN
+							wx.navigateTo({
+								url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
+							});
+						// #endif
 					}
-				});
+				})
 			}
 		},
+		data() {
+			return {
+				pact: '',
+				image: true,
+			}
+		}
 	}
 </script>
 

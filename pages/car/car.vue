@@ -1,13 +1,6 @@
 <template>
 	<view>
-		<view class="custom_top" :style="{height: top_height + 40 + 'px'}">
-			<view class="map_Btn" @click="toMap" v-show="appletType === 1">
-				<text class="map_icon t-icon t-icon-ditu"></text>
-				<text class="shop_name">{{shopName}}</text>
-			</view>
-			<text class="page_title" :style="{textAlign: appletType === 2 ? 'center':''}">租车</text>
-		</view>
-		<uni-easyinput v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search"></uni-easyinput>
+		<u-input v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search" input-align="center"></u-input>
 		<uni-data-checkbox :localdata="carTypeList" v-model="carType" @change="changeCarType" />
 		<WaterfallsFlow :wfList='list' @itemTap="itemTap" />
 	</view>

@@ -1,16 +1,19 @@
 {
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/login/Login",
+			"path": "pages/index/Index",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "首页",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/car/Car",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "车辆",
 				"enablePullDownRefresh": true
 			}
 		}, {
@@ -105,10 +108,15 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
+				"pagePath": "pages/index/Index",
+				"iconPath": "static/img/index.png",
+				"selectedIconPath": "static/img/index_activate.png",
+				"text": "首页"
+			},{
 				"pagePath": "pages/car/Car",
 				"iconPath": "static/img/car.png",
 				"selectedIconPath": "static/img/car_activate.png",
-				"text": "租车"
+				"text": "车辆"
 			},
 			{
 				"pagePath": "pages/order/Order",
