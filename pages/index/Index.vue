@@ -7,11 +7,24 @@
 				<text>{{menu.text}}</text>
 			</view>
 		</view>
-		<view>
-			小滴服务
+		<view class="serviceBox">
+			<view class="novice_service">
+				<u-button type="warning" size="small" :custom-style="noviceServiceBtn">详情>></u-button>
+			</view>
+			<view class="right_box">
+				<view class="right_box_top">
+					<u-button type="warning" size="small" :custom-style="reservationStyle">立即预定></u-button>
+				</view>
+				<view class="right_box_bottom">
+					<u-button type="warning" size="small" :custom-style="queryStyle">立即查询></u-button>
+				</view>
+			</view>
 		</view>
 		<view>
-			小滴精选
+			<view>小滴精选</view>
+			<view>
+				
+			</view>
 		</view>
 	</view>
 </template>
@@ -48,7 +61,28 @@
 					{icon: 'icon-121zhanweitu', text: '功能2'},
 					{icon: 'icon-121zhanweitu', text: '功能3'},
 					{icon: 'icon-121zhanweitu', text: '功能4'},
-				]
+				],
+				noviceServiceBtn:{
+					width: '40%',
+					fontSize: "12px",
+					height: '25px',
+					marginTop: '70px',
+					marginLeft: '20px',
+				},
+				reservationStyle: {
+					width: '35%',
+					fontSize: "10px",
+					height: '15px',
+					marginTop: '30px',
+					marginLeft: '20px',
+				},
+				queryStyle: {
+					width: '35%',
+					fontSize: "10px",
+					height: '15px',
+					marginTop: '30px',
+					marginLeft: '20px',
+				}
 			}
 		},
 		methods: {
@@ -77,5 +111,36 @@
 	.btn_icon {
 		width: 24px;
 		height: 24px;
+	}
+	.serviceBox {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: 300rpx;
+		padding: 10px;
+	}
+	.novice_service {
+		flex: 1;
+		background-color: red;
+		border-radius: 8px;
+		margin-right: 5px;
+	}
+	.right_box {
+		flex:1;
+		display: flex;
+		flex-direction: column;
+	}
+	.right_box_top {
+		width: 100%;
+		flex: 1;
+		border-radius: 8px;
+		background-color: green;
+		margin-bottom: 10px;
+	}
+	.right_box_bottom {
+		width: 100%;
+		flex: 1;
+		border-radius: 8px;
+		background-color: blue;
 	}
 </style>

@@ -161,7 +161,7 @@
 						description: this.carInfo.carNum + this.carInfo.carBrand,
 						address: this.takeAddress,
 						returnAddress:this.returnAddress,
-					}).then((res = {}) => {
+					}).then(res => {
 						if(res){
 							uni.showToast({
 								title: '预约完成，请等待商户联系',
