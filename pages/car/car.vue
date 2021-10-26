@@ -15,20 +15,12 @@
 			WaterfallsFlow,
 		},
 		onLoad(option) {
-			uni.getSystemInfo({
-				success: (res) => {
-					this.top_height = res.statusBarHeight;
-				}
-			});
 			this.dictInit('car_type').then(res => {
 				this.carTypeList = uni.getStorageSync('car_type');
 			});
-			this.changeShopName(option.shop);
-			uni.$on('refresh',()=>{
-				setTimeout(()=>{
-					this.getCarList(1, true);
-				}, 2000);
-			});
+			uni.$on('refreshCar', ()=>{
+				this.getCarList(1, true);
+			})
 		},
 		mounted() {
 			this.getCarList(1, true);
@@ -44,8 +36,6 @@
 			return {
 				list: [],
 				keyword: '',
-				top_height: 0,
-				shopName: uni.getStorageSync('shopName'),
 				appletType: uni.getStorageSync('appletType'),
 				pageNo: 1,
 				type: -1,
@@ -56,21 +46,8 @@
 		methods: {
 			itemTap(e) {
 				uni.navigateTo({
-					url: `/pages/car/CarDetail?id=${e.id}`,
+					url: `/packageA/pages/car/CarDetail?id=${e.id}`,
 				})
-			},
-			changeShopName(shop) {
-				let obj = shop ? JSON.parse(shop) : undefined;
-				obj ? this.shopName = obj.callout.content :  this.shopName = '';
-				this.$nextTick(() => {
-					uni.setStorageSync('shopName', this.shopName);
-					this.getCarList(1, true);
-				})
-			},
-			toMap() {
-				uni.navigateTo({
-					url: '/pages/car/Map?type=shop',
-				});
 			},
 			search() {
 				this.getCarList(1);
@@ -125,36 +102,5 @@
 </script>
 
 <style lang="scss">
-	.custom_top {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-	}
 
-	.map_Btn {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		flex: 1;
-		padding-left: 5px;
-		margin-top: 20px;
-	}
-
-	.shop_name {
-		flex: 1;
-		font-size: 12px;
-	}
-
-	.map_icon {
-		width: 24px;
-		height: 24px;
-	}
-
-	.page_title {
-		flex:1.2;
-		margin-top: 20px;
-		font-size: 13px;
-	}
 </style>

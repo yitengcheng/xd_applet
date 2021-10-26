@@ -114,7 +114,7 @@
 										icon: 'none',
 										success: () => {
 											uni.switchTab({
-												url: '/pages/car/Car',
+												url: '/packageA/pages/car/Car',
 												success: (res) => {
 													uni.$emit('refresh');
 												}

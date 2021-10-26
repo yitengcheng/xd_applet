@@ -39,8 +39,8 @@
 </template>
 
 <script>
-	import config from '../../common/config.js';
-	import api from '../../api/index.js';
+	import config from '../../../common/config.js';
+	import api from '../../../api/index.js';
 	export default {
 		mounted() {
 			this.setInitInfo();

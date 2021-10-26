@@ -18,27 +18,27 @@
 				buttonList: [{
 						icon: 'icon-gerenxinxi',
 						title: '个人信息',
-						path: '/pages/center/PersonalInformation',
+						path: '/packageA/pages/center/PersonalInformation',
 					},
 					{
 						icon: 'icon-youhuiquan',
 						title: '优惠券',
-						path: '/pages/center/Coupons',
+						path: '/packageA/pages/center/Coupons',
 					},
 					{
 						icon: 'icon-shoucangjia',
 						title: '我的收藏',
-						path: '/pages/center/Collection',
+						path: '/packageA/pages/center/Collection',
 					},
 					{
 						icon: 'icon-dianzihetongyuedingshu',
 						title: '合同扫码',
-						path: '/pages/center/ScanQRcode',
+						path: '/packageA/pages/center/ScanQRcode',
 					},
 					{
 						icon: 'icon-guanyuwomen',
 						title: '关于我们',
-						path: '/pages/center/AboutUs',
+						path: '/packageA/pages/center/AboutUs',
 					},
 				],
 			}

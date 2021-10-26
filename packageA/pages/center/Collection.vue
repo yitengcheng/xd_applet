@@ -8,7 +8,7 @@
 </template>
 
 <script>
-	import api from '../../api/index.js';
+	import api from '../../../api/index.js';
 	export default {
 		data() {
 			return {
@@ -40,7 +40,7 @@
 					}
 				}
 				uni.reLaunch({
-					url: `/pages/car/Car?shop=${JSON.stringify(shop)}`
+					url: `/packageA/pages/car/Car?shop=${JSON.stringify(shop)}`
 				});
 			}
 		}
