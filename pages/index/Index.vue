@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="bg_color">
 		<u-image width="100%" height="300rpx" src="https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg"></u-image>
 		<view class="menusBox">
 			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @click="toOtherPage(index)">
@@ -52,15 +52,18 @@ export default {
 				});
 			}
 		});
+		uni.$on('refreshIndex',()=>{
+			this.initCarList();
+		});
 	},
 	data() {
 		return {
 			carId: '',
 			menus: [
-				{icon: 'icon-121zhanweitu', text: '选择门店'},
-				{icon: 'icon-121zhanweitu', text: '企业用车'},
+				{icon: 'icon-121zhanweitu', text: '挂靠登记'},
+				{icon: 'icon-121zhanweitu', text: '优惠券'},
 				{icon: 'icon-121zhanweitu', text: '合同扫码'},
-				{icon: 'icon-121zhanweitu', text: '精选店铺'},
+				{icon: 'icon-121zhanweitu', text: '出行宝典'},
 			],
 			noviceServiceBtn:{
 				width: '40%',
@@ -86,14 +89,8 @@ export default {
 			carList: []
 		}
 	},
-	onLoad() {
-		uni.$on('refreshIndex',()=>{
-			this.initCarList();
-		});
-	},
 	mounted() {
 		this.initCarList();
-		
 	},
 	methods: {
 		initCarList(){
@@ -159,6 +156,7 @@ export default {
 .btn_icon {
 	width: 24px;
 	height: 24px;
+	margin-bottom: 5px;
 }
 .serviceBox {
 	display: flex;

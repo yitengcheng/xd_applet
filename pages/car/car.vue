@@ -1,9 +1,13 @@
 <template>
-	<view>
-		<u-input v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search" input-align="center"></u-input>
-		<uni-data-checkbox :localdata="carTypeList" v-model="carType" @change="changeCarType" />
-		<WaterfallsFlow :wfList='list' @itemTap="itemTap" />
-	</view>
+	<scroll-view>
+		<u-sticky>
+			<view class="search">
+				<uni-easyinput  v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search" input-align="center"></uni-easyinput>
+				<u-tabs :list="carTypeList" :is-scroll="true" name="text" :current="type" @change="changeCarType" active-color="#fdd51e"></u-tabs>
+			</view>
+		</u-sticky>
+		<WaterfallsFlow :wfList='list' @itemTap="itemTap" class="water_fall"/>
+	</scroll-view>
 </template>
 
 <script>
@@ -38,7 +42,7 @@
 				keyword: '',
 				appletType: uni.getStorageSync('appletType'),
 				pageNo: 1,
-				type: -1,
+				type: 0,
 				carTypeList: [],
 				carType: '',
 			}
@@ -95,12 +99,18 @@
 				});
 			},
 			changeCarType(e) {
-				this.getCarList(1);
-			}
+				this.carType = this.carTypeList[e].value;
+				this.type = e;
+				this.$nextTick(()=>{
+					this.getCarList(1);
+				});
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
-
+	.search {
+		background-color: #FFFFFF;
+	}
 </style>

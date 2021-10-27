@@ -1,36 +1,44 @@
 <template>
 	<view class="content" :enable-flex="true">
-		<swiper class="swiper_box" :indicator-dots='true' :autoplay='true'>
-			<swiper-item v-for="(item, index) in photos" :key="index">
-				<image :src="item" class="swiper_img" mode="aspectFit"></image>
-			</swiper-item>
-		</swiper>
+		<u-swiper class="swiper_box" :list="photos" mode="none" height="500"></u-swiper>
+		<view class="car_band">{{ carInfo.carBrand || '无' }}</view>
+		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
+		<view class="option_card">
+			<view class="time_address">
+				<view class="dot_line">
+					<view class="dot"></view>
+					<view class="line"></view>
+				</view>
+				<view class="time_box">
+					<view class="car_time_address">
+						<view>取车</view>
+						<uni-datetime-picker :value="startTime" type="datetime" :start="start" :border="false" @change="changeDate" />
+					</view>
+					<view class="car_time_address" @click="toMapTake">{{takeAddress}}<u-icon name="map"></u-icon></view>
+				</view>
+			</view>
+			<view class="time_address">
+				<view class="dot_line">
+					<view class="line"></view>
+					<view class="dot"></view>
+				</view>
+				<view class="time_box">
+					<view class=".car_time_address">
+						<view>还车</view>
+						<uni-datetime-picker :value="startTime" type="datetime" :start="start" :border="false" @change="changeDate" />
+					</view>
+					<view class="car_time_address" @click="toMapReturn">{{returnAddress}}<u-icon name="map"></u-icon></view>
+				</view>
+			</view>
+		</view>
+		
+		
 		<view class="info_box">
-			<text>车辆信息</text>
-			<text>车辆品牌：{{ _.find(carType, o => {return o.value == carInfo.carBrand}).text || '无' }}</text>
-			<text>车辆类型：{{ carInfo.carBrand || '无' }}</text>
-			<text>车牌号：{{ carInfo.carNum || '无' }}</text>
-			<text>车牌颜色：{{ carInfo.color || '无' }}</text>
-			<text>燃油类型：{{ _.find(carType, o => {return o.value == carInfo.fuelType}).text || '汽油' }}</text>
-			<text>租车单价：{{ carInfo.unitPrice || '无' }} 元/天</text>
-			<text>超过里程收取金额：{{ carInfo.maxMileagePrice || '无' }} 每日</text>
-			<view class="info" >
-				取车
-				<uni-easyinput :value="takeAddress" :inputBorder="false"/>
-				<SelectSwitch :switchList="['到店', '上门']" @change="toMapTake" :defaultSwitch="takeChecked"/>
-			</view>
-			<view class="info">
-				还车
-				<uni-easyinput :value="returnAddress" :inputBorder="false"/>
-				<SelectSwitch :switchList="['到店', '上门']" @change="toMapReturn" :defaultSwitch="returnChecked"/>
-			</view>
 			<view class="info">
 				<text>优惠券：</text>
 				<uni-data-picker :value="idcard" placeholder="请选择优惠券" :v-model="couponId" :localdata="couponList" @change='changeCoupon'></uni-data-picker>
 			</view>
 			<view class="datePick">
-				<uni-datetime-picker ref="datetime" :value="datetimerange" type="datetimerange" :start="start"
-					start-placeholder="租车时间" end-placeholder="还车时间" @change="changeDate" @close="close" />
 				<text v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
 				<text v-show="rangeMoney">租车金额：{{rangeMoney}}元</text>
 			</view>
@@ -50,10 +58,6 @@
 			SelectSwitch,
 		},
 		onLoad(option) {
-			this.dictInit('car_type', 'fuel_number').then(() => {
-				this.carType = uni.getStorageSync('car_type');
-				this.fuelNumber = uni.getStorageSync('fuel_number');
-			});
 			this.type = option.type;
 			let user = uni.getStorageSync('userInfo');
 			if(typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string'){
@@ -76,9 +80,8 @@
 		data() {
 			return {
 				photos: [],
-				carType: [],
-				fuelNumber: [],
-				datetimerange: [this.dayjs().format('YYYY-MM-DD HH:mm'),this.dayjs().add(1, 'day').format('YYYY-MM-DD HH:mm')],
+				startTime: this.dayjs().format('YYYY-MM-DD HH:mm'),
+				endTime: this.dayjs().add(1, 'day').format('YYYY-MM-DD HH:mm'),
 				start: this.dayjs().format('YYYY-MM-DD HH:mm'),
 				rangeSeparator: 1,
 				rangeMoney: '',
@@ -217,37 +220,19 @@
 					})
 				}
 			},
-			toMapTake(flag){
-				this.takeChecked = flag;
-				if(flag){
-					this.takeAddress  = this.carInfo.complany.complanyAddress;
-					this.takeLatlon  = this.carInfo.complany.latitude;
-				} else {
-					uni.chooseLocation({
-						success: (res) => {
-							this.selectAddress({type:'take', ...res});
-						},
-						fail: (res) => {
-							this.takeChecked = true;
-						}
-					})
-				}
+			toMapTake(){
+				uni.chooseLocation({
+					success: (res) => {
+						this.selectAddress({type:'take', ...res});
+					}
+				})
 			},
-			toMapReturn(flag){
-				this.returnChecked = flag
-				if(flag){
-					this.returnAddress  = this.carInfo.complany.complanyAddress;
-					this.returnLatlon  = this.carInfo.complany.latitude;
-				} else {
-					uni.chooseLocation({
-						success: (res) => {
-							this.selectAddress({type:'return', ...res});
-						},
-						fail: (res) => {
-							this.returnChecked = true;
-						}
-					})
-				}
+			toMapReturn(){
+				uni.chooseLocation({
+					success: (res) => {
+						this.selectAddress({type:'return', ...res});
+					}
+				})
 			},
 			changeDate(e) {
 				let endDate = this.dayjs(e[1]);
@@ -277,19 +262,73 @@
 <style lang="scss">
 	.swiper_box {
 		width: 100%;
-		height: 350rpx;
 	}
-
-	.swiper_img {
+	
+	.car_band {
 		width: 100%;
-		height: 300rpx;
+		font-size: 16px;
+		padding: 10px;
+		font-weight: 700;
 	}
-
-	.info_box {
-		width: 90%;
+	
+	
+	
+	.complany_name {
+		width: 100%;
+		font-size: 12px;
+		padding: 10px;
+	}
+	
+	.option_card {
 		display: flex;
 		flex-direction: column;
-		padding-top: 10px;
+		margin: 10px;
+		padding: 10px;
+		border-radius: 8px;
+		background-color: #FFFFFF;
+		width: 95%;
+		height: 400rpx;
+	}
+	
+	.dot_line {
+		flex: 1;
+		padding: 0px 10px 0px 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.dot {
+		background-color: #fdd51e;
+		width: 18px;
+		height: 18px;
+		border: 1px solid #fdd51e;
+		border-radius: 50%;
+	}
+	
+	.line {
+		flex: 1;
+		width: 1px;
+		border: 1px dashed black;
+	}
+	
+	.time_address {
+		flex: 1;
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.time_box {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+	}
+	
+	.car_time_address {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
 	}
 
 	.appointmentBtn {

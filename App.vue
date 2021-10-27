@@ -24,5 +24,10 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		background-color: #f4f4f4;
+	}
+	
+	.bg_color{
+		background-color: #f4f4f4;
 	}
 </style>
