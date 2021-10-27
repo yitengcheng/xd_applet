@@ -38,12 +38,17 @@ export default {
 		url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
 		url && uni.setStorageSync('complanyId', url.split('=')[1]);
 		url.split('=')[2] ? this.carId = url.split('=')[2] : this.carId = '';
+		uni.showLoading({
+			title: '信息加载中...',
+			mask: true,
+		});
 		uni.login({
 			onlyAuthorize: true,
 			success: (res) => {
 				!!res.code && api.login(res.code).then(res => {
 					uni.setStorageSync('openid', res.data.openid);
 					uni.setStorageSync('userInfo', res.data.userInfo);
+					uni.hideLoading();
 					if (this.carId) {
 						uni.reLaunch({
 							url: `/packageA/pages/car/CarDetail?id=${this.carId}&type=index`
