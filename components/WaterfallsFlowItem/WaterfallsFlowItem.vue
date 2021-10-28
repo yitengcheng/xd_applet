@@ -5,6 +5,9 @@
             <image v-show="item.avatar" :src="item.avatar" mode="aspectFill" class="info-avatar"/>
             <view class="info-nickname">{{ item.nickName }}</view>
         </view>
+		<view class="item-info">
+            <view class="info-nickname">{{ item.info }}</view>
+        </view>
     </view>
 </template>
 

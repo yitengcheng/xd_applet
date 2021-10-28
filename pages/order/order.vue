@@ -1,23 +1,59 @@
 <template>
-	<scroll-view>
+	<view class="content" >
 		<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间" end-placeholder="结束时间"></uni-datetime-picker>
-		<uni-list>
-			<uni-list-item v-for="(item,index) in data" :title="item.title" :note="item.note" :thumb="item.thumb"
-				thumbSize="lg" :rightText="item.rightText" :clickable="true" @click="onClick(item)" :key="index"></uni-list-item>
-		</uni-list>
-	</scroll-view>
+		<view :style="[{ minHeight: height + 'px', width: '100%'}]">
+			<view class="order_card" v-for="(order,index) in data" :key="index" @click="onClick(order)">
+				<view class="top">
+					<text>{{dayjs(order.createTime).format('YYYY-MM-DD')}}</text>
+					<text>{{dayjs(order.createTime).format('HH:mm:ss')}}</text>
+					<u-tag :text="order.payText" shape="circleRight" :type="order.payType"></u-tag>
+				</view>
+				<view class="middle">
+					<view class="dot_line">
+						<view class="dot"></view>
+						<view class="line"></view>
+					</view>
+					<view class="address_box">
+						<view class="take_car">
+							<view>{{order.address}}</view>
+						</view>
+					</view>
+				</view>
+				<view class="bottom">
+					<view class="dot_line">
+						<view class="line"></view>
+						<u-icon name="map-fill" size="34"></u-icon>
+					</view>
+					<view class="return_address_box">
+						<view class="return_car">
+							<view>{{order.returnAddress}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		
+	</view>
 </template>
 
 <script>
 	import api from '../../api/index.js';
 	import config from '../../common/config.js';
 	export default {
+		onLoad() {
+			uni.getSystemInfo({
+				success: (e) => {
+					this.height = e.safeArea.height - 136;
+				}
+			})
+		},
 		data() {
 			return {
 				dateRange:[],
 				pageNo: 1,
 				openid: uni.getStorageSync('openid'),
 				data: [],
+				height: 0,
 			}
 		},
 		onReachBottom() {
@@ -33,7 +69,7 @@
 		methods: {
 			onClick(e){
 				uni.navigateTo({
-					url: `/pages/order/OrderDetail?id=${e.id}`
+					url: `/pages/order/OrderDetail?id=${e.orderId}`
 				});
 			},
 			getOrderList(pageNo){
@@ -50,15 +86,11 @@
 							let tmpImg = '';
 							let tmpList = [];
 							res.rows.forEach(o => {
-								let carPhotos = ((o.car || {}).carPhotos || '').split(',');
-								tmpImg = carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` : '/static/img/car_defalut.png';
 								tmpList.push({
-									title: (o.car || {}).carBrand,
-									note: `${(o.car || {}).color},租期：${o.rentCarDays}天`,
-									thumb: tmpImg,
-									rightText: `取车时间：${this.dayjs(o.wantCarTime).format('YYYY-MM-DD')}`,
-									id: o.orderId,
-								})
+									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus === 'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o.payStatus === 'CLOSED' ? '订单关闭' : '未知状态',
+									payType: o.payStatus === 'SUCCESS' ? 'primary' : o.payStatus === 'NOTPAY' ? "success" : o.payStatus === 'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' : 'info',
+									...o
+									})
 							});
 							pageNum === 1 ? this.data = tmpList : this.data = this._.concat(this.data, tmpList);
 							pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
@@ -82,6 +114,82 @@
 	}
 </script>
 
-<style>
-
+<style lang="scss">
+	.order_card {
+		background-color: #FFFFFF;
+		padding: 10px 0px 10px 0px;
+		margin: 10px;
+		width: 95%;
+		height: 250rpx;
+		display: flex;
+		flex-direction: column;
+		border-radius: 8px;
+	}
+	.top {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		margin-bottom: 5px;
+	}
+	.middle {
+		flex: 1;
+		display: flex;
+		flex-direction: row;
+	}
+	.bottom {
+		flex: 1;
+		display: flex;
+		flex-direction: row;
+	}
+	.dot_line {
+		flex: 1;
+		padding: 1px 10px 1px 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.dot {
+		background-color: #fdd51e;
+		width: 18px;
+		height: 18px;
+		border: 1px solid #fdd51e;
+		border-radius: 50%;
+	}
+	
+	.line {
+		flex: 1;
+		width: 1px;
+		border: 1px dashed black;
+	}
+	
+	.address_box {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+	}
+	
+	.return_address_box {
+		display: flex;
+		width: 100%;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+	
+	.take_car {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		font-size: 14px;
+		font-weight: 700;
+	}
+	
+	.return_car {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		font-size: 14px;
+		font-weight: 700;
+	}
 </style>

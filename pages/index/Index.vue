@@ -8,10 +8,10 @@
 			</view>
 		</view>
 		<view class="serviceBox">
-			<view class="novice_service"><u-button type="warning" size="small" :custom-style="noviceServiceBtn">详情>></u-button></view>
+			<image class="novice_service" src="../../static/img/new_hand.png" mode="aspectFill"></image>
 			<view class="right_box">
 				<view class="right_box_top"><u-button type="warning" size="small" :custom-style="reservationStyle">立即预定></u-button></view>
-				<view class="right_box_bottom"><u-button type="warning" size="small" :custom-style="queryStyle">立即查询></u-button></view>
+				<image class="right_box_bottom" src="../../static/img/shop_query.png"></image>
 			</view>
 		</view>
 		<view>
@@ -65,10 +65,10 @@ export default {
 		return {
 			carId: '',
 			menus: [
-				{icon: 'icon-121zhanweitu', text: '挂靠登记'},
 				{icon: 'icon-121zhanweitu', text: '优惠券'},
 				{icon: 'icon-121zhanweitu', text: '合同扫码'},
 				{icon: 'icon-121zhanweitu', text: '出行宝典'},
+				{icon: 'icon-121zhanweitu', text: '挂靠登记'},
 			],
 			noviceServiceBtn:{
 				width: '40%',
@@ -167,14 +167,14 @@ export default {
 	display: flex;
 	flex-direction: row;
 	width: 100%;
-	height: 300rpx;
+	height: 370rpx;
 	padding: 10px;
 }
 .novice_service {
-	flex: 1;
-	background-color: red;
+	height: 165px;
+	width: 165px;
 	border-radius: 8px;
-	margin-right: 5px;
+	margin-right: 20px;
 }
 .right_box {
 	flex: 1;
@@ -186,13 +186,12 @@ export default {
 	flex: 1;
 	border-radius: 8px;
 	background-color: green;
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 }
 .right_box_bottom {
-	width: 100%;
-	flex: 1;
+	width: 174px;
+	height: 94px;
 	border-radius: 8px;
-	background-color: blue;
 }
 .handpick_box {
 	display: flex;

@@ -1,5 +1,5 @@
 <template>
-	<scroll-view>
+	<scroll-view class="bg_color">
 		<u-sticky>
 			<view class="search">
 				<uni-easyinput  v-model="keyword" placeholder="请输入关键字搜索" suffixIcon="search" @iconClick="search" input-align="center"></uni-easyinput>
@@ -71,6 +71,7 @@
 							let carPhotos = o.carPhotos.split(',');
 							tmpList.push({
 								nickName: o.carBrand,
+								info: (o.complany || {}).complanyName || '未知',
 								image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
 									'/static/img/car_defalut.png',
 								type: o.type,

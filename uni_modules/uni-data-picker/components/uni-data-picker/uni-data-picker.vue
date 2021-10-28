@@ -16,7 +16,7 @@
 						</view>
 					</scroll-view>
 					<text v-else class="selected-area placeholder">{{placeholder}}</text>
-					<view v-show="clearIcon && !readonly && inputSelected.length" class="icon-clear"
+					<view v-if="clearIcon && !readonly && inputSelected.length" class="icon-clear"
 						@click.stop="clear">
 						<uni-icons type="clear" color="#e1e1e1" size="14"></uni-icons>
 					</view>

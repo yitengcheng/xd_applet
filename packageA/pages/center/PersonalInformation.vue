@@ -1,39 +1,24 @@
 <template>
-	<view class="container">
-		<view class="page_title">驾照信息</view>
-		<view class="form_item">
-			<view class="form_item_title">上传驾照主页</view>
-			<uni-file-picker @select="upload" :limit="1" file-mediatype="image" v-model="license"></uni-file-picker>
-		</view>
-		<view class="form_item">
-			<view class="form_item_title">电话号码<space style="color: red;">*</space></view>
-			<view class="form_item_phone">
-				<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber" class="form_item_phone_input"></uni-easyinput>
-				<button open-type="getPhoneNumber" @getphonenumber="getUserInfo" size="mini" class="form_item_phone_btn">获取手机号</button>
-			</view>
-			
-		</view>
-		<view class="form_item">
-			<view class="form_item_title">驾驶证号<space style="color: red;">*</space></view>
-			<uni-easyinput placeholder="请输入驾驶证号" v-model="idcard"></uni-easyinput>
-		</view>
+	<view class="per_content" :style="[{ minHeight: height + 'px', width: '100%'}]" >
 		<view class="form_item">
 			<view class="form_item_title">姓名<space style="color: red;">*</space></view>
-			<uni-easyinput placeholder="请输入姓名" v-model="name"></uni-easyinput>
+			<uni-easyinput class="form_item_input" placeholder="请输入姓名" v-model="name" :inputBorder="false"></uni-easyinput>
 		</view>
+		<view class="line"></view>
 		<view class="form_item">
-			<view class="form_item_title">性别</view>
-			<uni-data-checkbox :localdata="range" placeholder="请选择性别" v-model="sex"></uni-data-checkbox>
+			<view class="form_item_title">驾驶证号/身份证号<space style="color: red;">*</space></view>
+			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号/身份证号" v-model="idcard" :inputBorder="false"></uni-easyinput>
 		</view>
+		<view class="line"></view>
 		<view class="form_item">
-			<view class="form_item_title">准驾车型</view>
-			<uni-easyinput placeholder="请输入准驾车型" v-model="driverType"></uni-easyinput>
+			<view class="form_item_title" style="width: 80px;">电话号码<space style="color: red;">*</space></view>
+			<view class="form_item_phone">
+				<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber" class="form_item_phone_input" :inputBorder="false"></uni-easyinput>
+				<button open-type="getPhoneNumber" @getphonenumber="getUserInfo" size="mini" class="form_item_phone_btn">获取手机号</button>
+			</view>
 		</view>
-		<view class="form_item">
-			<view class="form_item_title">证件有效期</view>
-			<uni-datetime-picker placeholder="请选择驾照有效期" type="dateranger" v-model="invalidCarTime">
-			</uni-datetime-picker>
-		</view>
+		<view class="line"></view>
+		<button>扫描身份证快速添加</button>
 		<button type="primary" class="sumbit_btn" @click="onSumbit">提交</button>
 	</view>
 </template>
@@ -42,29 +27,22 @@
 	import config from '../../../common/config.js';
 	import api from '../../../api/index.js';
 	export default {
+		onLoad() {
+			uni.getSystemInfo({
+				success: (e) => {
+					this.height = e.safeArea.height;
+				}
+			})
+		},
 		mounted() {
 			this.setInitInfo();
 		},
 		data() {
 			return {
-				license: [],
-				licenseUrl: '',
 				name: '',
-				sex: '',
 				idcard: '',
-				driverType: '',
-				invalidCarTime: [],
 				phoneNumber: '',
-				range: [{
-					"value": '0',
-					"text": "男"
-				}, {
-					"value": '1',
-					"text": "女"
-				}, {
-					"value": '2',
-					"text": "未知"
-				}]
+				height: 0,
 			};
 		},
 		methods: {
@@ -72,11 +50,16 @@
 				uni.login({
 					onlyAuthorize: true,
 					success: (res) => {
+						uni.showLoading({
+							title: '加载中',
+							icon: 'none',
+						});
 						!!res.code && api.getInfo({
 							encryptedData: e.detail.encryptedData,
 							iv: e.detail.iv,
 							code: res.code
 						}).then(res => {
+							uni.hideLoading();
 							uni.setStorageSync('openid', res.data.openid);
 							uni.setStorageSync('userInfo', res.data.userInfo);
 							this.phoneNumber = res.data.userInfo.phoneNumber;
@@ -87,19 +70,8 @@
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
 				if (userInfo) {
-					let extname = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('.') + 1);
-					let name = (userInfo.licenseMainUrl || '').substring((userInfo.licenseMainUrl || '').lastIndexOf('/') + 1);
-					this.license = [{
-							name,
-							extname,
-							url: `${config.IMG_URL}${userInfo.licenseMainUrl}`,
-						}],
-						this.licenseUrl = userInfo.licenseMainUrl;
 					this.name = userInfo.name;
-					this.sex = userInfo.sex;
 					this.idcard = userInfo.idcard;
-					this.driverType = userInfo.driveType;
-					this.invalidCarTime = (userInfo.invalidCarTime || '').split(',');
 					this.phoneNumber = userInfo.phoneNumber;
 				}
 			},
@@ -153,7 +125,7 @@
 			onSumbit(e) {
 				if (!this.idcard) {
 					return uni.showToast({
-						title: '请输入驾驶证号',
+						title: '请输入驾驶证号/身份证号',
 						icon: 'none'
 					})
 				}
@@ -171,12 +143,8 @@
 				}
 				api.updateUser({
 					name: this.name,
-					sex: this.sex,
 					idcard: this.idcard,
-					driveType: this.driverType,
 					phoneNumber: this.phoneNumber,
-					licenseMainUrl: this.licenseUrl,
-					invalidCarTime: this.invalidCarTime.toString(','),
 					openid: uni.getStorageSync('openid'),
 				}).then(res => {
 					if (!res.data) {
@@ -194,8 +162,15 @@
 </script>
 
 <style lang="scss">
-	.container {
-		padding: 10px
+	.per_content {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		width: 100%;
+		padding: 10px;
+		align-items: center;
+		overflow-y: hidden;
+		background-color: #f4f4f4;
 	}
 
 	.page_title {
@@ -204,17 +179,32 @@
 
 	.form_item {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		width: 90%;
 		margin-top: 20rpx;
+		align-items: center;
 	}
 
 	.form_item_title {
-		height: 24px;
+		height: 36px;
+		line-height: 36px;
+	}
+	
+	.form_item_input {
+		flex: 1;
+	}
+	
+	.line {
+		height: 1px;
+		width: 90%;
+		background-color: #888888;
+		margin: 10px 0px 10px 0px;
 	}
 
 	.sumbit_btn {
 		margin-top: 20rpx;
 	}
+	
 	
 	.form_item_phone {
 		display: flex;
@@ -228,6 +218,9 @@
 	}
 	
 	.form_item_phone_btn {
-		margin: 0;
+		background-color: #FFFFFF;
+		color: #000000;
+		border-radius: 20px;
+		border: 1px #000000 solid;
 	}
 </style>

@@ -40,15 +40,14 @@
 		<view class="coupons_box">
 			<text class="coupon_text">优惠券</text>
 			<uni-data-picker class="coupon_picker" :value="idcard" placeholder="请选择优惠券" :v-model="couponId"
-				:localdata="couponList" @change='changeCoupon'></uni-data-picker>
+				:localdata="couponList" @change='changeCoupon' :clearIcon="true"></uni-data-picker>
 		</view>
 		<text class="range_text" v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
 		<text class="range_money" v-show="rangeMoney">租车金额：￥{{rangeMoney}}元</text>
 		<view class="bottom_buttons">
-			<u-button class="bottom_button" @click="goBack">{{btnLeftText}}</u-button>
-			<u-button type="primary" class="bottom_button" @click="appointment">预约用车</u-button>
+			<u-button class="bottom_button" @click="goBack" :hair-line="false">{{btnLeftText}}</u-button>
+			<u-button type="primary" class="bottom_button" @click="appointment" :hair-line="false">预约用车</u-button>
 		</view>
-		
 	</view>
 </template>
 
@@ -99,8 +98,6 @@
 				phone: '',
 				couponId: '',
 				couponList: [],
-				takeChecked: true,
-				returnChecked: true,
 				btnLeftText: '联系客服'
 			};
 		},
@@ -113,7 +110,7 @@
 				option.type === 'return' ? this.returnAddress = option.name : this.takeAddress = option.name;
 			},
 			changeCoupon(e) {
-				this.couponId = e.detail.value[0].value;
+				this.couponId = ((e.detail || {}).value[0] || {}).value || '';
 			},
 			initCoupon() {
 				api.coupons({
@@ -183,7 +180,7 @@
 					})
 					return;
 				}
-				if (this.datetimerange.length === 2 && this.rangeSeparator !== '') {
+				if (this.startTime && this.endTime && this.rangeSeparator !== '') {
 					let coupon = this._.find(this.couponList, o => {
 						return o.value == this.couponId
 					});
@@ -277,6 +274,9 @@
 				}
 			},
 			goBack() {
+				if(this.btnLeftText === ''){
+					
+				} else {}
 				uni.switchTab({
 					url: '/pages/car/Car'
 				})

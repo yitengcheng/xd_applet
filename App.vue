@@ -1,7 +1,6 @@
 <script>
 	export default {
 		onLaunch: () => {
-			uni.clearStorageSync();
 			console.log('App Launch')
 		},
 		onShow: function() {

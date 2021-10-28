@@ -28,8 +28,7 @@
 			"path": "pages/order/Order",
 			"style": {
 				"navigationBarTitleText": "订单",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 100
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/order/OrderDetail",
@@ -96,10 +95,11 @@
 		}]
 	}],
 	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#007AFF",
+		"color": "#333333",
+		"selectedColor": "#fdd51e",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
+		"iconWidth": "26.38px",
 		"list": [{
 				"pagePath": "pages/index/Index",
 				"iconPath": "static/img/index.png",
@@ -129,7 +129,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F4F4F4"
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
