@@ -18,8 +18,8 @@
 			</view>
 		</view>
 		<view class="line"></view>
-		<button>扫描身份证快速添加</button>
-		<button type="primary" class="sumbit_btn" @click="onSumbit">提交</button>
+		<view class="scan_idcard"><u-icon name="scan"></u-icon>扫描身份证快速添加</view>
+		<u-button type="primary" class="sumbit_btn" @click="onSumbit">提交</u-button>
 	</view>
 </template>
 
@@ -203,8 +203,8 @@
 
 	.sumbit_btn {
 		margin-top: 20rpx;
+		width: 80%;
 	}
-	
 	
 	.form_item_phone {
 		display: flex;
@@ -222,5 +222,12 @@
 		color: #000000;
 		border-radius: 20px;
 		border: 1px #000000 solid;
+	}
+	
+	.scan_idcard {
+		margin-top: 150rpx;
+		margin-bottom: 50rpx;
+		font-size: 12px;
+		color: #666666;
 	}
 </style>

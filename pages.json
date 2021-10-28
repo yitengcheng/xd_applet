@@ -80,13 +80,6 @@
 				"enablePullDownRefresh": true
 			}
 		}, {
-			"path": "pages/center/ScanQRcode",
-			"style": {
-				"navigationBarTitleText": "扫描电子合同",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
 			"path": "pages/center/AboutUs",
 			"style": {
 				"navigationBarTitleText": "关于我们",
