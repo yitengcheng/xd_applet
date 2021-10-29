@@ -1,38 +1,49 @@
 <template>
-	<view class="content" >
-		<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间" end-placeholder="结束时间"></uni-datetime-picker>
-		<view :style="[{ minHeight: height + 'px', width: '100%'}]">
-			<view class="order_card" v-for="(order,index) in data" :key="index" @click="onClick(order)">
-				<view class="top">
-					<text>{{dayjs(order.createTime).format('YYYY-MM-DD')}}</text>
-					<text>{{dayjs(order.createTime).format('HH:mm:ss')}}</text>
-					<u-tag :text="order.payText" shape="circleRight" :type="order.payType"></u-tag>
+	<view class="content">
+		<u-sticky>
+			<view>
+				<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间"
+					end-placeholder="结束时间"></uni-datetime-picker>
+				<u-tabs :list="payStatusList" :is-scroll="true" name="text" :current="type" @change="changePayType" active-color="#fdd51e"></u-tabs>
+			</view>
+		</u-sticky>
+		
+		<view class="order_card" v-for="(order,index) in data" :key="index" @click="onClick(order)">
+			<view class="top">
+				<text class="car_band">{{order.car.carBrand}}</text>
+				<text>{{dayjs(order.wantCarTime).format('YYYY-MM-DD')}}</text>
+				<text>{{dayjs(order.wantCarTime).format('HH:mm:ss')}}</text>
+				<u-tag :text="order.payText" shape="circle" :type="order.payType"></u-tag>
+			</view>
+			<view class="middle">
+				<view class="dot_line">
+					<view class="dot"></view>
+					<view class="line"></view>
 				</view>
-				<view class="middle">
-					<view class="dot_line">
-						<view class="dot"></view>
-						<view class="line"></view>
-					</view>
-					<view class="address_box">
-						<view class="take_car">
-							<view>{{order.address}}</view>
-						</view>
+				<view class="address_box">
+					<view class="car">
+						<view class="car_type">取车</view>
+						<view class="car_address">{{order.address}}</view>
 					</view>
 				</view>
-				<view class="bottom">
-					<view class="dot_line">
-						<view class="line"></view>
-						<u-icon name="map-fill" size="34"></u-icon>
-					</view>
-					<view class="return_address_box">
-						<view class="return_car">
-							<view>{{order.returnAddress}}</view>
+			</view>
+			<view class="bottom">
+				<view class="dot_line">
+					<u-icon name="map-fill" size="34"></u-icon>
+				</view>
+				<view class="return_address_box">
+					<view class="car">
+						<view class="car_type">还车</view>
+						<view class="car_address">{{order.returnAddress}}</view>
+						<view class="car_price">
+							<span class="symbol">￥</span>
+							{{order.totalMoney === '0' ? order.shouldMoney/100 : order.totalMoney/100}}
+							<span class="unit">元</span>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-		
 	</view>
 </template>
 
@@ -40,20 +51,29 @@
 	import api from '../../api/index.js';
 	import config from '../../common/config.js';
 	export default {
-		onLoad() {
-			uni.getSystemInfo({
-				success: (e) => {
-					this.height = e.safeArea.height - 136;
-				}
+		onLoad(option) {
+			
+			this.payStatus = option.payStatus || '';
+			this.type = option.type * 1 || 0;
+			this.$on('refreshOrder', ()=>{
+				this.getOrderList(1);
 			})
 		},
 		data() {
 			return {
-				dateRange:[],
+				dateRange: [],
 				pageNo: 1,
 				openid: uni.getStorageSync('openid'),
 				data: [],
-				height: 0,
+				payStatusList:[
+					{name: '全部', value: ''},
+					{name: '待付款', value: "NOTPAY"},
+					{name: '支付成功', value: 'SUCCESS'},
+					{name: '已退款', value: "REFUNDED"},
+					{name: '到店付款', value: "到店付款"},
+				],
+				payStatus: '',
+				type: 0,
 			}
 		},
 		onReachBottom() {
@@ -67,28 +87,34 @@
 			this.getOrderList(1);
 		},
 		methods: {
-			onClick(e){
+			onClick(e) {
 				uni.navigateTo({
 					url: `/packageA/pages/order/OrderDetail?id=${e.orderId}`
 				});
 			},
-			getOrderList(pageNo){
+			getOrderList(pageNo) {
 				let pageNum = pageNo || this.pageNo;
-				if(this.dateRange.length === 0 || this.dateRange.length === 2){
+				if (this.dateRange.length === 0 || this.dateRange.length === 2) {
 					api.orderList({
 						pageNum,
 						pageSize: 10,
 						openid: this.openid,
 						beginTime: this.dateRange[0] || '',
 						endTime: this.dateRange[1] || '',
+						payStatus: this.payStatus,
 					}).then((res = {}) => {
-						if(res.rows && res.rows.length >= 0){
+						if (res.rows && res.rows.length >= 0) {
 							let tmpImg = '';
 							let tmpList = [];
 							res.rows.forEach(o => {
 								tmpList.push({
-									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus === 'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o.payStatus === 'CLOSED' ? '订单关闭' : o.payStatus,
-									payType: o.payStatus === 'SUCCESS' ? 'primary' : o.payStatus === 'NOTPAY' ? "success" : o.payStatus === 'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' : 'primary',
+									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus ===
+										'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o
+										.payStatus === 'CLOSED' ? '订单关闭' : o.payStatus,
+									payType: o.payStatus === 'SUCCESS' ? 'primary' : o
+										.payStatus === 'NOTPAY' ? "success" : o.payStatus ===
+										'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' :
+										'primary',
 									...o
 								});
 							});
@@ -104,9 +130,16 @@
 					})
 				}
 			},
-			changeDate(e){
+			changeDate(e) {
 				this.dateRange = e;
 				this.$nextTick(() => {
+					this.getOrderList(1);
+				});
+			},
+			changePayType(e){
+				this.payStatus = this.payStatusList[e].value;
+				this.type = e;
+				this.$nextTick(()=>{
 					this.getOrderList(1);
 				});
 			}
@@ -119,12 +152,20 @@
 		background-color: #FFFFFF;
 		padding: 10px 0px 10px 0px;
 		margin: 10px;
-		width: 95%;
+		width: 90%;
 		height: 250rpx;
 		display: flex;
 		flex-direction: column;
 		border-radius: 8px;
 	}
+
+	.car_band {
+		width: 200rpx;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
 	.top {
 		display: flex;
 		flex-direction: row;
@@ -132,16 +173,19 @@
 		align-items: center;
 		margin-bottom: 5px;
 	}
+
 	.middle {
 		flex: 1;
 		display: flex;
 		flex-direction: row;
 	}
+
 	.bottom {
 		flex: 1;
 		display: flex;
 		flex-direction: row;
 	}
+
 	.dot_line {
 		flex: 1;
 		padding: 1px 10px 1px 10px;
@@ -149,7 +193,7 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	
+
 	.dot {
 		background-color: #fdd51e;
 		width: 18px;
@@ -157,39 +201,66 @@
 		border: 1px solid #fdd51e;
 		border-radius: 50%;
 	}
-	
+
 	.line {
 		flex: 1;
 		width: 1px;
-		border: 1px dashed black;
+		border-left: 1px dashed black;
 	}
-	
+
 	.address_box {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
 	}
-	
+
 	.return_address_box {
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		justify-content: flex-end;
 	}
-	
-	.take_car {
+
+	.car {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		font-size: 14px;
-		font-weight: 700;
+		position: relative;
+	}
+
+	.car_type {
+		font-size: 16px;
+		font-family: 'Microsoft YaHei';
+		font-weight: bold;
+		color: #333333;
+	}
+
+	.car_address {
+		font-size: 10px;
+		font-family: 'Microsoft YaHei';
+		font-weight: 400;
+		color: #999999;
+		width: 480rpx;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.car_price {
+		position: absolute;
+		top: 10%;
+		right: 5%;
+		font-family: 'Microsoft YaHei';
+		font-weight: 400;
+		line-height: 10px;
+		color: #FF4343;
 	}
 	
-	.return_car {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		font-size: 14px;
-		font-weight: 700;
+	.symbol {
+		font-size: 8px;
+	}
+	
+	.unit {
+		font-size: 8px;
+		color: #333333;
 	}
 </style>

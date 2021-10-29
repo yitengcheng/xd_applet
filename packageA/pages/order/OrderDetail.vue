@@ -1,5 +1,5 @@
 <template>
-	<view class="content" :enable-flex="true" :style="[{ minHeight: height + 'px', width: '100%'}]">
+	<view class="content" :style="[{ minHeight: height + 'px', width: '100%'}]">
 		<u-swiper class="swiper_box" :list="photos" mode="none" height="470"></u-swiper>
 		<view class="car_band">{{ carInfo.car.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -21,7 +21,6 @@
 			</view>
 			<view class="time_address">
 				<view class="dot_line">
-					<view class="line"></view>
 					<view class="dot"></view>
 				</view>
 				<view class="return_time_box">
@@ -37,6 +36,9 @@
 		</view>
 		<text class="range_text">租车时间：{{carInfo.rentCarDays}}天</text>
 		<text class="range_money">总金额：￥{{_.isString((carInfo.complany || {}).subMchId) ? carInfo.totalMoney/100 : carInfo.shouldMoney/100}}元</text>
+		<uni-popup ref="popup" type="dialog">
+			<uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
+		</uni-popup>
 		<view class="bottom_buttons">
 			<u-button class="bottom_button" type="primary" @click="toPay"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
@@ -44,9 +46,6 @@
 				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
 			<u-button class="bottom_button" type="primary" @click="showPact" v-show="pactFlag">合同预览</u-button>
 		</view>
-		<uni-popup ref="popup" type="dialog">
-			<uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
-		</uni-popup>
 	</view>
 </template>
 
@@ -66,7 +65,7 @@
 		onLoad(option) {
 			uni.getSystemInfo({
 				success: (e) => {
-					this.height = e.safeArea.height - 46;
+					this.height = e.windowHeight;
 				}
 			});
 			option.id && this.getOrderInfo(option.id);
@@ -145,11 +144,9 @@
 										icon: 'none',
 										success: () => {
 											uni.switchTab({
-												url: '/packageA/pages/car/Car',
+												url: '/pages/order/Order',
 												success: (res) => {
-													uni.$emit(
-														'refresh'
-														);
+													uni.$emit('refreshOrder');
 												}
 											});
 										}
@@ -218,7 +215,7 @@
 	.line {
 		flex: 1;
 		width: 1px;
-		border: 1px dashed black;
+		border-left: 1px dashed black;
 	}
 	
 	.time_address {
@@ -237,7 +234,6 @@
 		display: flex;
 		width: 100%;
 		flex-direction: column;
-		justify-content: flex-end;
 	}
 	
 	.car_time_address {
@@ -248,6 +244,7 @@
 	}
 	
 	.range_text {
+		margin-top: 100rpx;
 		font-size: 16px;
 		margin-bottom: 10px;
 	}
@@ -257,6 +254,8 @@
 		font-weight: 700;
 	}
 	.bottom_buttons {
+		position: absolute;
+		bottom: 0%;
 		display: flex;
 		flex-direction: row;
 		width: 100%;

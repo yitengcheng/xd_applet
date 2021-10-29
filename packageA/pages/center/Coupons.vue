@@ -36,14 +36,12 @@
 		methods:{
 			toUse(id){
 				uni.setStorageSync('complanyId', id);
-				let shop = {
-					callout:{
-						content: '优惠券跳转',
-					}
-				}
 				uni.reLaunch({
-					url: `/pages/index/Index?shop=${JSON.stringify(shop)}`
+					url: `/pages/index/Index`
 				});
+				uni.$emit('refreshCar');
+				uni.$emit('refreshIndex');
+				
 			},
 			getCouponsList(pageNo){
 				let pageNum = pageNo || this.pageNo;

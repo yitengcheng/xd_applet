@@ -181,9 +181,9 @@
 	}
 
 	.u-mode-light-primary {
-		background-color: $u-type-primary-light;
+		background-color: #333333;
 		color: $u-type-primary;
-		border: 1px solid $u-type-primary-disabled;
+		border: 1px solid $u-type-primary;
 	}
 	
 	.u-mode-light-success {

@@ -1,5 +1,5 @@
 <template>
-	<view class="content" :enable-flex="true">
+	<view class="content" :style="[{height: height + 'px'}]">
 		<u-swiper class="swiper_box" :list="photos" mode="none" height="500"></u-swiper>
 		<view class="car_band">{{ carInfo.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -21,12 +21,12 @@
 				</view>
 			</view>
 			<view class="time_address">
-				<view class="dot_line">
-					<view class="line"></view>
+				<view class="return_dot_line">
+					<view class="return_line"></view>
 					<view class="dot"></view>
 				</view>
 				<view class="time_box">
-					<view class=".car_time_address">
+					<view class="car_time_address">
 						<view>还车</view>
 						<uni-datetime-picker v-model="endTime" type="datetime" :start="end" :border="false"
 							@change="changeDate" />
@@ -60,6 +60,11 @@
 			SelectSwitch,
 		},
 		onLoad(option) {
+			uni.getSystemInfo({
+				success: (e) => {
+					this.height = e.windowHeight;
+				}
+			});
 			this.btnLeftText = option.type ? '回到店铺首页' : '联系客服';
 			let user = uni.getStorageSync('userInfo');
 			if (typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string') {
@@ -98,7 +103,8 @@
 				phone: '',
 				couponId: '',
 				couponList: [],
-				btnLeftText: '联系客服'
+				btnLeftText: '联系客服',
+				height: 0,
 			};
 		},
 		methods: {
@@ -328,7 +334,7 @@
 
 	.dot_line {
 		flex: 1;
-		padding: 1px 10px 1px 10px;
+		padding: 10px 10px 0px 10px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -344,8 +350,20 @@
 
 	.line {
 		flex: 1;
-		width: 1px;
-		border: 1px dashed black;
+		border-left: 1px dashed black;
+	}
+	
+	.return_dot_line {
+		flex: 1;
+		padding: 1px 10px 0px 10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	.return_line {
+		height: 20rpx;
+		border-left: 1px dashed black;
 	}
 
 	.time_address {
@@ -397,6 +415,8 @@
 		font-weight: 700;
 	}
 	.bottom_buttons {
+		position: absolute;
+		bottom: 0;
 		display: flex;
 		flex-direction: row;
 		width: 100%;

@@ -25,7 +25,7 @@
 						res.rows.forEach(o => {
 							this.list.push({
 								title: o.complanyName,
-								image: '/static/img/shop_icon.png',
+								image: '/packageA/static/img/shop_icon.png',
 								id: o.id,
 							});
 						})
@@ -34,14 +34,11 @@
 			},
 			toCar(complany){
 				uni.setStorageSync('complanyId', complany.id);
-				let shop = {
-					callout:{
-						content: complany.title,
-					}
-				}
 				uni.reLaunch({
-					url: `/packageA/pages/car/Car?shop=${JSON.stringify(shop)}`
+					url: `/pages/car/Car`
 				});
+				uni.$emit('refreshIndex');
+				uni.$emit('refreshCar');
 			}
 		}
 	}

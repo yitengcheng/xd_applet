@@ -1,5 +1,5 @@
 <template>
-	<view class="center_content">
+	<view class="content">
 		<view class="top_box">
 			<image src="../../static/img/center_bg.png" class="center_bg"></image>
 			<view class="info_box">
@@ -11,19 +11,19 @@
 			</view>
 		</view>
 		<view class="static_box">
-			<view class="number">
+			<view class="number" @click="toCollection">
 				<u-count-to class="number_text" :start-val="0" :end-val="collectionNumber"></u-count-to>
 				<view>足迹</view>
 			</view>
-			<view class="number">
+			<view class="number" @click="toCoupons">
 				<u-count-to class="number_text" :start-val="0" :end-val="couponNumber"></u-count-to>
 				<view>优惠券</view>
 			</view>
-			<view class="number">
+			<view class="number" @click="clickNo">
 				<u-count-to class="number_text" :start-val="0" :end-val="0"></u-count-to>
 				<view>里程数</view>
 			</view>
-			<view class="number">
+			<view class="number" @click="clickNo">
 				<u-count-to class="number_text" :start-val="0" :end-val="0"></u-count-to>
 				<view>积分</view>
 			</view>
@@ -34,21 +34,25 @@
 					<image src="../../static/img/order_center.png" class="orader_img"></image>
 					<view>我的订单</view>
 				</view>
-				<view class="look_order">查看订单></view>
+				<view class="look_order" @click="toOrderList(0,'')">查看订单></view>
 			</view>
 			<view class="line">-</view>
 			<view class="order_box_options">
-				<view class="order_box_option">
+				<view class="order_box_option" @click="toOrderList(1,'NOTPAY')">
 					<image src="../../static/img/payment.png" class="order_box_option_img"></image>
-					<view class="order_box_option_text">代付款</view>
+					<view class="order_box_option_text">待付款</view>
 				</view>
-				<view class="order_box_option">
+				<view class="order_box_option" @click="toOrderList(3,'REFUNDED')">
 					<image src="../../static/img/refund.png" class="order_box_option_img"></image>
-					<view class="order_box_option_text">退款</view>
+					<view class="order_box_option_text">已退款</view>
 				</view>
-				<view class="order_box_option">
+				<view class="order_box_option" @click="toOrderList(2,'SUCCESS')">
 					<image src="../../static/img/order_icon.png" class="order_box_option_img"></image>
-					<view class="order_box_option_text">全部订单</view>
+					<view class="order_box_option_text">付款成功</view>
+				</view>
+				<view class="order_box_option" @click="toOrderList(4,'到店付款')">
+					<image src="../../static/img/offline_pay.png" class="order_box_option_img"></image>
+					<view class="order_box_option_text">到店付款</view>
 				</view>
 			</view>
 		</view>
@@ -58,32 +62,26 @@
 				<text class="verify_box_info_text">快来验证吧>></text>
 			</view>
 			<image src="../../static/img/perason.png" class="verify_box_info_img"></image>
-			<u-button type="primary" :custom-style="verify_box_info_btn">验证</u-button>
+			<u-button type="primary" :custom-style="verify_box_info_btn" @click="toPerson">验证</u-button>
 		</view>
 		<view class="bottom_title">
 			<image src="../../static/img/service.png" class="bottom_title_img"></image>
 			<text class="bottom_title_text">平台服务</text>
 		</view>
 		<view class="bottom_box">
-			<view class="bottom_item">
+			<view class="bottom_item" @click="clickNo">
 				<image src="../../static/img/contact.png" class="bottom_item_img"></image>
 				<text class="bottom_item_text">联系客服</text>
 			</view>
-			<view class="bottom_item">
+			<view class="bottom_item" @click="scanQR">
 				<image src="../../static/img/pact.png" class="bottom_item_img"></image>
 				<text class="bottom_item_text">合同扫码</text>
 			</view>
-			<view class="bottom_item">
+			<view class="bottom_item" @click="clickNo">
 				<image src="../../static/img/about_us.png" class="bottom_item_img"></image>
 				<text class="bottom_item_text">关于我们</text>
 			</view>
 		</view>
-		<!-- <view class="btn_box">
-			<view v-for="(item,index) in buttonList" :key='index' class="btn_item" @click="goToPage(item.path)">
-				<text class="t-icon btn_icon" :class="'t-' + item.icon"></text>
-				<text class="btn_title">{{item.title}}</text>
-			</view>
-		</view> -->
 	</view>
 </template>
 
@@ -114,9 +112,79 @@
 			}
 		},
 		methods: {
-			goToPage(url) {
+			toCollection(){
 				uni.navigateTo({
-					url,
+					url: '/packageA/pages/center/Collection'
+				});
+			},
+			toCoupons(){
+				uni.navigateTo({
+					url: '/packageA/pages/center/Coupons'
+				})
+			},
+			clickNo(){
+				uni.showToast({
+					title: '功能尚在开发中，敬请期待',
+					icon: 'error'
+				});
+			},
+			toOrderList(type, payStatus){
+				uni.reLaunch({
+					url: `/pages/order/Order?type=${type}&payStatus=${payStatus}`
+				});
+				uni.$emit('refreshOrder');
+			},
+			scanQR() {
+				uni.scanCode({
+					onlyFromCamera: true,
+					success: (code) => {
+						let {
+							result
+						} = code;
+						let user = uni.getStorageSync('userInfo');
+						if (!user.phoneNumber) {
+							uni.navigateTo({
+								url: '/packageA/pages/center/PersonalInformation'
+							})
+							return;
+						}
+						// 请求合同签署令牌
+						api.getTicket({
+							contractId: result,
+							phone: user.phoneNumber,
+						}).then(res => {
+							let {
+								data
+							} = res;
+							if (data) {
+								// 跳转合同签署
+								wx.navigateTo({
+									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
+									events: {
+										signSuccessCb: () => { // 签署成功回调
+											const url = '/pages/index/Index'; // 需要跳转的小程序页面地址，必须是绝对路径，可不传
+											eventChannel.emit('jumpTo',url); // 触发跳转逻辑，回调存在时必需调用，url不传默认返回
+										},
+									},
+									success(res) {
+										uni.showModal({
+											title: '签署成功',
+											icon: 'success',
+											showCancel:false,
+											success: (e) => {
+												eventChannel = res.eventChannel;
+											}
+										});
+									},
+								});
+							}
+						})
+					}
+				});
+			},
+			toPerson(){
+				uni.navigateTo({
+					url: '/packageA/pages/center/PersonalInformation'
 				})
 			}
 		}
@@ -124,14 +192,6 @@
 </script>
 
 <style lang="scss">
-	.center_content {
-		display: flex;
-		width: 100%;
-		background-color: #F4F4F4;
-		flex-direction: column;
-		align-items: center;
-		min-height: 1310rpx;
-	}
 	.center_bg {
 		width: 100%;
 		height: 300rpx;

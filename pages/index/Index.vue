@@ -19,7 +19,7 @@
 			<view class="sift">租车精选</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)" margin="10rpx">
+					@click="toCarInfo(car.id)" margin="10rpx" border-radius="30">
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
@@ -249,15 +249,14 @@
 		display: flex;
 		flex-direction: row;
 		width: 100%;
-		height: 370rpx;
-		padding: 10px;
+		height: 395rpx;
+		padding: 20rpx 0 20rpx 20rpx;
 	}
 
 	.novice_service {
-		height: 165px;
-		width: 165px;
+		height: 355rpx;
+		width: 365rpx;
 		border-radius: 8px;
-		margin-right: 20px;
 	}
 
 	.right_box {
@@ -267,14 +266,14 @@
 	}
 
 	.right_box_top {
-		width: 174px;
-		height: 94px;
+		width: 365rpx;
+		height: 187.5rpx;
 		border-radius: 8px;
 	}
 
 	.right_box_bottom {
-		width: 174px;
-		height: 94px;
+		width: 365rpx;
+		height: 187.5rpx;
 		border-radius: 8px;
 	}
 

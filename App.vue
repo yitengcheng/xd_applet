@@ -21,9 +21,10 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
 		overflow: hidden;
 		background-color: #f4f4f4;
+		width: 100%;
+		min-height: 1320rpx;
 	}
 	
 	.bg_color{
