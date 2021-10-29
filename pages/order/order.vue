@@ -69,7 +69,7 @@
 		methods: {
 			onClick(e){
 				uni.navigateTo({
-					url: `/pages/order/OrderDetail?id=${e.orderId}`
+					url: `/packageA/pages/order/OrderDetail?id=${e.orderId}`
 				});
 			},
 			getOrderList(pageNo){
@@ -87,10 +87,10 @@
 							let tmpList = [];
 							res.rows.forEach(o => {
 								tmpList.push({
-									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus === 'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o.payStatus === 'CLOSED' ? '订单关闭' : '未知状态',
-									payType: o.payStatus === 'SUCCESS' ? 'primary' : o.payStatus === 'NOTPAY' ? "success" : o.payStatus === 'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' : 'info',
+									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus === 'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o.payStatus === 'CLOSED' ? '订单关闭' : o.payStatus,
+									payType: o.payStatus === 'SUCCESS' ? 'primary' : o.payStatus === 'NOTPAY' ? "success" : o.payStatus === 'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' : 'primary',
 									...o
-									})
+								});
 							});
 							pageNum === 1 ? this.data = tmpList : this.data = this._.concat(this.data, tmpList);
 							pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;

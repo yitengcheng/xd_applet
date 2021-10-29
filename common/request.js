@@ -38,7 +38,7 @@ request.globalRequest = (url, method, data) => {
 		}
 	}).catch(params => {
 		uni.showToast({
-			title: params.msg || '',
+			title: params.msg || '服务器连接失败',
 			icon: 'none',
 			duration: 2000,
 		});

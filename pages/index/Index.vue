@@ -11,17 +11,15 @@
 		<view class="serviceBox">
 			<image class="novice_service" src="../../static/img/new_hand.png" mode="aspectFill"></image>
 			<view class="right_box">
-				<view class="right_box_top">
-					<u-button type="warning" size="small" :custom-style="reservationStyle">立即预定></u-button>
-				</view>
-				<image class="right_box_bottom" src="../../static/img/shop_query.png"></image>
+				<image class="right_box_top" src="../../static/img/rent_car.png" @click="toCarPage"></image>
+				<image class="right_box_bottom" src="../../static/img/shop_query.png" @click="toMap"></image>
 			</view>
 		</view>
 		<view>
-			<view class="sift">小滴精选</view>
+			<view class="sift">租车精选</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)">
+					@click="toCarInfo(car.id)" margin="10rpx">
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
@@ -207,6 +205,16 @@
 						});
 						break;
 				}
+			},
+			toCarPage(){
+				uni.switchTab({
+					url: '/pages/car/Car'
+				});
+			},
+			toMap(){
+				uni.navigateTo({
+					url: '/packageA/pages/car/Map'
+				})
 			}
 		}
 	}
@@ -259,11 +267,9 @@
 	}
 
 	.right_box_top {
-		width: 100%;
-		flex: 1;
+		width: 174px;
+		height: 94px;
 		border-radius: 8px;
-		background-color: green;
-		margin-bottom: 15px;
 	}
 
 	.right_box_bottom {
@@ -281,7 +287,7 @@
 
 	.handpick_card {
 		width: 50%;
-		height: 500rpx;
+		height: 450rpx;
 	}
 
 	.handpick_card_text {

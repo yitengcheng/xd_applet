@@ -66,7 +66,7 @@ export default {
 			});
 		},
 		onMarker(e) {
-			(e.detail.markerId === 'my' || e.detail.markerId === 900000000) ? uni.setStorageSync('complanyId','') : uni.setStorageSync('complanyId', e.detail.markerId);
+			(e.detail.markerId !== 'my' && e.detail.markerId !== 900000000) && uni.setStorageSync('complanyId', e.detail.markerId);
 			uni.$emit('refreshIndex');
 			uni.$emit('refreshCar');
 			uni.navigateBack();

@@ -169,7 +169,7 @@
 						returnAddress: this.returnAddress,
 					}).then(res => {
 						if (res) {
-							uni.showToast({
+							uni.showModal({
 								title: '预约完成，请等待商户联系',
 								icon: 'success',
 								success: () => {
@@ -208,7 +208,7 @@
 					}).then((res = {}) => {
 						if (res.data) {
 							uni.navigateTo({
-								url: `/pages/order/OrderDetail?id=${res.data.orderId}`
+								url: `/packageA/pages/order/OrderDetail?id=${res.data.orderId}`
 							})
 						} else {
 							uni.showToast({
@@ -274,12 +274,22 @@
 				}
 			},
 			goBack() {
-				if(this.btnLeftText === ''){
-					
-				} else {}
-				uni.switchTab({
-					url: '/pages/car/Car'
-				})
+				if(this.btnLeftText === '联系客服'){
+					uni.makePhoneCall({
+					    phoneNumber: this.carInfo.complany.phoneNumber,
+						fail: ()=>{
+							uni.showModal({
+								title: '提示',
+								content: `未知原因导致拨打失败，请手动输入联系电话：${this.carInfo.complany.phoneNumber}`,
+								showCancel: false
+							})
+						}
+					});
+				} else {
+					uni.switchTab({
+						url: '/pages/index/Index'
+					})
+				}
 			}
 		}
 	}

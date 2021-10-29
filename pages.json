@@ -30,19 +30,6 @@
 				"navigationBarTitleText": "订单",
 				"enablePullDownRefresh": true
 			}
-		}, {
-			"path": "pages/order/OrderDetail",
-			"style": {
-				"navigationBarTitleText": "订单详情",
-				"enablePullDownRefresh": false
-			}
-
-		},  {
-			"path": "pages/order/PreviewPact",
-			"style": {
-				"navigationBarTitleText": "预览合同",
-				"enablePullDownRefresh": false
-			}
 		}
 	],
 	"subPackages": [{
@@ -65,7 +52,8 @@
 		{
 			"path": "pages/car/Map",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "店铺",
+				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/center/PersonalInformation",
@@ -83,6 +71,19 @@
 			"path": "pages/center/AboutUs",
 			"style": {
 				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
+		},  {
+			"path": "pages/order/PreviewPact",
+			"style": {
+				"navigationBarTitleText": "预览合同",
 				"enablePullDownRefresh": false
 			}
 		}]

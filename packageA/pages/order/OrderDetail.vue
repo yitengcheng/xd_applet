@@ -39,9 +39,9 @@
 		<text class="range_money">总金额：￥{{_.isString((carInfo.complany || {}).subMchId) ? carInfo.totalMoney/100 : carInfo.shouldMoney/100}}元</text>
 		<view class="bottom_buttons">
 			<u-button class="bottom_button" type="primary" @click="toPay"
-				v-show="(info.payStatus === 'NOTPAY' && !!info.complany.subMchId)">{{buttonText}}</u-button>
+				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
 			<u-button class="bottom_button" type="warn" @click="toRefund"
-				v-show="info.payStatus === 'SUCCESS' && !info.crvTime">退款申请</u-button>
+				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
 			<u-button class="bottom_button" type="primary" @click="showPact" v-show="pactFlag">合同预览</u-button>
 		</view>
 		<uni-popup ref="popup" type="dialog">
@@ -51,8 +51,8 @@
 </template>
 
 <script>
-	import api from '../../api/index.js';
-	import config from '../../common/config.js';
+	import api from '../../../api/index.js';
+	import config from '../../../common/config.js';
 	export default {
 		data() {
 			return {
@@ -100,11 +100,11 @@
 				let index = this.carInfo.contract.indexOf('/');
 				if (index === -1) {
 					uni.navigateTo({
-						url: `/pages/order/PreviewPact?isImage=0&param=${this.carInfo.contract}`
+						url: `/packageA/pages/order/PreviewPact?isImage=0&param=${this.carInfo.contract}`
 					})
 				} else {
 					uni.navigateTo({
-						url: `/pages/order/PreviewPact?isImage=1&param=${this.carInfo.contract}`
+						url: `/packageA/pages/order/PreviewPact?isImage=1&param=${this.carInfo.contract}`
 					})
 				}
 			},
