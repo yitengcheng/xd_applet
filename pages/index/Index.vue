@@ -1,5 +1,6 @@
 <template>
 	<view class="bg_color" :style="[{ minHeight: height + 'px', width: '100%'}]">
+		<uni-nav-bar :title="pageTitle" :statusBar="true"></uni-nav-bar>
 		<u-image width="100%" height="300rpx" src="https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg">
 		</u-image>
 		<view class="menusBox">
@@ -19,7 +20,7 @@
 			<view class="sift">租车精选</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)" margin="10rpx" border-radius="30">
+					@click="toCarInfo(car.id)" margin="1px" border-radius="30">
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
@@ -49,7 +50,11 @@
 				success: (res) => {
 					!!res.code && api.login(res.code).then((res = {}) => {
 						uni.setStorageSync('openid', (res.data || {}).openid);
-						uni.setStorageSync('userInfo', (res.data || {}).userInfo);
+						uni.setStorageSync('userInfo', {
+							collectionNumber: ((res.data || {}).collect||[]).length,
+							couponNumber: (res.data || {}).couponNum,
+							...(res.data || {}).userInfo,
+							});
 						uni.hideLoading();
 						if (this.carId) {
 							uni.reLaunch({
@@ -67,6 +72,7 @@
 					this.height = e.safeArea.height - 92;
 				}
 			});
+			uni.$on('changePageTitle',(title)=>{ this.changePageTitle(title)});
 		},
 		data() {
 			return {
@@ -110,25 +116,26 @@
 					marginTop: '30px',
 					marginLeft: '20px',
 				},
-				carList: []
+				carList: [],
+				pageTitle: ''
 			}
 		},
 		mounted() {
 			this.initCarList();
+			this.changePageTitle();
 		},
 		methods: {
+			changePageTitle(title){
+				this.pageTitle = title ? title : '优行小滴';
+			},
 			initCarList() {
-				api.carList({
-					pageNum: 1,
-					pageSize: 10,
-					carType: '',
-				}).then((res = {}) => {
-					if (res.rows) {
+				api.carSelectList().then((res = {}) => {
+					if (res.data) {
 						let {
-							rows
+							data
 						} = res;
 						let tmp = []
-						rows.forEach(row => {
+						data.forEach(row => {
 							let carPhotos = row.carPhotos.split(',');
 							tmp.push({
 								image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
@@ -286,7 +293,7 @@
 
 	.handpick_card {
 		width: 50%;
-		height: 450rpx;
+		height: 440rpx;
 	}
 
 	.handpick_card_text {

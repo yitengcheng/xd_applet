@@ -6,7 +6,10 @@ const car = {
 	},
 	carInfo: (id) => {
 		return request.globalRequest(`/system/car/api/${id}`, 'get');
-	}
+	},
+	carSelectList: (id) => {
+		return request.globalRequest(`/system/car/api/selected?complanyId=`, 'get');
+	},
 }
 
 

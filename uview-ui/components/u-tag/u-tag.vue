@@ -183,13 +183,13 @@
 	.u-mode-light-primary {
 		background-color: #333333;
 		color: $u-type-primary;
-		border: 1px solid $u-type-primary;
+		border: 1px solid #333333;
 	}
 	
 	.u-mode-light-success {
-		background-color: $u-type-success-light;
-		color: $u-type-success;
-		border: 1px solid $u-type-success-disabled;
+		background-color: $u-type-primary;
+		color: #333333;
+		border: 1px solid $u-type-primary;
 	}
 	
 	.u-mode-light-error {

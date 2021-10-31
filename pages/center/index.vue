@@ -59,7 +59,7 @@
 		<view class="verify_box">
 			<view class="verify_box_info">
 				<text class="verify_box_info_title">个人信息</text>
-				<text class="verify_box_info_text">快来验证吧>></text>
+				<text class="verify_box_info_text">验证快速租车>></text>
 			</view>
 			<image src="../../static/img/perason.png" class="verify_box_info_img"></image>
 			<u-button type="primary" :custom-style="verify_box_info_btn" @click="toPerson">验证</u-button>
@@ -89,8 +89,8 @@
 	import api from '../../api/index.js';
 	export default {
 		mounted() {
-			this.collectionNumber = 20;
-			this.couponNumber = 25;
+			this.collectionNumber = this.user.collectionNumber;
+			this.couponNumber = this.user.couponNumber;
 		},
 		data() {
 			return {

@@ -39,6 +39,7 @@
 				});
 				uni.$emit('refreshIndex');
 				uni.$emit('refreshCar');
+				uni.$emit('changePageTitle', complany.title);
 			}
 		}
 	}

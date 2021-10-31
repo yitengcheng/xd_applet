@@ -6,8 +6,8 @@
 		{
 			"path": "pages/index/Index",
 			"style": {
-				"navigationBarTitleText": "优行小滴",
-				"enablePullDownRefresh": false
+				"navigationStyle":"custom",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

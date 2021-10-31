@@ -8,7 +8,7 @@
 			</view>
 			<view class="card_box_right">
 				<view class="card_price">￥{{card.preferentialPrice}}</view>
-				<button class="card_use" :disabled="card.disabled" @click="toUse(card.id)">去使用</button>
+				<button class="card_use" :disabled="card.disabled" @click="toUse(card)">去使用</button>
 			</view>
 		</view>
 	</scroll-view>
@@ -34,11 +34,12 @@
 			this.getCouponsList(1);
 		},
 		methods:{
-			toUse(id){
-				uni.setStorageSync('complanyId', id);
+			toUse(card){
+				uni.setStorageSync('complanyId', card.id);
 				uni.reLaunch({
 					url: `/pages/index/Index`
 				});
+				// uni.$emit('changePageTitle')
 				uni.$emit('refreshCar');
 				uni.$emit('refreshIndex');
 				

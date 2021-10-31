@@ -67,8 +67,10 @@ export default {
 		},
 		onMarker(e) {
 			(e.detail.markerId !== 'my' && e.detail.markerId !== 900000000) && uni.setStorageSync('complanyId', e.detail.markerId);
+			let tmp = this._.find(this.markers, o => { return o.id === e.detail.markerId });
 			uni.$emit('refreshIndex');
 			uni.$emit('refreshCar');
+			uni.$emit('changePageTitle', ((tmp || {}).callout || {}).content);
 			uni.navigateBack();
 		},
 	}
