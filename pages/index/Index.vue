@@ -1,9 +1,7 @@
 <template>
 	<view class="bg_color" :style="[{ minHeight: height + 'px', width: '100%'}]">
 		<u-sticky>
-			<uni-nav-bar :statusBar="true">
-				<view class="status_bar_title">{{pageTitle}}</view>
-			</uni-nav-bar>
+			<uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar>
 		</u-sticky>
 		<u-image width="100%" height="300rpx" src="https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg">
 		</u-image>
@@ -21,7 +19,7 @@
 			</view>
 		</view>
 		<view>
-			<view class="sift">租车精选</view>
+			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image>精选</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
 					@click="toCarInfo(car.id)" margin="2px" border-radius="30">
@@ -54,6 +52,7 @@
 				success: (res) => {
 					!!res.code && api.login({code: res.code}).then((res = {}) => {
 						uni.setStorageSync('openid', (res.data || {}).openid);
+						this.pageTitle = (res.data || {}).complanyName;
 						uni.setStorageSync('userInfo', {
 							collectionNumber: ((res.data || {}).collect||[]).length,
 							couponNumber: (res.data || {}).couponNum,
@@ -126,10 +125,10 @@
 		},
 		mounted() {
 			this.initCarList();
-			this.changePageTitle();
 		},
 		methods: {
 			changePageTitle(title){
+				console.log(title);
 				this.pageTitle = title ? title : '优行小滴';
 			},
 			initCarList() {
@@ -232,6 +231,10 @@
 </script>
 
 <style lang="scss">
+	.rental_car_logo {
+		width: 70rpx;
+		height: 35rpx;
+	}
 	.status_bar_title {
 		flex: 1;
 		font-size: 14px;
