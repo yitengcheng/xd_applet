@@ -2,7 +2,7 @@ import request from '../../common/request.js'
 
 const user = {
 	login:(data)=>{
-		return request.globalRequest(`/tool/wxlogin?code=${data}`, 'post');
+		return request.globalRequest(`/tool/wxlogin`, 'post', data);
 	},
 	getInfo:(data)=>{
 		return request.globalRequest('/tool/wx/getinfo', 'post', data);

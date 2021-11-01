@@ -1,6 +1,10 @@
 <template>
 	<view class="bg_color" :style="[{ minHeight: height + 'px', width: '100%'}]">
-		<uni-nav-bar :title="pageTitle" :statusBar="true"></uni-nav-bar>
+		<u-sticky>
+			<uni-nav-bar :statusBar="true">
+				<view class="status_bar_title">{{pageTitle}}</view>
+			</uni-nav-bar>
+		</u-sticky>
 		<u-image width="100%" height="300rpx" src="https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg">
 		</u-image>
 		<view class="menusBox">
@@ -20,7 +24,7 @@
 			<view class="sift">租车精选</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)" margin="1px" border-radius="30">
+					@click="toCarInfo(car.id)" margin="2px" border-radius="30">
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
@@ -48,7 +52,7 @@
 			uni.login({
 				onlyAuthorize: true,
 				success: (res) => {
-					!!res.code && api.login(res.code).then((res = {}) => {
+					!!res.code && api.login({code: res.code}).then((res = {}) => {
 						uni.setStorageSync('openid', (res.data || {}).openid);
 						uni.setStorageSync('userInfo', {
 							collectionNumber: ((res.data || {}).collect||[]).length,
@@ -228,6 +232,10 @@
 </script>
 
 <style lang="scss">
+	.status_bar_title {
+		flex: 1;
+		font-size: 14px;
+	}
 	.menusBox {
 		margin-top: 20rpx;
 		margin-bottom: 20rpx;
