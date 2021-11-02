@@ -81,6 +81,10 @@
 				<image src="../../static/img/about_us.png" class="bottom_item_img"></image>
 				<text class="bottom_item_text">关于我们</text>
 			</view>
+			<view class="bottom_item" @click="clearStorage">
+				<image src="../../static/img/clear.png" class="bottom_item_img"></image>
+				<text class="bottom_item_text">清理缓存</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -186,6 +190,18 @@
 				uni.navigateTo({
 					url: '/packageA/pages/center/PersonalInformation'
 				})
+			},
+			clearStorage(){
+				let complanyId = uni.getStorageSync('complanyId');
+				let appletType = uni.getStorageSync('appletType');
+				uni.clearStorage();
+				uni.setStorageSync('complanyId', complanyId);
+				uni.setStorageSync('appletType', appletType);
+				uni.showToast({
+					title: '清理完成，请关闭小程序重新进入',
+					icon:'none',
+					duration: 3000,
+				});
 			}
 		}
 	}

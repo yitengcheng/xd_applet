@@ -26,7 +26,7 @@
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
-						<view>{{car.price}}元/天</view>
+						<view>{{car.unitPrice}}元/天</view>
 					</view>
 				</u-card>
 			</view>
@@ -52,7 +52,7 @@
 				success: (res) => {
 					!!res.code && api.login({code: res.code}).then((res = {}) => {
 						uni.setStorageSync('openid', (res.data || {}).openid);
-						this.pageTitle = (res.data || {}).complanyName;
+						this.changePageTitle((res.data || {}).complanyName);
 						uni.setStorageSync('userInfo', {
 							collectionNumber: ((res.data || {}).collect||[]).length,
 							couponNumber: (res.data || {}).couponNum,
