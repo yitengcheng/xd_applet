@@ -10,7 +10,7 @@
 		<view class="form_item">
 			<view class="form_item_title">驾驶证号/身份证号<space style="color: red;">*</space>
 			</view>
-			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号/身份证号" v-model="idcard" :inputBorder="false" :maxlength="18">
+			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号" v-model="idcard" :inputBorder="false" :maxlength="18">
 			</uni-easyinput>
 		</view>
 		<view class="line"></view>
@@ -24,9 +24,15 @@
 					class="form_item_phone_btn">获取手机号</button>
 			</view>
 		</view>
+		<view class="form_item">
+			<view class="form_item_title">档案编号<space style="color: red;">*</space>
+			</view>
+			<uni-easyinput class="form_item_input" placeholder="请输入档案编号" v-model="archivesNum" :inputBorder="false" >
+			</uni-easyinput>
+		</view>
 		<view class="line"></view>
 		<view class="scan_idcard" @click="identifyIdcard">
-			<u-icon name="scan"></u-icon>扫描身份证快速添加
+			<u-icon name="scan"></u-icon>扫描驾驶证快速添加
 		</view>
 		<u-button type="primary" class="sumbit_btn" @click="onSumbit">提交</u-button>
 	</view>
@@ -45,6 +51,7 @@
 				name: '',
 				idcard: '',
 				phoneNumber: '',
+				archivesNum: '',
 			};
 		},
 		methods: {
@@ -86,20 +93,15 @@
 							title: '识别中'
 						})
 						uni.uploadFile({
-							url: `${config.API_URL}/tool/ocr/idcard?type=2`,
+							url: `${config.API_URL}/tool/ocr/driving?type=8`,
 							filePath: res.tempFilePaths[0],
 							name: 'file',
 							success: (data) => {
 								let result = JSON.parse(data.data);
-								let {
-									url
-								} = result;
-								let {
-									words_result
-								} = e.ocr;
-								if (url && !!words_result) {
-									this.name = words_result.姓名.words;
-									this.idcard = words_result.公民身份号码.words;
+								let { url,ocr } = result.data;
+								if (url && !!ocr) {
+									this.name = ocr.name;
+									this.idcard = ocr.licenseNumber;
 								}
 								uni.hideLoading();
 							},
@@ -124,6 +126,12 @@
 				if (!this.name) {
 					return uni.showToast({
 						title: '请输入姓名',
+						icon: 'none'
+					})
+				}
+				if (!this.archivesNum) {
+					return uni.showToast({
+						title: '请输入驾照副页档案编号',
 						icon: 'none'
 					})
 				}

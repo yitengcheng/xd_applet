@@ -56,7 +56,7 @@
 			search() {
 				this.getCarList(1);
 			},
-			getCarList(pageNo, init = false) {
+			getCarList(pageNo, init = true) {
 				let pageNum = pageNo || this.pageNo;
 				let type = this.carType === -1 ? '' : this.carType;
 				api.carList({

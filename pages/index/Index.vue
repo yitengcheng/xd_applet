@@ -19,7 +19,7 @@
 			</view>
 		</view>
 		<view>
-			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image>精选</view>
+			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image></view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
 					@click="toCarInfo(car.id)" margin="2px" border-radius="30">
@@ -232,8 +232,8 @@
 
 <style lang="scss">
 	.rental_car_logo {
-		width: 70rpx;
-		height: 35rpx;
+		width: 180rpx;
+		height: 55rpx;
 	}
 	.status_bar_title {
 		flex: 1;

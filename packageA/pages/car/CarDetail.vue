@@ -15,7 +15,7 @@
 						<uni-datetime-picker v-model="startTime" type="datetime" :start="start" :border="false"
 							@change="changeDate" />
 					</view>
-					<view class="car_time_address" @click="toMapTake">{{takeAddress}}
+					<view class="car_time_address" @click="toMapTake">{{takeAddress || ' '}}
 						<u-icon name="map"></u-icon>
 					</view>
 				</view>
@@ -31,7 +31,7 @@
 						<uni-datetime-picker v-model="endTime" type="datetime" :start="end" :border="false"
 							@change="changeDate" />
 					</view>
-					<view class="car_time_address" @click="toMapReturn">{{returnAddress}}
+					<view class="car_time_address" @click="toMapReturn">{{returnAddress || ' '}}
 						<u-icon name="map"></u-icon>
 					</view>
 				</view>
