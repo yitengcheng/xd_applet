@@ -19,9 +19,7 @@
 			WaterfallsFlow,
 		},
 		onLoad(option) {
-			this.dictInit('car_type').then(res => {
-				this.carTypeList = uni.getStorageSync('car_type');
-			});
+			this.dictInit('car_type');
 			uni.$on('refreshCar', ()=>{
 				this.getCarList(1, true);
 			})
@@ -40,7 +38,6 @@
 			return {
 				list: [],
 				keyword: '',
-				appletType: uni.getStorageSync('appletType'),
 				pageNo: 1,
 				type: 0,
 				carTypeList: [],
@@ -56,7 +53,7 @@
 			search() {
 				this.getCarList(1);
 			},
-			getCarList(pageNo, init = true) {
+			getCarList(pageNo, init = false) {
 				let pageNum = pageNo || this.pageNo;
 				let type = this.carType === -1 ? '' : this.carType;
 				api.carList({
@@ -81,19 +78,19 @@
 						pageNum === 1 ? this.list = tmpList : this.list = this._.concat(this.list, tmpList);
 						pageNum === 1 ? this.pageNo = 2 : this.pageNo = this.pageNo + 1;
 						if (init) {
-							this.carTypeList = uni.getStorageSync('car_type');
-							this.$nextTick(() => {
-								let tmp = [];
-								this.list.forEach(o => {
-									tmp.push(this._.find(this.carTypeList, item => {
-										return item.value === o.type
-									}));
-								});
-								this.carTypeList = this._.concat([{
-									text: '全部',
-									value: -1
-								}], this._.uniqBy(tmp, 'value'));
-							});
+							api.companyCarType(uni.getStorageSync('complanyId')).then((res = {})=> {
+								if((res.data || []).length > 0){
+									this.carTypeList.push({text: '全部', value: -1});
+									res.data.forEach(o => {
+										this.carTypeList.push({text: o, value: o});
+									});
+								} else {
+									this.carTypeList = this._.concat([{
+										text: '全部',
+										value: -1
+									}], uni.getStorageSync('car_type'));
+								}
+							})
 						}
 					}
 					uni.stopPullDownRefresh();

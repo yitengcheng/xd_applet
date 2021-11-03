@@ -3,7 +3,7 @@
 		<u-sticky>
 			<uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar>
 		</u-sticky>
-		<u-image width="100%" height="300rpx" src="https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg">
+		<u-swiper :list="swiperList" mode="none" height="300" img-mode="scaleToFill"></u-swiper>
 		</u-image>
 		<view class="menusBox">
 			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @click="toOtherPage(index)">
@@ -26,7 +26,13 @@
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
-						<view>{{car.unitPrice}}元/天</view>
+						<view class="car_box">
+							<view>
+								<span class="car_price" style="font-size: 8px;">￥</span>
+								<span class="car_price">{{car.unitPrice}}</span>/天
+							</view>
+							<view class="to_icon">></view>
+						</view>
 					</view>
 				</u-card>
 			</view>
@@ -58,6 +64,18 @@
 							couponNumber: (res.data || {}).couponNum,
 							...(res.data || {}).userInfo,
 							});
+						api.rotation(uni.getStorageSync('complanyId')).then(res => {
+							if(res.data){
+								let tmp = [];
+								let data = res.data.split(',');
+								data.forEach(o => {
+									tmp.push(`${config.IMG_URL}${o}`);
+								});
+								this.swiperList = tmp;
+							} else {
+								this.swiperList = ['https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg'];
+							}
+						});
 						uni.hideLoading();
 						if (this.carId) {
 							uni.reLaunch({
@@ -120,7 +138,8 @@
 					marginLeft: '20px',
 				},
 				carList: [],
-				pageTitle: ''
+				pageTitle: '',
+				swiperList: [],
 			}
 		},
 		mounted() {
@@ -128,7 +147,6 @@
 		},
 		methods: {
 			changePageTitle(title){
-				console.log(title);
 				this.pageTitle = title ? title : '优行小滴';
 			},
 			initCarList() {
@@ -231,6 +249,24 @@
 </script>
 
 <style lang="scss">
+	.car_box {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.to_icon {
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background-color: #fdd51e;
+		text-align: center;
+		line-height: 18px;
+		font-weight: 700;
+	}
+	.car_price {
+		color: #FF4343;
+		font-size: 18px;
+	}
 	.rental_car_logo {
 		width: 180rpx;
 		height: 55rpx;

@@ -10,7 +10,8 @@
 		<view class="form_item">
 			<view class="form_item_title">驾驶证号/身份证号<space style="color: red;">*</space>
 			</view>
-			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号" v-model="idcard" :inputBorder="false" :maxlength="18">
+			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号" v-model="idcard" :inputBorder="false"
+				:maxlength="18">
 			</uni-easyinput>
 		</view>
 		<view class="line"></view>
@@ -27,7 +28,7 @@
 		<view class="form_item">
 			<view class="form_item_title">档案编号<space style="color: red;">*</space>
 			</view>
-			<uni-easyinput class="form_item_input" placeholder="请输入档案编号" v-model="archivesNum" :inputBorder="false" >
+			<uni-easyinput class="form_item_input" placeholder="请输入档案编号" v-model="archivesNum" :inputBorder="false">
 			</uni-easyinput>
 		</view>
 		<view class="line"></view>
@@ -41,7 +42,11 @@
 <script>
 	import config from '../../../common/config.js';
 	import api from '../../../api/index.js';
-	import {phoneRegex, card15, card18} from '../../../common/regex.js'
+	import {
+		phoneRegex,
+		card15,
+		card18
+	} from '../../../common/regex.js'
 	export default {
 		mounted() {
 			this.setInitInfo();
@@ -98,7 +103,10 @@
 							name: 'file',
 							success: (data) => {
 								let result = JSON.parse(data.data);
-								let { url,ocr } = result.data;
+								let {
+									url,
+									ocr
+								} = result.data;
 								if (url && !!ocr) {
 									this.name = ocr.name;
 									this.idcard = ocr.licenseNumber;

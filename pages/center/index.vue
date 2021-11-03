@@ -6,7 +6,7 @@
 				<image src="../../static/img/defalut_head.png" class="head_img"></image>
 				<view class="info">
 					<text>姓名: {{user.name || '小滴妹妹'}}</text>
-					<text style="font-size: 14px;">ID：{{ user.id || 'youxingxiaodi'}}</text>
+					<text style="font-size: 14px;">ID：{{ _.random(100000000, 999999999, false) || 'youxingxiaodi'}}</text>
 				</view>
 			</view>
 		</view>
