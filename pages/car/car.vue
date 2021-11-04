@@ -72,6 +72,7 @@
 								image: carPhotos.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` :
 									'/static/img/car_defalut.png',
 								type: o.type,
+								price: o.unitPrice,
 								id: o.id,
 							});
 						});

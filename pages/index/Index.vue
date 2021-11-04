@@ -19,7 +19,9 @@
 			</view>
 		</view>
 		<view>
-			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image></view>
+			<view class="sift">
+				<image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image>
+			</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
 					@click="toCarInfo(car.id)" margin="2px" border-radius="30">
@@ -49,42 +51,8 @@
 			url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
 			url && uni.setStorageSync('complanyId', url.split('=')[1]);
 			url.split('=')[2] ? this.carId = url.split('=')[2] : this.carId = '';
-			uni.showLoading({
-				title: '信息加载中...',
-				mask: true,
-			});
-			uni.login({
-				onlyAuthorize: true,
-				success: (res) => {
-					!!res.code && api.login({code: res.code}).then((res = {}) => {
-						uni.setStorageSync('openid', (res.data || {}).openid);
-						this.changePageTitle((res.data || {}).complanyName);
-						uni.setStorageSync('userInfo', {
-							collectionNumber: ((res.data || {}).collect||[]).length,
-							couponNumber: (res.data || {}).couponNum,
-							...(res.data || {}).userInfo,
-							});
-						api.rotation(uni.getStorageSync('complanyId')).then(res => {
-							if(res.data){
-								let tmp = [];
-								let data = res.data.split(',');
-								data.forEach(o => {
-									tmp.push(`${config.IMG_URL}${o}`);
-								});
-								this.swiperList = tmp;
-							} else {
-								this.swiperList = ['https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg'];
-							}
-						});
-						uni.hideLoading();
-						if (this.carId) {
-							uni.reLaunch({
-								url: `/packageA/pages/car/CarDetail?id=${this.carId}&type=index`
-							});
-						}
-					});
-				}
-			});
+			url.split('=')[3] ? this.type = url.split('=')[3] : this.type = '';
+			this.login();
 			uni.$on('refreshIndex', () => {
 				this.initCarList();
 			});
@@ -93,12 +61,15 @@
 					this.height = e.safeArea.height - 92;
 				}
 			});
-			uni.$on('changePageTitle',(title)=>{ this.changePageTitle(title)});
+			uni.$on('changePageTitle', (title) => {
+				this.changePageTitle(title)
+			});
 		},
 		data() {
 			return {
 				carId: '',
 				height: '',
+				type: '', // 1 线上 2 线下
 				menus: [{
 						icon: '/static/img/led.png',
 						text: '我要领劵'
@@ -146,7 +117,53 @@
 			this.initCarList();
 		},
 		methods: {
-			changePageTitle(title){
+			login(){
+				uni.showLoading({
+					title: '信息加载中...',
+					mask: true,
+				});
+				uni.login({
+					onlyAuthorize: true,
+					success: (res) => {
+						!!res.code && api.login({
+							code: res.code
+						}).then((res = {}) => {
+							if((res.data || {}).openid){
+								uni.setStorageSync('openid', (res.data || {}).openid);
+								this.changePageTitle((res.data || {}).complanyName);
+								uni.setStorageSync('userInfo', {
+									collectionNumber: ((res.data || {}).collect || []).length,
+									couponNumber: (res.data || {}).couponNum,
+									...(res.data || {}).userInfo,
+								});
+								api.rotation(uni.getStorageSync('complanyId')).then(res => {
+									if (res.data) {
+										let tmp = [];
+										let data = res.data.split(',');
+										data.forEach(o => {
+											tmp.push(`${config.IMG_URL}${o}`);
+										});
+										this.swiperList = tmp;
+									} else {
+										this.swiperList = [
+											'https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg'
+										];
+									}
+								});
+								uni.hideLoading();
+								if (this.carId) {
+									uni.reLaunch({
+										url: `/packageA/pages/car/CarDetail?id=${this.carId}&type=index&payment=${this.type}`
+									});
+								}
+							} else {
+								this.login();
+							}
+						});
+					}
+				});
+			},
+			changePageTitle(title) {
 				this.pageTitle = title ? title : '优行小滴';
 			},
 			initCarList() {
@@ -201,15 +218,17 @@
 									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
 									events: {
 										signSuccessCb: () => { // 签署成功回调
-											const url = '/pages/index/Index'; // 需要跳转的小程序页面地址，必须是绝对路径，可不传
-											eventChannel.emit('jumpTo',url); // 触发跳转逻辑，回调存在时必需调用，url不传默认返回
+											const url =
+											'/pages/index/Index'; // 需要跳转的小程序页面地址，必须是绝对路径，可不传
+											eventChannel.emit('jumpTo',
+											url); // 触发跳转逻辑，回调存在时必需调用，url不传默认返回
 										},
 									},
 									success(res) {
 										uni.showModal({
 											title: '签署成功',
 											icon: 'success',
-											showCancel:false,
+											showCancel: false,
 											success: (e) => {
 												eventChannel = res.eventChannel;
 											}
@@ -223,6 +242,9 @@
 			},
 			toOtherPage(index) {
 				switch (index) {
+					case 0:
+						this.addConpou();
+						break;
 					case 1:
 						this.scanQR();
 						break;
@@ -234,15 +256,31 @@
 						break;
 				}
 			},
-			toCarPage(){
+			toCarPage() {
 				uni.switchTab({
 					url: '/pages/car/Car'
 				});
 			},
-			toMap(){
+			toMap() {
 				uni.navigateTo({
 					url: '/packageA/pages/car/Map'
 				})
+			},
+			addConpou() {
+				uni.scanCode({
+					onlyFromCamera: true,
+					success: (code) => {
+						let { result } = code;
+						api.addCoupon({ openId: uni.getStorageSync('openId'), couponId: result}).then((res) => {
+							if(!res){
+								uni.showToast({
+									title: '领取成功',
+									icon: 'success',
+								})
+							}
+						})
+					},
+				});
 			}
 		}
 	}
@@ -254,6 +292,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 	}
+
 	.to_icon {
 		width: 18px;
 		height: 18px;
@@ -263,18 +302,22 @@
 		line-height: 18px;
 		font-weight: 700;
 	}
+
 	.car_price {
 		color: #FF4343;
 		font-size: 18px;
 	}
+
 	.rental_car_logo {
 		width: 180rpx;
 		height: 55rpx;
 	}
+
 	.status_bar_title {
 		flex: 1;
 		font-size: 14px;
 	}
+
 	.menusBox {
 		margin-top: 20rpx;
 		margin-bottom: 20rpx;

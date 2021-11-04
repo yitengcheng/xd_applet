@@ -1,8 +1,8 @@
 import request from '../../common/request.js'
 
 const collection = {
-	collectionList:(openid)=>{
-		return request.globalRequest(`/system/customer/api/complany/${openid}`, 'get');
+	collectionList:(data)=>{
+		return request.globalRequest(`/system/customer/api/complany`, 'post', data);
 	}
 }
 

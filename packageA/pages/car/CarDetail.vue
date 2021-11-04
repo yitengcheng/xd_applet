@@ -66,6 +66,7 @@
 				}
 			});
 			this.btnLeftText = option.type ? '回到店铺首页' : '联系客服';
+			this.payment = option.payment;
 			let user = uni.getStorageSync('userInfo');
 			if (typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string') {
 				uni.showModal({
@@ -105,6 +106,7 @@
 				couponList: [],
 				btnLeftText: '联系客服',
 				height: 0,
+				payment: '',
 			};
 		},
 		methods: {
@@ -159,7 +161,7 @@
 				});
 			},
 			appointment() {
-				if (!this.carInfo.complany.subMchId) {
+				if (!this.carInfo.complany.subMchId || this.patment === '2') {
 					api.offLineOrder({
 						carId: this.carInfo.id,
 						complanyId: this.carInfo.complanyId,

@@ -2,7 +2,10 @@
 	<scroll-view>
 		<view v-for="(complany, index) in list" :key="index" class="item" @click="toCar(complany)">
 			<image :src="complany.image" class="item_img"></image>
-			<view class="item_text">{{complany.title}}</view>
+			<view class="item_box">
+				<view class="item_text">{{complany.title}}</view>
+				<view class="item_text_address">{{complany.address}}</view>
+			</view>
 		</view>
 	</scroll-view>
 </template>
@@ -12,27 +15,42 @@
 	export default {
 		data() {
 			return {
-				list: []
+				list: [],
+				pageNo: 1,
 			};
 		},
 		mounted() {
-			this.getCollectList()
+			this.getCollectList(1);
+		},
+		onPullDownRefresh() {
+			this.getCollectList(1);
+		},
+		onReachBottom() {
+			this.getCollectList(this.pageNo);
 		},
 		methods: {
-			getCollectList() {
-				api.collectionList(uni.getStorageSync('openid')).then((res = {}) => {
+			getCollectList(pageNum) {
+				api.collectionList({
+					openid: uni.getStorageSync('openid'),
+					pageNum,
+					pageSize: 10,
+				}).then((res = {}) => {
 					if (res.rows) {
+						let tmp = []
 						res.rows.forEach(o => {
-							this.list.push({
+							tmp.push({
 								title: o.complanyName,
+								address: o.complanyAddress,
 								image: '/packageA/static/img/shop_icon.png',
 								id: o.id,
 							});
-						})
+						});
+						pageNum === 1 ? this.list = tmp : this.list = this._.concat(this.list, tmp);
+						pageNum === 1 ? this.pageNo = 2 : this.pageNo = pageNum + 1;
 					}
 				})
 			},
-			toCar(complany){
+			toCar(complany) {
 				uni.setStorageSync('complanyId', complany.id);
 				uni.reLaunch({
 					url: `/pages/car/Car`
@@ -60,9 +78,21 @@
 	}
 
 	.item_text {
-		flex: 1;
+		font-size: 18px;
+		font-weight: 700;
+		color: #333333;
+	}
+	
+	.item_text_address {
+		font-size: 12px;
+		color: #888888;
+	}
+
+	.item_box {
+		margin-left: 10px;
 		display: flex;
-		justify-content: center;
-		align-items: center;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
 	}
 </style>
