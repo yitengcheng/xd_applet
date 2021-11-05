@@ -26,8 +26,8 @@
 		width: 100%;
 		min-height: 1320rpx;
 	}
-	
-	.bg_color{
+
+	.bg_color {
 		background-color: #f4f4f4;
 	}
 </style>

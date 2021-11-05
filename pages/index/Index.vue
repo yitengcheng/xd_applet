@@ -47,23 +47,71 @@
 	import config from '../../common/config.js';
 	export default {
 		onLoad(option) {
-			let url = option.q ? decodeURIComponent(option.q) : '';
-			url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
-			url && uni.setStorageSync('complanyId', url.split('=')[1]);
-			url.split('=')[2] ? this.carId = url.split('=')[2] : this.carId = '';
-			url.split('=')[3] ? this.type = url.split('=')[3] : this.type = '';
-			this.login();
-			uni.$on('refreshIndex', () => {
-				this.initCarList();
-			});
-			uni.getSystemInfo({
-				success: (e) => {
-					this.height = e.safeArea.height - 92;
+			const updateManager = uni.getUpdateManager();
+			updateManager.onCheckForUpdate((res) => {
+				if(res.hasUpdate){
+					uni.showLoading({
+						mask:true,
+						title: '新版本更新中'
+					})
+				} else {
+					let url = option.q ? decodeURIComponent(option.q) : '';
+					url ? uni.setStorageSync('appletType', 2) : uni.setStorageSync('appletType', 1); // 1: 平台用户 2： 租车公司用户
+					url && uni.setStorageSync('complanyId', url.split('=')[1]);
+					url.split('=')[2] ? this.carId = url.split('=')[2] : this.carId = '';
+					url.split('=')[3] ? this.type = url.split('=')[3] : this.type = '';
+					if(option.carId){
+						this.carId = option.carId;
+					}
+					option.complanyId && uni.setStorageSync('complanyId', option.complanyId);
+					uni.$on('refreshIndex', () => {
+						this.initCarList();
+					});
+					uni.getSystemInfo({
+						success: (e) => {
+							this.height = e.safeArea.height - 92;
+						}
+					});
+					uni.$on('changePageTitle', (title) => {
+						this.changePageTitle(title)
+					});
+					this.login();
 				}
 			});
-			uni.$on('changePageTitle', (title) => {
-				this.changePageTitle(title)
+			updateManager.onUpdateReady((res) => {
+				uni.hideLoading();
+				uni.showModal({
+					title: '更新提示',
+					content: '新版本已经准备好，是否重启应用？',
+					success(res) {
+						if (res.confirm) {
+							updateManager.applyUpdate();
+						}
+					}
+				});
 			});
+			updateManager.onUpdateFailed((res) =>{
+				uni.hideLoading();
+				uni.showModal({
+					title: '更新提示',
+					content: '更新失败，请重新进入应用',
+					showCancel:false,
+					success(res) {
+						if (res.confirm) {
+							updateManager.applyUpdate();
+						}
+					}
+				});
+			});
+		},
+		onPullDownRefresh() {
+			this.initCarList();
+		},
+		onShareAppMessage(res) {
+			return {
+			  title: '优行小滴欢迎你',
+			  path: `/pages/index/Index?complanyId=${uni.getStorageSync('complanyId')}`
+			}
 		},
 		data() {
 			return {
@@ -118,10 +166,6 @@
 		},
 		methods: {
 			login(){
-				uni.showLoading({
-					title: '信息加载中...',
-					mask: true,
-				});
 				uni.login({
 					onlyAuthorize: true,
 					success: (res) => {
@@ -136,7 +180,7 @@
 									couponNumber: (res.data || {}).couponNum,
 									...(res.data || {}).userInfo,
 								});
-								api.rotation(uni.getStorageSync('complanyId')).then(res => {
+								api.rotation(uni.getStorageSync('complanyId') || 0).then(res => {
 									if (res.data) {
 										let tmp = [];
 										let data = res.data.split(',');
@@ -150,9 +194,8 @@
 										];
 									}
 								});
-								uni.hideLoading();
 								if (this.carId) {
-									uni.reLaunch({
+									uni.navigateTo({
 										url: `/packageA/pages/car/CarDetail?id=${this.carId}&type=index&payment=${this.type}`
 									});
 								}
@@ -182,6 +225,7 @@
 							});
 						});
 						this.carList = tmp;
+						uni.stopPullDownRefresh();
 					}
 				});
 			},

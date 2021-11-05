@@ -34,6 +34,12 @@
 		onPullDownRefresh() {
 			this.getCarList(1);
 		},
+		onShareAppMessage(res) {
+			return {
+			  title: '优行小滴欢迎你',
+			  path: `/pages/index/Index?complanyId=${uni.getStorageSync('complanyId')}`
+			}
+		},
 		data() {
 			return {
 				list: [],

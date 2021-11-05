@@ -16,8 +16,7 @@
 		</view>
 		<view class="line"></view>
 		<view class="form_item">
-			<view class="form_item_title" style="width: 160rpx;">电话号码<space style="color: red;">*</space>
-			</view>
+			<view class="form_item_title" style="width: 160rpx;">电话号码<space style="color: red;">*</space></view>
 			<view class="form_item_phone">
 				<uni-easyinput placeholder="请输入电话号码" v-model="phoneNumber" class="form_item_phone_input"
 					:inputBorder="false" :maxlength="11"></uni-easyinput>
@@ -25,6 +24,7 @@
 					class="form_item_phone_btn">获取手机号</button>
 			</view>
 		</view>
+		<view class="line"></view>
 		<view class="form_item">
 			<view class="form_item_title">档案编号<space style="color: red;">*</space>
 			</view>

@@ -89,6 +89,7 @@
 	}
 
 	.item_box {
+		flex: 1;
 		margin-left: 10px;
 		display: flex;
 		flex-direction: column;

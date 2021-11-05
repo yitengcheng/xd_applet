@@ -7,12 +7,16 @@ const request = {}
 const headers = {}
 
 request.globalRequest = (url, method, data) => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	})
 	let header = {}
 	let complanyId = uni.getStorageSync('complanyId');
 	//接口公共参数
-	const obj = {
-		complanyId: !!complanyId ? complanyId : '',
-	}
+	let obj = {};
+	complanyId ? obj = {complanyId} : {};
+	
 	let JSONParams = {
 		url: `${config.API_URL}${url}`,
 		method: method,
@@ -27,6 +31,7 @@ request.globalRequest = (url, method, data) => {
 	console.log('request:', JSONParams);
 	return uni.request(JSONParams).then(res => {
 		console.log('response:', res.length > 1 ? JSON.parse(res[1].data) : JSON.parse(res));
+		uni.hideLoading();
 		if (res[1]) {
 			let data = JSON.parse(res[1].data);
 			//TODO 根据实际后台返回格式修改

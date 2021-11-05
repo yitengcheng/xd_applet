@@ -85,6 +85,12 @@
 			}
 			(option || {}).id && this.getCarInfo(option.id);
 		},
+		onShareAppMessage(res) {
+			return {
+			  title: '优行小滴欢迎你',
+			  path: `/pages/index/Index?complanyId=${uni.getStorageSync('complanyId')}&carId=${this.carInfo.id}`
+			}
+		},
 		data() {
 			return {
 				photos: [],
@@ -161,7 +167,7 @@
 				});
 			},
 			appointment() {
-				if (!this.carInfo.complany.subMchId || this.patment === '2') {
+				if (!this.carInfo.complany.subMchId || this.payment == '2') {
 					api.offLineOrder({
 						carId: this.carInfo.id,
 						complanyId: this.carInfo.complanyId,
