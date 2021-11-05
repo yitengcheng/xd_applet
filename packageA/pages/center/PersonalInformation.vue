@@ -170,6 +170,7 @@
 					name: this.name,
 					idcard: this.idcard,
 					phoneNumber: this.phoneNumber,
+					archivesNum: this.archivesNum,
 					openid: uni.getStorageSync('openid'),
 				}).then(res => {
 					if (!res.data) {
