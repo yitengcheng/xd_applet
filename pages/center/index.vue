@@ -64,7 +64,7 @@
 			<image src="../../static/img/perason.png" class="verify_box_info_img"></image>
 			<u-button type="primary" :custom-style="verify_box_info_btn" @click="toPerson">验证</u-button>
 		</view>
-		<view class="bottom_title">
+		<view class="bottom_title" @click="phoneCall">
 			<image src="../../static/img/service.png" class="bottom_title_img"></image>
 			<text class="bottom_title_text">平台服务</text>
 		</view>
@@ -124,6 +124,11 @@
 			toCoupons(){
 				uni.navigateTo({
 					url: '/packageA/pages/center/Coupons'
+				})
+			},
+			phoneCall(){
+				uni.makePhoneCall({
+					phoneNumber: uni.getStorageSync('phoneNumber'),
 				})
 			},
 			clickNo(){

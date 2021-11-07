@@ -175,6 +175,7 @@
 							if((res.data || {}).openid){
 								uni.setStorageSync('openid', (res.data || {}).openid);
 								this.changePageTitle((res.data || {}).complanyName);
+								uni.setStorageSync('phoneNumber', (res.data || {}).complanyPhone);
 								uni.setStorageSync('userInfo', {
 									collectionNumber: ((res.data || {}).collect || []).length,
 									couponNumber: (res.data || {}).couponNum,
