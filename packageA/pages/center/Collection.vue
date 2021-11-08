@@ -3,7 +3,9 @@
 		<view v-for="(complany, index) in list" :key="index" class="item" @click="toCar(complany)">
 			<image :src="complany.image" class="item_img"></image>
 			<view class="item_box">
-				<view class="item_text">{{complany.title}}</view>
+				<view class="item_text">
+					{{complany.title}}<space class="item_text_phone">({{complany.phoneNumber}})</space>
+				</view>
 				<view class="item_text_address">{{complany.address}}</view>
 			</view>
 		</view>
@@ -40,7 +42,8 @@
 						res.rows.forEach(o => {
 							tmp.push({
 								title: o.complanyName,
-								address: o.complanyAddress,
+								address: o.complanyAddress || '',
+								phoneNumber: o.phoneNumber || '',
 								image: '/packageA/static/img/shop_icon.png',
 								id: o.id,
 							});
@@ -69,18 +72,25 @@
 		flex-direction: row;
 		margin: 10px;
 		padding: 10px;
+		align-items: center;
 		border-bottom: 1px solid #f8f8f8;
 	}
 
 	.item_img {
-		width: 40px;
-		height: 40px;
+		width: 30px;
+		height: 30px;
 	}
 
 	.item_text {
 		font-size: 18px;
 		font-weight: 700;
 		color: #333333;
+	}
+	
+	.item_text_phone {
+		font-size: 12px;
+		font-weight: 300;
+		color: #888888;
 	}
 	
 	.item_text_address {

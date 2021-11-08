@@ -26,8 +26,7 @@
 		</view>
 		<view class="line"></view>
 		<view class="form_item">
-			<view class="form_item_title">档案编号<space style="color: red;">*</space>
-			</view>
+			<view class="form_item_title">档案编号</view>
 			<uni-easyinput class="form_item_input" placeholder="请输入档案编号" v-model="archivesNum" :inputBorder="false">
 			</uni-easyinput>
 		</view>
@@ -134,12 +133,6 @@
 				if (!this.name) {
 					return uni.showToast({
 						title: '请输入姓名',
-						icon: 'none'
-					})
-				}
-				if (!this.archivesNum) {
-					return uni.showToast({
-						title: '请输入驾照副页档案编号',
 						icon: 'none'
 					})
 				}

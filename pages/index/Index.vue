@@ -1,5 +1,5 @@
 <template>
-	<view class="bg_color" :style="[{ minHeight: height + 'px', width: '100%'}]">
+	<view class="bg_color">
 		<u-sticky>
 			<uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar>
 		</u-sticky>
@@ -67,11 +67,6 @@
 					uni.$on('refreshIndex', () => {
 						this.initCarList();
 					});
-					uni.getSystemInfo({
-						success: (e) => {
-							this.height = e.safeArea.height - 92;
-						}
-					});
 					uni.$on('changePageTitle', (title) => {
 						this.changePageTitle(title)
 					});
@@ -116,7 +111,6 @@
 		data() {
 			return {
 				carId: '',
-				height: '',
 				type: '', // 1 线上 2 线下
 				menus: [{
 						icon: '/static/img/led.png',
@@ -175,7 +169,7 @@
 							if((res.data || {}).openid){
 								uni.setStorageSync('openid', (res.data || {}).openid);
 								this.changePageTitle((res.data || {}).complanyName);
-								uni.setStorageSync('phoneNumber', (res.data || {}).complanyPhone);
+								uni.setStorageSync('phoneNumber', (res.data || {}).phoneNumber);
 								uni.setStorageSync('userInfo', {
 									collectionNumber: ((res.data || {}).collect || []).length,
 									couponNumber: (res.data || {}).couponNum,

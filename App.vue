@@ -24,10 +24,15 @@
 		overflow: hidden;
 		background-color: #f4f4f4;
 		width: 100%;
-		min-height: 1320rpx;
 	}
 
 	.bg_color {
+		background-color: #f4f4f4;
+	}
+	page {
+		display: flex;
+		width: 100%;
+		height: 100%;
 		background-color: #f4f4f4;
 	}
 </style>

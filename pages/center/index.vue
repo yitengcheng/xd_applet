@@ -64,12 +64,12 @@
 			<image src="../../static/img/perason.png" class="verify_box_info_img"></image>
 			<u-button type="primary" :custom-style="verify_box_info_btn" @click="toPerson">验证</u-button>
 		</view>
-		<view class="bottom_title" @click="phoneCall">
+		<view class="bottom_title">
 			<image src="../../static/img/service.png" class="bottom_title_img"></image>
 			<text class="bottom_title_text">平台服务</text>
 		</view>
 		<view class="bottom_box">
-			<view class="bottom_item" @click="clickNo">
+			<view class="bottom_item" @click="phoneCall">
 				<image src="../../static/img/contact.png" class="bottom_item_img"></image>
 				<text class="bottom_item_text">联系客服</text>
 			</view>
@@ -127,8 +127,15 @@
 				})
 			},
 			phoneCall(){
+				let phoneNumber = uni.getStorageSync('phoneNumber');
 				uni.makePhoneCall({
-					phoneNumber: uni.getStorageSync('phoneNumber'),
+					phoneNumber,
+					fail: (e) => {
+						uni.showToast({
+							title: '拨打失败,商家未留客服电话',
+							icon: 'none',
+						})
+					}
 				})
 			},
 			clickNo(){

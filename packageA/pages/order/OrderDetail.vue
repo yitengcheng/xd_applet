@@ -1,5 +1,5 @@
 <template>
-	<view class="content" :style="[{ minHeight: height + 'px', width: '100%'}]">
+	<view class="content">
 		<u-swiper class="swiper_box" :list="photos" mode="none" height="470"></u-swiper>
 		<view class="car_band">{{ carInfo.car.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -34,8 +34,12 @@
 				</view>
 			</view>
 		</view>
-		<text class="range_text">租车时间：{{carInfo.rentCarDays}}天</text>
-		<text class="range_money">总金额：￥{{_.isString((carInfo.complany || {}).subMchId) ? carInfo.totalMoney/100 : carInfo.shouldMoney/100}}元</text>
+		<view class="price_info">
+			<text class="range_text">租车时间：{{carInfo.rentCarDays}}天</text>
+			<text class="range_text">服务费：{{carInfo.serviceMoney / 100}}元</text>
+			<text class="range_text">租赁费：{{carInfo.shouldMoney / 100}}元</text>
+			<text class="range_money">总金额：￥{{_.isString((carInfo.complany || {}).subMchId) ? carInfo.totalMoney/100 : carInfo.shouldMoney/100}}元</text>
+		</view>
 		<uni-popup ref="popup" type="dialog">
 			<uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
 		</uni-popup>
@@ -59,15 +63,9 @@
 				carInfo: {},
 				buttonText: '实际付款：￥',
 				pactFlag: false,
-				height: 0,
 			};
 		},
 		onLoad(option) {
-			uni.getSystemInfo({
-				success: (e) => {
-					this.height = e.windowHeight;
-				}
-			});
 			option.id && this.getOrderInfo(option.id);
 		},
 		methods: {
@@ -242,9 +240,13 @@
 		align-items: center;
 		justify-content: space-between;
 	}
-	
+	.price_info {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: 20px;
+	}
 	.range_text {
-		margin-top: 100rpx;
 		font-size: 16px;
 		margin-bottom: 10px;
 	}
