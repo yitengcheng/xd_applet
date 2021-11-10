@@ -28,9 +28,9 @@ request.globalRequest = (url, method, data) => {
 		header: header,
 		sslVerify: "false",
 	}
-	console.log('request:', JSONParams);
+	process.env.NODE_ENV === 'development' && console.log('request:', JSONParams);
 	return uni.request(JSONParams).then(res => {
-		console.log('response:', res.length > 1 ? JSON.parse(res[1].data) : JSON.parse(res));
+		process.env.NODE_ENV === 'development' && console.log('response:', res.length > 1 ? JSON.parse(res[1].data) : JSON.parse(res));
 		uni.hideLoading();
 		if (res[1]) {
 			let data = JSON.parse(res[1].data);

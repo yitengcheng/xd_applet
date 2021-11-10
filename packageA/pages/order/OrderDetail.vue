@@ -150,9 +150,6 @@
 										}
 									})
 								},
-								fail: (payErr) => {
-									console.log(payErr)
-								}
 							})
 						}
 					})

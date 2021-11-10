@@ -25,12 +25,8 @@ export default {
 							this.$emit('click', result.data);
 							uni.hideLoading();
 						},
-						fail:(error) => {
-							uni.hideLoading();
-							console.log(error);
-						},
 						complete: (msg) => {
-							console.log(msg);
+							uni.hideLoading();
 						}
 					});
 				}

@@ -254,7 +254,7 @@
 							if (data) {
 								// 跳转合同签署
 								wx.navigateTo({
-									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
+									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=${config.QYS}`,
 									events: {
 										signSuccessCb: () => { // 签署成功回调
 											const url =

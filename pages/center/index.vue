@@ -91,6 +91,7 @@
 
 <script>
 	import api from '../../api/index.js';
+	import config from '../../common/config.js';
 	export default {
 		mounted() {
 			this.collectionNumber = this.user.collectionNumber;
@@ -175,7 +176,7 @@
 							if (data) {
 								// 跳转合同签署
 								wx.navigateTo({
-									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
+									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=${config.QYS}`,
 									events: {
 										signSuccessCb: () => { // 签署成功回调
 											const url = '/pages/index/Index'; // 需要跳转的小程序页面地址，必须是绝对路径，可不传

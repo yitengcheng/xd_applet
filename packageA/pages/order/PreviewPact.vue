@@ -26,7 +26,7 @@
 						// 跳转合同签署
 						// #ifdef MP-WEIXIN
 							wx.navigateTo({
-								url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=cn`,
+								url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=${config.QYS}`,
 							});
 						// #endif
 					}
