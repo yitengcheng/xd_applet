@@ -63,6 +63,9 @@
 					if(option.carId){
 						this.carId = option.carId;
 					}
+					if(option.payment){
+						this.type = option.payment;
+					}
 					option.complanyId && uni.setStorageSync('complanyId', option.complanyId);
 					uni.$on('refreshIndex', () => {
 						this.initCarList();

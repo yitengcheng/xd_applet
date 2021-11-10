@@ -87,8 +87,8 @@
 		},
 		onShareAppMessage(res) {
 			return {
-			  title: '优行小滴欢迎你',
-			  path: `/pages/index/Index?complanyId=${uni.getStorageSync('complanyId')}&carId=${this.carInfo.id}`
+				title: '优行小滴欢迎你',
+				path: `/pages/index/Index?complanyId=${uni.getStorageSync('complanyId')}&carId=${this.carInfo.id}`
 			}
 		},
 		data() {
@@ -168,30 +168,39 @@
 			},
 			appointment() {
 				if (!this.carInfo.complany.subMchId || this.payment == '2') {
-					api.offLineOrder({
-						carId: this.carInfo.id,
-						complanyId: this.carInfo.complanyId,
-						couponId: this.couponId,
-						openid: uni.getStorageSync('openid'),
-						rentCarDays: this.rangeSeparator,
-						latitude: this.takeLatlon,
-						returnLatitude: this.returnLatlon,
-						wantCarTime: this.startTime,
-						estimateReturnTime: this.endTime,
-						description: this.carInfo.carNum + this.carInfo.carBrand,
-						address: this.takeAddress,
-						returnAddress: this.returnAddress,
-					}).then(res => {
-						if (res) {
-							uni.showModal({
-								title: '预约完成，请等待商户联系',
-								icon: 'success',
-								success: () => {
-									uni.navigateBack();
-								}
-							})
+					uni.showModal({
+						title: '提示',
+						content: '是否预约该车辆',
+						success: (e) => {
+							if (e.confirm) {
+								api.offLineOrder({
+									carId: this.carInfo.id,
+									complanyId: this.carInfo.complanyId,
+									couponId: this.couponId,
+									openid: uni.getStorageSync('openid'),
+									rentCarDays: this.rangeSeparator,
+									latitude: this.takeLatlon,
+									returnLatitude: this.returnLatlon,
+									wantCarTime: this.startTime,
+									estimateReturnTime: this.endTime,
+									description: this.carInfo.carNum + this.carInfo.carBrand,
+									address: this.takeAddress,
+									returnAddress: this.returnAddress,
+								}).then(res => {
+									if (res) {
+										uni.showModal({
+											title: '预约完成，请等待商户联系',
+											icon: 'success',
+											showCancel: false,
+											success: () => {
+												uni.navigateBack();
+											}
+										})
+									}
+								})
+							}
 						}
-					})
+					});
 					return;
 				}
 				if (this.startTime && this.endTime && this.rangeSeparator !== '') {
@@ -259,7 +268,7 @@
 					}
 				})
 			},
-			changeDate(e){
+			changeDate(e) {
 				this.$nextTick(() => {
 					this.diffDate();
 				})
@@ -275,8 +284,10 @@
 						duration: 2000,
 					});
 					this.endTime = this.dayjs(this.startTime).add(1, 'day').format('YYYY-MM-DD HH:mm:ss');
+					this.rangeSeparator = 1;
+					this.rangeMoney = this.carInfo.unitPrice;
 				} else {
-					if(endDate.isAfter(startDate)){
+					if (endDate.isAfter(startDate)) {
 						this.startTime = startDate.format('YYYY-MM-DD HH:mm:ss');
 						this.endTime = endDate.format('YYYY-MM-DD HH:mm:ss');
 					} else {
@@ -288,10 +299,10 @@
 				}
 			},
 			goBack() {
-				if(this.btnLeftText === '联系客服'){
+				if (this.btnLeftText === '联系客服') {
 					uni.makePhoneCall({
-					    phoneNumber: this.carInfo.complany.phoneNumber,
-						fail: ()=>{
+						phoneNumber: this.carInfo.complany.phoneNumber,
+						fail: () => {
 							uni.showModal({
 								title: '提示',
 								content: `未知原因导致拨打失败，请手动输入联系电话：${this.carInfo.complany.phoneNumber}`,
@@ -320,8 +331,6 @@
 		padding: 10px;
 		font-weight: 700;
 	}
-
-
 
 	.complany_name {
 		width: 100%;
@@ -360,7 +369,7 @@
 		flex: 1;
 		border-left: 1px dashed black;
 	}
-	
+
 	.return_dot_line {
 		flex: 1;
 		padding: 1px 10px 0px 10px;
@@ -368,7 +377,7 @@
 		flex-direction: column;
 		align-items: center;
 	}
-	
+
 	.return_line {
 		height: 20rpx;
 		border-left: 1px dashed black;
@@ -422,6 +431,7 @@
 		font-size: 16px;
 		font-weight: 700;
 	}
+
 	.bottom_buttons {
 		position: absolute;
 		bottom: 0;
@@ -430,6 +440,7 @@
 		width: 100%;
 		margin-top: 20px;
 	}
+
 	.bottom_button {
 		flex: 1;
 		border-radius: 0px;
