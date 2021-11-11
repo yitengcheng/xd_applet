@@ -24,7 +24,7 @@
 			</view>
 			<view class="handpick_box">
 				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)" border-radius="30" margin="5rpx">
+					@click="toCarInfo(car.id)" border-radius="30" margin="1px">
 					<view slot="body">
 						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 						<view class="handpick_card_text">{{car.carBrand}}</view>
@@ -420,13 +420,13 @@
 		display: flex;
 		width: 100%;
 		flex-direction: row;
-		justify-content: center;
+		justify-content: space-between;
 		flex-wrap: wrap;
 	}
 
 	.handpick_card {
-		width: 49%;
-		height: 450rpx;
+		width: 50%;
+		height: 455rpx;
 	}
 
 	.handpick_card_text {

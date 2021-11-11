@@ -4,10 +4,14 @@
 			<view>
 				<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间"
 					end-placeholder="结束时间"></uni-datetime-picker>
-				<u-tabs :list="payStatusList" :is-scroll="true" name="text" :current="type" @change="changePayType" active-color="#fdd51e"></u-tabs>
+				<view style="width: 750rpx">
+					<u-tabs :list="payStatusList" name="name" :current="type" @change="changePayType"
+						active-color="#fdd51e"></u-tabs>
+				</view>
+
 			</view>
 		</u-sticky>
-		
+
 		<view class="order_card" v-for="(order,index) in data" :key="index" @click="onClick(order)">
 			<view class="top">
 				<text class="car_band">{{order.car.carBrand}}</text>
@@ -52,10 +56,9 @@
 	import config from '../../common/config.js';
 	export default {
 		onLoad(option) {
-			
 			this.payStatus = option.payStatus || '';
 			this.type = option.type * 1 || 0;
-			this.$on('refreshOrder', ()=>{
+			this.$on('refreshOrder', () => {
 				this.getOrderList(1);
 			})
 		},
@@ -65,12 +68,30 @@
 				pageNo: 1,
 				openid: uni.getStorageSync('openid'),
 				data: [],
-				payStatusList:[
-					{name: '全部', value: ''},
-					{name: '待付款', value: "NOTPAY"},
-					{name: '支付成功', value: 'SUCCESS'},
-					{name: '已退款', value: "REFUNDED"},
-					{name: '到店付款', value: "到店付款"},
+				payStatusList: [{
+						name: '全部',
+						value: ''
+					},
+					{
+						name: '待付款',
+						value: "NOTPAY"
+					},
+					{
+						name: '支付成功',
+						value: 'SUCCESS'
+					},
+					{
+						name: '已退款',
+						value: "REFUNDED"
+					},
+					{
+						name: '已拒绝',
+						value: "REFUSE"
+					},
+					{
+						name: '到店付款',
+						value: "到店付款"
+					},
 				],
 				payStatus: '',
 				type: 0,
@@ -110,11 +131,12 @@
 								tmpList.push({
 									payText: o.payStatus === 'SUCCESS' ? '支付成功' : o.payStatus ===
 										'NOTPAY' ? "等待付款" : o.payStatus === 'REFUNDED' ? '退款完成' : o
-										.payStatus === 'CLOSED' ? '订单关闭' : o.payStatus,
+										.payStatus === 'CLOSED' ? '订单关闭' : o.payStatus ===
+										'REFUSE' ? '已拒绝' : o.payStatus,
 									payType: o.payStatus === 'SUCCESS' ? 'primary' : o
 										.payStatus === 'NOTPAY' ? "success" : o.payStatus ===
 										'REFUNDED' ? 'error' : o.payStatus === 'CLOSED' ? 'info' :
-										'primary',
+										o.payStatus === 'REFUSE' ? 'error' : 'primary',
 									...o
 								});
 							});
@@ -136,10 +158,10 @@
 					this.getOrderList(1);
 				});
 			},
-			changePayType(e){
+			changePayType(e) {
 				this.payStatus = this.payStatusList[e].value;
 				this.type = e;
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.getOrderList(1);
 				});
 			}
@@ -254,11 +276,11 @@
 		line-height: 10px;
 		color: #FF4343;
 	}
-	
+
 	.symbol {
 		font-size: 8px;
 	}
-	
+
 	.unit {
 		font-size: 8px;
 		color: #333333;
