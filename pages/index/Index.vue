@@ -258,24 +258,6 @@
 								// 跳转合同签署
 								wx.navigateTo({
 									url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=${config.QYS}`,
-									events: {
-										signSuccessCb: () => { // 签署成功回调
-											const url =
-											'/pages/index/Index'; // 需要跳转的小程序页面地址，必须是绝对路径，可不传
-											eventChannel.emit('jumpTo',
-											url); // 触发跳转逻辑，回调存在时必需调用，url不传默认返回
-										},
-									},
-									success(res) {
-										uni.showModal({
-											title: '签署成功',
-											icon: 'success',
-											showCancel: false,
-											success: (e) => {
-												eventChannel = res.eventChannel;
-											}
-										});
-									},
 								});
 							}
 						})

@@ -74,13 +74,13 @@
 								width: 36,
 								height: 36
 							});
-							o.latitude && this.shopList.push({
+							this.shopList.push({
 								id: o.id,
-								shopName: o.name === null ? '' : o.name,
-								shopAddress: o.address === null ? o.businessAddress === null ? '暂无' : o.businessAddress : o.address,
-								shopPhone: o.phoneNumber === null ? '暂无' : o.phoneNumber,
-								longitude: o.latitude.split(',')[0],
-								latitude: o.latitude.split(',')[1],
+								shopName: o.name ?? '',
+								shopAddress: o.address ?? o.businessAddress ?? '暂无',
+								shopPhone: o.phoneNumber ?? '暂无',
+								longitude: o.latitude?.split(',')[0],
+								latitude: o.latitude?.split(',')[1],
 							})
 						});
 					}

@@ -1,5 +1,5 @@
 <template>
-	<view class="content" :style="[{height: height + 'px'}]">
+	<view class="content" style="position: relative;">
 		<u-swiper class="swiper_box" :list="photos" mode="none" height="500"></u-swiper>
 		<view class="car_band">{{ carInfo.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -48,7 +48,7 @@
 			<u-button class="bottom_button" @click="goBack" :hair-line="false">{{btnLeftText}}</u-button>
 			<u-button type="primary" class="bottom_button" @click="appointment" :hair-line="false">预约用车</u-button>
 		</view>
-	</view>
+	</view >
 </template>
 
 <script>
@@ -430,6 +430,7 @@
 	.range_money {
 		font-size: 16px;
 		font-weight: 700;
+		margin-bottom: 100rpx;
 	}
 
 	.bottom_buttons {
@@ -438,7 +439,7 @@
 		display: flex;
 		flex-direction: row;
 		width: 100%;
-		margin-top: 20px;
+		
 	}
 
 	.bottom_button {

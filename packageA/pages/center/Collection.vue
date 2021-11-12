@@ -1,8 +1,8 @@
 <template>
 	<scroll-view>
-		<view v-for="(complany, index) in list" :key="index" class="item" @click="toCar(complany)">
-			<image :src="complany.image" class="item_img"></image>
-			<view class="item_box">
+		<view v-for="(complany, index) in list" :key="index" class="item">
+			<image :src="complany.image" class="item_img" @click="callPhone(complany.phoneNumber)"></image>
+			<view class="item_box"  @click="toCar(complany)">
 				<view class="item_text">
 					{{complany.title}}<space class="item_text_phone">({{complany.phoneNumber}})</space>
 				</view>
@@ -44,7 +44,7 @@
 								title: o.complanyName,
 								address: o.complanyAddress || '',
 								phoneNumber: o.phoneNumber || '',
-								image: '/packageA/static/img/shop_icon.png',
+								image: '/packageA/static/img/phone.png',
 								id: o.id,
 							});
 						});
@@ -61,6 +61,19 @@
 				uni.$emit('refreshIndex');
 				uni.$emit('refreshCar');
 				uni.$emit('changePageTitle', complany.title);
+			},
+			callPhone(phoneNumber){
+				uni.showModal({
+					title: '提示',
+					content: '是否拨打该公司电话',
+					success: (e) => {
+						if(e.confirm){
+							uni.makePhoneCall({
+								phoneNumber,
+							});
+						}
+					}
+				})
 			}
 		}
 	}
