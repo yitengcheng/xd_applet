@@ -86,6 +86,7 @@
 					this.name = userInfo.name;
 					this.idcard = userInfo.idcard;
 					this.phoneNumber = userInfo.phoneNumber;
+					this.archivesNum = userInfo.archivesNum;
 				}
 			},
 			identifyIdcard() {
