@@ -36,7 +36,7 @@
 		</view>
 		<view class="price_info">
 			<text class="range_text">租车时间：{{carInfo.rentCarDays}}天</text>
-			<text class="range_text">服务费：{{carInfo.serviceMoney / 100}}元</text>
+			<text class="range_text">基础服务费：{{carInfo.serviceMoney / 100}}元</text>
 			<text class="range_text">租赁费：{{carInfo.shouldMoney / 100}}元</text>
 			<text class="range_money">总金额：￥{{_.isString((carInfo.complany || {}).subMchId) ? carInfo.totalMoney/100 : carInfo.shouldMoney/100}}元</text>
 		</view>
