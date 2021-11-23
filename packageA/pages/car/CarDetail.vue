@@ -74,9 +74,9 @@
 					icon: 'none',
 					success: (e) => {
 						if (e.confirm) {
-							uni.reLaunch({
-								url: '../center/PersonalInformation',
-							})
+							uni.navigateTo({
+								url: '/packageA/pages/center/PersonalInformation',
+							});
 						} else {
 							uni.navigateBack();
 						}
@@ -210,6 +210,13 @@
 					if (typeof coupon !== 'undefined' && this.rangeMoney < ((coupon || {}).item || {}).strip) {
 						uni.showToast({
 							title: '租车金额不符合优惠券使用条件',
+							icon: 'none',
+						});
+						return;
+					}
+					if (typeof coupon !== 'undefined' && this.rangeMoney * 1 - coupon?.item?.price < 20) {
+						uni.showToast({
+							title: '租车金额不能低于20元',
 							icon: 'none',
 						});
 						return;

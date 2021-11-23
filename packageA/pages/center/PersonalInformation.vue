@@ -170,9 +170,7 @@
 					if (!res.data) {
 						api.getUserInfo(uni.getStorageSync('openid')).then(res => {
 							uni.setStorageSync('userInfo', res.data);
-							uni.reLaunch({
-								url: '/pages/center/index'
-							});
+							uni.navigateBack();
 						});
 					}
 				});
