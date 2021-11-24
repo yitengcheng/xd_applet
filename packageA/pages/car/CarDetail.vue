@@ -1,5 +1,5 @@
 <template>
-	<view class="content" style="position: relative;">
+	<view class="content">
 		<u-swiper class="swiper_box" :list="photos" mode="none" height="500"></u-swiper>
 		<view class="car_band">{{ carInfo.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -441,8 +441,6 @@
 	}
 
 	.bottom_buttons {
-		position: absolute;
-		bottom: 0;
 		display: flex;
 		flex-direction: row;
 		width: 100%;
