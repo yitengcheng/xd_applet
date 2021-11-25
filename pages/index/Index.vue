@@ -12,7 +12,7 @@
 			</view>
 		</view>
 		<view class="serviceBox">
-			<image class="novice_service" src="../../static/img/new_hand.png" mode="aspectFill"></image>
+			<image class="novice_service" src="../../static/img/new_hand.png" mode="aspectFill" @click="toNewbie"></image>
 			<view class="right_box">
 				<image class="right_box_top" src="../../static/img/rent_car.png" @click="toCarPage"></image>
 				<image class="right_box_bottom" src="../../static/img/shop_query.png" @click="toMap"></image>
@@ -305,6 +305,11 @@
 						})
 					},
 				});
+			},
+			toNewbie(){
+				uni.navigateTo({
+					url: '/packageA/pages/index/Newbie',
+				})
 			}
 		}
 	}

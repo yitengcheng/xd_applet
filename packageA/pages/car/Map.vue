@@ -3,10 +3,13 @@
 		<map class="map_box" :style="{ height: container_height - 335 + 'px' }" :longitude="longitude"
 			:latitude="latitude" :markers="markers" @markertap="onMarker"></map>
 		<view class="list_box">
-			<view v-for="(shop, index) in shopList" :key="index" class="shop_box" @click="toShop(shop)">
+			<view v-for="(shop, index) in shopList" :key="index" class="shop_box">
 				<view class="shop_address_name">
-					<view class="shop_name">{{shop.shopName}}</view>
-					<view class="shop_phone">{{shop.shopPhone}}</view>
+					<view class="shop_name" @click="toShop(shop)">{{shop.shopName}}</view>
+					<view class="shop_phone" @click="callPhone(shop.shopPhone)">
+						<u-image src="/packageA/static/img/phone.png" width="16px" height="16px"></u-image>
+						{{shop.shopPhone}}
+					</view>
 				</view>
 				<view class="shop_address">{{shop.shopAddress}}</view>
 				<view class="line"></view>
@@ -98,8 +101,25 @@
 				uni.navigateBack();
 			},
 			toShop(shop){
-				this.longitude = shop.longitude;
-				this.latitude = shop.latitude;
+				this.latitude = '';
+				this.longitude = '';
+				this.$nextTick(() => {
+					this.longitude = shop.longitude;
+					this.latitude = shop.latitude;
+				});
+			},
+			callPhone(phone){
+				if(!phone){
+					uni.showModal({
+						title: '提示',
+						content: '该公司未留存电话',
+						showCancel:false
+					})
+					return;
+				}
+				uni.makePhoneCall({
+					phoneNumber: phone
+				});
 			}
 		}
 	}
@@ -146,6 +166,8 @@
 	}
 
 	.shop_phone {
+		display: flex;
+		flex-direction: row;
 		font-size: 16px;
 		font-weight: 300;
 	}

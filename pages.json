@@ -6,7 +6,7 @@
 		{
 			"path": "pages/index/Index",
 			"style": {
-				"navigationStyle":"custom",
+				"navigationStyle": "custom",
 				"enablePullDownRefresh": true
 			}
 		},
@@ -23,7 +23,7 @@
 				"navigationBarTitleText": "个人中心",
 				"enablePullDownRefresh": false
 			}
-		}, 
+		},
 		{
 			"path": "pages/order/Order",
 			"style": {
@@ -35,58 +35,66 @@
 	"subPackages": [{
 		"root": "packageA",
 		"pages": [{
-			"path": "pages/car/CarDetail",
-			"style": {
-				"navigationBarTitleText": "车辆详情",
-				"enablePullDownRefresh": false
-			}
-		}, 
-		{
-			"path": "pages/center/Collection",
-			"style": {
-				"navigationBarTitleText": "足迹",
-				"enablePullDownRefresh": false
-			}
-		
-		},
-		{
-			"path": "pages/car/Map",
-			"style": {
-				"navigationBarTitleText": "店铺",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/center/PersonalInformation",
-			"style": {
-				"navigationBarTitleText": "个人信息",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/center/Coupons",
-			"style": {
-				"navigationBarTitleText": "优惠券",
-				"enablePullDownRefresh": true
-			}
-		}, {
-			"path": "pages/center/AboutUs",
-			"style": {
-				"navigationBarTitleText": "关于我们",
-				"enablePullDownRefresh": false
-			}
-		},{
-			"path": "pages/order/OrderDetail",
-			"style": {
-				"navigationBarTitleText": "订单详情",
-				"enablePullDownRefresh": false
-			}
+				"path": "pages/car/CarDetail",
+				"style": {
+					"navigationBarTitleText": "车辆详情",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "pages/center/Collection",
+				"style": {
+					"navigationBarTitleText": "足迹",
+					"enablePullDownRefresh": false
+				}
 
-		},  {
-			"path": "pages/order/PreviewPact",
-			"style": {
-				"navigationBarTitleText": "预览合同",
-				"enablePullDownRefresh": false
+			},
+			{
+				"path": "pages/car/Map",
+				"style": {
+					"navigationBarTitleText": "店铺",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "pages/center/PersonalInformation",
+				"style": {
+					"navigationBarTitleText": "个人信息",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "pages/center/Coupons",
+				"style": {
+					"navigationBarTitleText": "优惠券",
+					"enablePullDownRefresh": true
+				}
+			}, {
+				"path": "pages/center/AboutUs",
+				"style": {
+					"navigationBarTitleText": "关于我们",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "pages/order/OrderDetail",
+				"style": {
+					"navigationBarTitleText": "订单详情",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "pages/order/PreviewPact",
+				"style": {
+					"navigationBarTitleText": "预览合同",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "pages/index/Newbie",
+				"style": {
+					"navigationBarTitleText": "新手指南",
+					"enablePullDownRefresh": false
+				}
+
 			}
-		}]
+		]
 	}],
 	"tabBar": {
 		"color": "#333333",
