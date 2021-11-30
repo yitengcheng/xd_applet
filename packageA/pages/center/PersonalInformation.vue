@@ -82,6 +82,19 @@
 			},
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
+				if(!userInfo){
+					uni.showModal({
+						title: "提示",
+						content: '我们将收集您的个人信息，用于在车辆交付时核验您的身份',
+						confirmText: '同意',
+						cancelText: '拒绝',
+						success: (e) => {
+							if(!e.confirm){
+								uni.navigateBack();
+							}
+						}
+					});
+				}
 				if (userInfo) {
 					this.name = userInfo.name;
 					this.idcard = userInfo.idcard;

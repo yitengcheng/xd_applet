@@ -4,7 +4,6 @@
 			<uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar>
 		</u-sticky>
 		<u-swiper :list="swiperList" mode="none" height="300" img-mode="scaleToFill"></u-swiper>
-		</u-image>
 		<view class="menusBox">
 			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @click="toOtherPage(index)">
 				<u-image width="50px" height="50px" :src="menu.icon"></u-image>
@@ -23,20 +22,17 @@
 				<image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image>
 			</view>
 			<view class="handpick_box">
-				<u-card v-for="car in carList" :key="car.id" class="handpick_card" :show-head="false" :show-foot="false"
-					@click="toCarInfo(car.id)" border-radius="30" margin="1px">
-					<view slot="body">
-						<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
-						<view class="handpick_card_text">{{car.carBrand}}</view>
-						<view class="car_box">
-							<view>
-								<span class="car_price" style="font-size: 8px;">￥</span>
-								<span class="car_price">{{car.unitPrice}}</span>/天
-							</view>
-							<view class="to_icon">></view>
+				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card" @click="toCarInfo(car.id)">
+					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
+					<view class="handpick_card_text">{{car.carBrand}}</view>
+					<view class="car_box">
+						<view>
+							<span class="car_price" style="font-size: 8px;">￥</span>
+							<span class="car_price">{{car.unitPrice}}</span>/天
 						</view>
+						<view class="to_icon">></view>
 					</view>
-				</u-card>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -407,13 +403,19 @@
 		display: flex;
 		width: 100%;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: space-around;
 		flex-wrap: wrap;
 	}
 
 	.handpick_card {
-		width: 50%;
+		width: 48%;
 		height: 455rpx;
+		display: flex;
+		flex-direction: column;
+		background-color: #FFFFFF;
+		padding: 15px;
+		border-radius: 10px;
+		margin-top: 2%;
 	}
 
 	.handpick_card_text {
