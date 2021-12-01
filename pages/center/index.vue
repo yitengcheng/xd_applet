@@ -28,7 +28,7 @@
 				<view>积分</view>
 			</view>
 		</view>
-		<view class="order_box">
+		<view class="order_box" >
 			<view class="order_box_title">
 				<view class="order">
 					<image src="../../static/img/order_center.png" class="orader_img"></image>
@@ -56,7 +56,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="verify_box">
+		<view class="verify_box" v-if="privacyFlag">
 			<view class="verify_box_info">
 				<text class="verify_box_info_title">个人信息</text>
 				<text class="verify_box_info_text">验证快速租车>></text>
@@ -100,6 +100,7 @@
 		data() {
 			return {
 				user: uni.getStorageSync('userInfo'),
+				privacyFlag: uni.getStorageSync('privacyFlag'),
 				collectionNumber: 0,
 				couponNumber: 0,
 				height: 0,
@@ -113,6 +114,7 @@
 					lineHeight: '30px',
 					color: '#333333',
 					borderRadius: '910px',
+					margin: 0,
 				}
 			}
 		},
@@ -363,6 +365,7 @@
 		background-color: #FFFFFF;
 		justify-content: space-around;
 		align-items: center;
+		flex-direction: row;
 	}
 
 	.verify_box_info {

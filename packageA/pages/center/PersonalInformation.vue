@@ -82,7 +82,7 @@
 			},
 			setInitInfo() {
 				let userInfo = uni.getStorageSync('userInfo');
-				if(!userInfo){
+				if(!userInfo.phoneNumber || !userInfo.idcard){
 					uni.showModal({
 						title: "提示",
 						content: '我们将收集您的个人信息，用于在车辆交付时核验您的身份',

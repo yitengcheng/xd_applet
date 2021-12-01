@@ -2,8 +2,7 @@ import App from './App'
 import dictRequest from 'common/dict.js';
 import _ from 'lodash';
 import dayjs from 'dayjs';
-import './static/icon/iconfont-weapp-icon.css';
-import uView from "uview-ui";
+import uView from '@/uni_modules/uview-ui'
 
 /**
  * 用于初始化字典，返回Promise实例
