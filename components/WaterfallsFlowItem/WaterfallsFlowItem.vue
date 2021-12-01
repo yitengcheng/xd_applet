@@ -64,6 +64,9 @@ export default {
 .info-price {
 	color: #FF4343;
 	font-size: 18px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 .info-price-symbol {
 	font-size: 8px;

@@ -22,7 +22,7 @@
 					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
 					<view class="handpick_card_text">{{ car.carBrand }}</view>
 					<view class="car_box">
-						<view>
+						<view style="display: flex;flex-direction: row;align-items: center;">
 							<span class="car_price" style="font-size: 8px;">￥</span>
 							<span class="car_price">{{ car.unitPrice }}</span>
 							/天
@@ -242,7 +242,7 @@ export default {
 					data.forEach(row => {
 						let carPhotos = row.carPhotos.split(',');
 						tmp.push({
-							image: carPhotos?.[0] !== '[object Object]' && carPhotos?.length >= 1 ? `${config.IMG_URL}${carPhotos[0]}` : '/static/img/defalut.png',
+							image: (carPhotos?.[0] !== '[object Object]' && carPhotos?.[0] !== '') ? `${config.IMG_URL}${carPhotos[0]}` : '/static/img/defalut.png',
 							...row
 						});
 					});

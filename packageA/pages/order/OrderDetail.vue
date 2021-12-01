@@ -44,11 +44,11 @@
 			<uni-popup-dialog mode="input" type="info" @confirm="confirm" placeholder="请输入退款理由"></uni-popup-dialog>
 		</uni-popup>
 		<view class="bottom_buttons">
-			<u-button class="bottom_button" type="primary" @click="toPay"
+			<u-button type="primary" @click="toPay"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
-			<u-button class="bottom_button" type="warn" @click="toRefund"
+			<u-button type="warn" @click="toRefund"
 				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
-			<u-button class="bottom_button" type="primary" @click="showPact" v-show="pactFlag">合同预览</u-button>
+			<u-button type="primary" @click="showPact" v-show="pactFlag">合同预览</u-button>
 		</view>
 	</view>
 </template>
@@ -259,9 +259,9 @@
 		flex-direction: row;
 		width: 100%;
 		margin-top: 20px;
-	}
-	.bottom_button {
-		flex: 1;
-		border-radius: 0px;
+		button{
+			flex: 1;
+			border-radius: 0px;
+		}
 	}
 </style>

@@ -45,8 +45,8 @@
 		<text class="range_text" v-show="rangeSeparator">租车时间：{{rangeSeparator}}天</text>
 		<text class="range_money" v-show="rangeMoney">租车金额：￥{{rangeMoney}}元</text>
 		<view class="bottom_buttons">
-			<u-button class="bottom_button" @click="goBack" :hair-line="false">{{btnLeftText}}</u-button>
-			<u-button type="primary" class="bottom_button" @click="appointment" :hair-line="false">预约用车</u-button>
+			<u-button @click="goBack" :hair-line="false">{{btnLeftText}}</u-button>
+			<u-button type="primary" @click="appointment" :hair-line="false">预约用车</u-button>
 		</view>
 	</view >
 </template>
@@ -444,11 +444,10 @@
 		display: flex;
 		flex-direction: row;
 		width: 100%;
-		
-	}
-
-	.bottom_button {
-		flex: 1;
-		border-radius: 0px;
+		button{
+			flex: 1;
+			border-radius: 0px;
+			margin: 0;
+		}
 	}
 </style>
