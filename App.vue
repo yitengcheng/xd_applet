@@ -10,7 +10,6 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		overflow: hidden;
 		background-color: #f4f4f4;
 		width: 100%;

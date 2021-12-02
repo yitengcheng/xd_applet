@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" style="align-items: center;">
 		<view class="top_box">
 			<image src="../../static/img/center_bg.png" class="center_bg"></image>
 			<view class="info_box">

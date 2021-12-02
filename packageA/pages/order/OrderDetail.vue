@@ -1,6 +1,6 @@
 <template>
-	<view class="content">
-		<u-swiper class="swiper_box" :list="photos" mode="none" height="470"></u-swiper>
+	<view class="content" style="position: relative;">
+		<u-swiper :list="photos" mode="none" height="300px" img-mode="scaleToFill"></u-swiper>
 		<view class="car_band">{{ carInfo.car.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
 		<view class="option_card">
@@ -12,10 +12,10 @@
 				<view class="time_box">
 					<view class="car_time_address">
 						<view>取车</view>
-						<view>{{dayjs(carInfo.wantCarTime).format('YYYY-MM-DD')}}</view>
+						<view>{{dayjs(carInfo.wantCarTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
 					<view class="car_time_address">
-						{{carInfo.address}}
+						{{carInfo.address || '无'}}
 					</view>
 				</view>
 			</view>
@@ -26,10 +26,10 @@
 				<view class="return_time_box">
 					<view class="car_time_address">
 						<view>还车</view>
-						<view>{{dayjs(carInfo.estimateReturnTime).format('YYYY-MM-DD')}}</view>
+						<view>{{dayjs(carInfo.estimateReturnTime).format('YYYY-MM-DD HH:mm:ss')}}</view>
 					</view>
 					<view class="car_time_address">
-						{{carInfo.returnAddress}}
+						{{carInfo.returnAddress || '无'}}
 					</view>
 				</view>
 			</view>
@@ -48,7 +48,7 @@
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
 			<u-button type="warn" @click="toRefund"
 				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
-			<u-button type="primary" @click="showPact" v-show="pactFlag">合同预览</u-button>
+			<u-button type="primary" @click="showPact" v-if="pactFlag">合同预览</u-button>
 		</view>
 	</view>
 </template>
@@ -81,7 +81,7 @@
 							this.photos.push(`${config.IMG_URL}${o}`);
 						});
 						delete data.wantCarTime;
-						data.contract ? this.pactFlag = true : this.pactFlag = false;
+						!data.contract ? this.pactFlag = false : this.pactFlag = true;
 						this.carInfo = {
 							time,
 							...data
@@ -187,7 +187,7 @@
 		padding: 10px;
 		border-radius: 8px;
 		background-color: #FFFFFF;
-		width: 95%;
+		width: 90%;
 		height: 300rpx;
 	}
 	
@@ -221,13 +221,13 @@
 	
 	.time_box {
 		display: flex;
-		width: 100%;
+		width: 85%;
 		flex-direction: column;
 	}
 	
 	.return_time_box {
 		display: flex;
-		width: 100%;
+		width: 85%;
 		flex-direction: column;
 	}
 	

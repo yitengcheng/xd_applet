@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" style="align-items: center;">
 		<view class="form_item">
 			<view class="form_item_title">姓名<space style="color: red;">*</space>
 			</view>

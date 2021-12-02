@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" style="align-items: center;">
 		<u-sticky>
 			<view>
 				<uni-datetime-picker type="daterange" v-model="dateRange" @change="changeDate" start-placeholder="开始时间"
@@ -27,18 +27,18 @@
 				<view class="address_box">
 					<view class="car">
 						<view class="car_type">取车</view>
-						<view class="car_address">{{order.address}}</view>
+						<view class="car_address">{{order.address || '无'}}</view>
 					</view>
 				</view>
 			</view>
 			<view class="bottom">
 				<view class="dot_line">
-					<u-icon name="map-fill" size="34"></u-icon>
+					<u-icon name="map-fill" size="20"></u-icon>
 				</view>
 				<view class="return_address_box">
 					<view class="car">
 						<view class="car_type">还车</view>
-						<view class="car_address">{{order.returnAddress}}</view>
+						<view class="car_address">{{order.returnAddress || '无'}}</view>
 						<view class="car_price">
 							<span class="symbol">￥</span>
 							{{order.totalMoney === '0' ? order.shouldMoney/100 : order.totalMoney/100}}
@@ -238,7 +238,7 @@
 
 	.return_address_box {
 		display: flex;
-		width: 100%;
+		width: 90%;
 		flex-direction: column;
 	}
 
@@ -275,6 +275,9 @@
 		font-weight: 400;
 		line-height: 10px;
 		color: #FF4343;
+		display: flex;
+		flex-direction: row;
+		
 	}
 
 	.symbol {

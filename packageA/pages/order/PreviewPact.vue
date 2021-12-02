@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" style="align-items: center;">
 		<image v-if="image" :src="pact"></image>
 		<web-view v-if="!image" :src="pact"></web-view>
 	</view>

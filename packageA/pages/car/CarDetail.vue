@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<u-swiper class="swiper_box" :list="photos" mode="none" height="500"></u-swiper>
+		<u-swiper :list="photos" mode="none" height="300px" img-mode="scaleToFill"></u-swiper>
 		<view class="car_band">{{ carInfo.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
 		<view class="option_card">
@@ -155,6 +155,7 @@
 					tmp.forEach(o => {
 						this.photos.push(`${config.IMG_URL}${o}`);
 					});
+					console.log(this.photos)
 					this.carInfo = data;
 					this.takeAddress = data.complany.complanyAddress;
 					this.takeLatlon = data.complany.latitude;
@@ -329,7 +330,7 @@
 
 <style lang="scss">
 	.swiper_box {
-		width: 100%;
+		// width: 100%;
 	}
 
 	.car_band {
@@ -430,11 +431,13 @@
 	}
 
 	.range_text {
+		align-self: center;
 		font-size: 16px;
 		margin-bottom: 10px;
 	}
 
 	.range_money {
+		align-self: center;
 		font-size: 16px;
 		font-weight: 700;
 		margin-bottom: 100rpx;

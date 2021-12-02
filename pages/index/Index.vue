@@ -1,7 +1,7 @@
 <template>
 	<view class="bg_color">
 		<u-sticky><uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar></u-sticky>
-		<u-swiper :list="swiperList" mode="none" height="300" img-mode="scaleToFill"></u-swiper>
+		<u-swiper :list="swiperList" mode="none" height="200px" img-mode="scaleToFill"></u-swiper>
 		<view class="menusBox">
 			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @click="toOtherPage(index)">
 				<u-image width="50px" height="50px" :src="menu.icon"></u-image>
@@ -19,7 +19,7 @@
 			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image></view>
 			<view class="handpick_box">
 				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card" @click="toCarInfo(car.id)">
-					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit"></u-image>
+					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit" ></u-image>
 					<view class="handpick_card_text">{{ car.carBrand }}</view>
 					<view class="car_box">
 						<view style="display: flex;flex-direction: row;align-items: center;">
