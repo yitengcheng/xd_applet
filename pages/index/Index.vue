@@ -3,7 +3,7 @@
 		<u-sticky><uni-nav-bar :statusBar="true" :title="pageTitle"></uni-nav-bar></u-sticky>
 		<u-swiper :list="swiperList" mode="none" height="200px" img-mode="scaleToFill"></u-swiper>
 		<view class="menusBox">
-			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @click="toOtherPage(index)">
+			<view v-for="(menu, index) in menus" class="menuItem" :key="index" @touchstart="toOtherPage(index)">
 				<u-image width="50px" height="50px" :src="menu.icon"></u-image>
 				<text>{{ menu.text }}</text>
 			</view>
