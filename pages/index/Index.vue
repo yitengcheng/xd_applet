@@ -413,13 +413,13 @@ export default {
 
 .right_box_top {
 	width: 365rpx;
-	height: 187.5rpx;
+	height: 181.5rpx;
 	border-radius: 8px;
 }
 
 .right_box_bottom {
 	width: 365rpx;
-	height: 187.5rpx;
+	height: 181.5rpx;
 	border-radius: 8px;
 }
 
