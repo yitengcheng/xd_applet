@@ -18,7 +18,7 @@
 		<view>
 			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image></view>
 			<view class="handpick_box">
-				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card" @click="toCarInfo(car.id)">
+				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card" @touchstart="toCarInfo(car.id)">
 					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit" ></u-image>
 					<view class="handpick_card_text">{{ car.carBrand }}</view>
 					<view class="car_box">
@@ -35,8 +35,7 @@
 		<u-popup :show="showModal" mode="center" :safeAreaInsetBottom="false" :closeOnClickOverlay="false">
 			<view class="privacy_box">
 				<view class="privacy_title">服务协议</view>
-				<view style="display: block;">
-					请您务必认真阅读、充分理解“用户服务协议”和“隐私政策”各条款，包括但不限于：为了向你提供数据、分享等服务所要获取的权限信息。您可以阅读
+				<view style="display: block;">请您务必认真阅读、充分理解“用户服务协议”和“隐私政策”各条款，包括但不限于：为了向你提供数据、分享等服务所要获取的权限信息。您可以阅读
 					<view class="privacy_box_web" @click="goWeb('https://xd.qiantur.com/treaty')">《用户服务协议》</view>
 					<view class="privacy_box_web" @click="goWeb('https://xd.qiantur.com/policy')">《隐私政策》</view>
 					了解详细信息。如您同意，请点击“同意”开始接受我们的服务。
@@ -427,19 +426,19 @@ export default {
 	display: flex;
 	width: 100%;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: center;
 	flex-wrap: wrap;
 }
 
 .handpick_card {
-	width: 40.5%;
+	width: 40%;
 	height: 455rpx;
 	display: flex;
 	flex-direction: column;
 	background-color: #ffffff;
 	padding: 15px;
 	border-radius: 10px;
-	margin-top: 2%;
+	margin: 1%;
 }
 
 .handpick_card_text {

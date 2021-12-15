@@ -58,7 +58,7 @@
 		onLoad(option) {
 			this.payStatus = option.payStatus || '';
 			this.type = option.type * 1 || 0;
-			this.$on('refreshOrder', () => {
+			uni.$on('refreshOrder', () => {
 				this.getOrderList(1);
 			})
 		},

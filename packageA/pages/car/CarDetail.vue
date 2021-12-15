@@ -68,7 +68,7 @@
 			this.btnLeftText = option.type ? '回到店铺首页' : '联系客服';
 			this.payment = option.payment;
 			let user = uni.getStorageSync('userInfo');
-			if (typeof user.idcard !== 'string' && typeof user.phoneNumber !== 'string' && typeof user.name !== 'string') {
+			if (typeof user.idcard !== 'string' || typeof user.phoneNumber !== 'string' || typeof user.name !== 'string') {
 				uni.showModal({
 					title: '您尚未绑定个人驾驶信息，请前往个人中心的个人信息页面进行绑定',
 					icon: 'none',
@@ -155,7 +155,6 @@
 					tmp.forEach(o => {
 						this.photos.push(`${config.IMG_URL}${o}`);
 					});
-					console.log(this.photos)
 					this.carInfo = data;
 					this.takeAddress = data.complany.complanyAddress;
 					this.takeLatlon = data.complany.latitude;
@@ -353,7 +352,7 @@
 		padding: 10px;
 		border-radius: 8px;
 		background-color: #FFFFFF;
-		width: 95%;
+		width: 90%;
 		height: 400rpx;
 	}
 
@@ -399,7 +398,7 @@
 
 	.time_box {
 		display: flex;
-		width: 100%;
+		width: 85%;
 		flex-direction: column;
 	}
 

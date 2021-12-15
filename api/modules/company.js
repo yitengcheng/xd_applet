@@ -8,7 +8,7 @@ const company = {
 		return request.globalRequest(`/system/complany/api/rotation/${data}`, 'get' );
 	},
 	companyCarType: (data)=>{
-		return request.globalRequest(`/system/car/api/car/type/${data}`, 'get');
+		return request.globalRequest(`/system/car/api/car/type/${data || 0}`, 'get');
 	}
 	
 }

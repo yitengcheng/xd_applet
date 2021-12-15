@@ -13,6 +13,9 @@ const order = {
 	previe: (id) => {
 		return request.globalRequest(`/qys/view?contractId=${id}`, 'get');
 	},
+	cancelOrder: (data) => {
+		return request.globalRequest(`/tool/wxorder/api/delete/${data}`, 'delete');
+	}
 }
 
 

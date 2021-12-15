@@ -10,11 +10,12 @@
 		<view class="form_item">
 			<view class="form_item_title">驾驶证号/身份证号<space style="color: red;">*</space>
 			</view>
-			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号" v-model="idcard" :inputBorder="false"
+			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证号/身份证号" v-model="idcard" :inputBorder="false"
 				:maxlength="18">
 			</uni-easyinput>
 		</view>
 		<view class="line"></view>
+		
 		<view class="form_item">
 			<view class="form_item_title" style="width: 160rpx;">电话号码<space style="color: red;">*</space></view>
 			<view class="form_item_phone">
@@ -26,15 +27,22 @@
 		</view>
 		<view class="line"></view>
 		<view class="form_item">
-			<view class="form_item_title">档案编号</view>
-			<uni-easyinput class="form_item_input" placeholder="请输入档案编号" v-model="archivesNum" :inputBorder="false">
+			<view class="form_item_title">驾驶证档案编号</view>
+			<uni-easyinput class="form_item_input" placeholder="请输入驾驶证档案编号" v-model="archivesNum" :inputBorder="false">
+			</uni-easyinput>
+		</view>
+		<view class="line"></view>
+		<view class="form_item">
+			<view class="form_item_title">现居住地</view>
+			<uni-easyinput class="form_item_input" placeholder="请输入现居住地址" v-model="nowAddress" :inputBorder="false"
+				:maxlength="18">
 			</uni-easyinput>
 		</view>
 		<view class="line"></view>
 		<view class="scan_idcard" @click="identifyIdcard">
 			<u-icon name="scan"></u-icon>扫描驾驶证快速添加
 		</view>
-		<u-button type="primary" class="sumbit_btn" @click="onSumbit">提交</u-button>
+		<u-button type="primary" :customStyle="sumbitStyle" @click="onSumbit">提交</u-button>
 	</view>
 </template>
 
@@ -56,6 +64,11 @@
 				idcard: '',
 				phoneNumber: '',
 				archivesNum: '',
+				nowAddress: '',
+				sumbitStyle: {
+					marginTop: '20rpx',
+					width: '80vw',
+				}
 			};
 		},
 		methods: {
@@ -100,6 +113,7 @@
 					this.idcard = userInfo.idcard;
 					this.phoneNumber = userInfo.phoneNumber;
 					this.archivesNum = userInfo.archivesNum;
+					this.nowAddress = userInfo.nowAddress;
 				}
 			},
 			identifyIdcard() {
@@ -178,6 +192,7 @@
 					idcard: this.idcard,
 					phoneNumber: this.phoneNumber,
 					archivesNum: this.archivesNum,
+					nowAddress: this.nowAddress,
 					openid: uni.getStorageSync('openid'),
 				}).then(res => {
 					if (!res.data) {
@@ -206,6 +221,8 @@
 	}
 
 	.form_item_title {
+		display: flex;
+		flex-direction: row;
 		height: 36px;
 		line-height: 36px;
 	}
@@ -221,11 +238,6 @@
 		margin: 10px 0px 10px 0px;
 	}
 
-	.sumbit_btn {
-		margin-top: 20rpx;
-		width: 80%;
-	}
-
 	.form_item_phone {
 		display: flex;
 		flex-direction: row;
@@ -233,7 +245,7 @@
 	}
 
 	.form_item_phone_input {
-		flex: 1;
+		width: 300rpx;
 		margin-right: 10px;
 	}
 
@@ -245,6 +257,8 @@
 	}
 
 	.scan_idcard {
+		display: flex;
+		flex-direction: row;
 		margin-top: 150rpx;
 		margin-bottom: 50rpx;
 		font-size: 12px;
