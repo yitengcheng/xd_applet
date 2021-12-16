@@ -46,7 +46,7 @@
 		<view class="bottom_buttons">
 			<u-button type="primary" @click="toPay"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
-			<u-button type="primary" @click="cancelOrder"
+			<u-button type="warn" @click="cancelOrder"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">取消订单</u-button>
 			<u-button type="warn" @click="toRefund"
 				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
