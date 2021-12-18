@@ -9,22 +9,19 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true
 			}
-		},
-		{
+		}, {
 			"path": "pages/car/Car",
 			"style": {
 				"navigationBarTitleText": "车辆",
 				"enablePullDownRefresh": true
 			}
-		},
-		{
+		}, {
 			"path": "pages/center/index",
 			"style": {
 				"navigationBarTitleText": "个人中心",
 				"enablePullDownRefresh": false
 			}
-		},
-		{
+		}, {
 			"path": "pages/order/Order",
 			"style": {
 				"navigationBarTitleText": "订单",
@@ -32,109 +29,109 @@
 			}
 		}
 	],
-	"subPackages": [{
+	"subPackages": [ {
 		"root": "packageA",
-		"pages": [{
-				"path": "pages/car/CarDetail",
-				"style": {
-					"navigationBarTitleText": "车辆详情",
-					"enablePullDownRefresh": false
-				}
-			},
-			{
-				"path": "pages/center/Collection",
-				"style": {
-					"navigationBarTitleText": "足迹",
-					"enablePullDownRefresh": false
-				}
-
-			},
-			{
-				"path": "pages/car/Map",
-				"style": {
-					"navigationBarTitleText": "店铺",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "pages/center/PersonalInformation",
-				"style": {
-					"navigationBarTitleText": "个人信息",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "pages/center/Coupons",
-				"style": {
-					"navigationBarTitleText": "优惠券",
-					"enablePullDownRefresh": true
-				}
-			}, {
-				"path": "pages/center/AboutUs",
-				"style": {
-					"navigationBarTitleText": "关于我们",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "pages/order/OrderDetail",
-				"style": {
-					"navigationBarTitleText": "订单详情",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "pages/order/PreviewPact",
-				"style": {
-					"navigationBarTitleText": "预览合同",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "pages/index/Newbie",
-				"style": {
-					"navigationBarTitleText": "新手指南",
-					"enablePullDownRefresh": false
-				}
-
+		"plugins" : {
+		    "qyssdk-plugin" : {
+		        "version" : "1.0.20",
+		        "provider" : "wxaf8f505686ddf66a"
+		    }
+		},
+		"pages": [ {
+			"path": "pages/car/CarDetail",
+			"style": {
+				"navigationBarTitleText": "车辆详情",
+				"enablePullDownRefresh": false
 			}
-		    ,{
-                    "path" : "pages/center/WebView",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
-	}],
+		}, {
+			"path": "pages/center/Collection",
+			"style": {
+				"navigationBarTitleText": "足迹",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/car/Map",
+			"style": {
+				"navigationBarTitleText": "店铺",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/center/PersonalInformation",
+			"style": {
+				"navigationBarTitleText": "个人信息",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/center/Coupons",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"enablePullDownRefresh": true
+			}
+		}, {
+			"path": "pages/center/AboutUs",
+			"style": {
+				"navigationBarTitleText": "关于我们",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/order/OrderDetail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/order/PreviewPact",
+			"style": {
+				"navigationBarTitleText": "预览合同",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/index/Newbie",
+			"style": {
+				"navigationBarTitleText": "新手指南",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/center/WebView",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/utils/Pact",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		} ]
+	} ],
 	"tabBar": {
 		"color": "#333333",
 		"selectedColor": "#fdd51e",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"iconWidth": "26.38px",
-		"list": [{
-				"pagePath": "pages/index/Index",
-				"iconPath": "static/img/index.png",
-				"selectedIconPath": "static/img/index_activate.png",
-				"text": "首页"
-			}, {
-				"pagePath": "pages/car/Car",
-				"iconPath": "static/img/car.png",
-				"selectedIconPath": "static/img/car_activate.png",
-				"text": "车辆"
-			},
-			{
-				"pagePath": "pages/order/Order",
-				"iconPath": "static/img/order.png",
-				"selectedIconPath": "static/img/order_activate.png",
-				"text": "订单"
-			},
-			{
-				"pagePath": "pages/center/index",
-				"iconPath": "static/img/center.png",
-				"selectedIconPath": "static/img/center_active.png",
-				"text": "个人中心"
-			}
-		]
+		"list": [ {
+			"pagePath": "pages/index/Index",
+			"iconPath": "static/img/index.png",
+			"selectedIconPath": "static/img/index_activate.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/car/Car",
+			"iconPath": "static/img/car.png",
+			"selectedIconPath": "static/img/car_activate.png",
+			"text": "车辆"
+		}, {
+			"pagePath": "pages/order/Order",
+			"iconPath": "static/img/order.png",
+			"selectedIconPath": "static/img/order_activate.png",
+			"text": "订单"
+		}, {
+			"pagePath": "pages/center/index",
+			"iconPath": "static/img/center.png",
+			"selectedIconPath": "static/img/center_active.png",
+			"text": "个人中心"
+		} ]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

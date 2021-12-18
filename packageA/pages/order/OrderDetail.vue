@@ -1,5 +1,5 @@
 <template>
-	<view class="content" style="position: relative;">
+	<view class="content" style="position: relative;height: 100vh;">
 		<u-swiper :list="photos" mode="none" height="300px" img-mode="scaleToFill"></u-swiper>
 		<view class="car_band">{{ carInfo.car.carBrand || '无' }}</view>
 		<view class="complany_name">{{ carInfo.complany.complanyName }}</view>
@@ -46,7 +46,7 @@
 		<view class="bottom_buttons">
 			<u-button type="primary" @click="toPay"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">{{buttonText}}</u-button>
-			<u-button type="warn" @click="cancelOrder"
+			<u-button type="error" @click="cancelOrder"
 				v-if="(carInfo.payStatus === 'NOTPAY' && !!carInfo.complany.subMchId)">取消订单</u-button>
 			<u-button type="warn" @click="toRefund"
 				v-if="carInfo.payStatus === 'SUCCESS' && !carInfo.crvTime">退款申请</u-button>
@@ -63,7 +63,7 @@
 			return {
 				photos: [],
 				carInfo: {},
-				buttonText: '实际付款：￥',
+				buttonText: '确认付款：￥',
 				pactFlag: false,
 			};
 		},
@@ -101,7 +101,7 @@
 							time,
 							...data
 						};
-						this.buttonText = `实际付款：￥${data.totalMoney/100 || '未知金额'}`;
+						this.buttonText = `确认付款：￥${data.totalMoney/100 || '未知金额'}`;
 					}
 				});
 			},

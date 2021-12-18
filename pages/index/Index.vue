@@ -274,9 +274,8 @@ export default {
 					}).then(res => {
 						let { data } = res;
 						if (data) {
-							// 跳转合同签署
-							wx.navigateTo({
-								url: `plugin://qyssdk-plugin/doc?ticket=${data}&env=${config.QYS}`
+							uni.navigateTo({
+								url: `/packageA/pages/utils/Pact?data=${data}`
 							});
 						}
 					});
