@@ -175,7 +175,7 @@
 							if (e.confirm) {
 								api.offLineOrder({
 									carId: this.carInfo.id,
-									complanyId: this.carInfo.complanyId,
+									complanyId: this.carInfo.outComplanyId || this.carInfo?.complanyId,
 									couponId: this.couponId,
 									openid: uni.getStorageSync('openid'),
 									rentCarDays: this.rangeSeparator,
@@ -223,7 +223,7 @@
 					}
 					api.getPayInfo({
 						carId: this.carInfo.id,
-						complanyId: this.carInfo.complanyId,
+						complanyId: this.carInfo.outComplanyId || this.carInfo?.complanyId,
 						couponId: this.couponId,
 						openid: uni.getStorageSync('openid'),
 						rentCarDays: this.rangeSeparator,
@@ -445,7 +445,7 @@
 	.bottom_buttons {
 		display: flex;
 		flex-direction: row;
-		width: 100%;
+		width: 100vw;
 		button{
 			flex: 1;
 			border-radius: 0px;

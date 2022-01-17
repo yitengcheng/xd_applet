@@ -18,10 +18,10 @@
 		<view>
 			<view class="sift"><image src="../../static/img/zuchelogo.png" class="rental_car_logo"></image></view>
 			<view class="handpick_box">
-				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card" @touchstart="toCarInfo(car.id)">
+				<view v-for="(car, index) in carList" :key="car.id" class="handpick_card">
 					<u-image width="100%" height="300rpx" :src="car.image" mode="aspectFit" ></u-image>
 					<view class="handpick_card_text">{{ car.carBrand }}</view>
-					<view class="car_box">
+					<view class="car_box" @touchstart="toCarInfo(car.id)">
 						<view style="display: flex;flex-direction: row;align-items: center;">
 							<span class="car_price" style="font-size: 8px;">￥</span>
 							<span class="car_price">{{ car.unitPrice }}</span>

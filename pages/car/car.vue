@@ -92,7 +92,7 @@ export default {
 						let carPhotos = o.carPhotos.split(',');
 						tmpList.push({
 							nickName: o.carBrand,
-							info: (o.complany || {}).complanyName || '未知',
+							info: (o.complany || {}).complanyName || o.complanyName,
 							image:
 								carPhotos.length >= 1
 									? `${config.IMG_URL}${carPhotos[0]}`
