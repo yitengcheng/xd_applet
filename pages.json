@@ -31,12 +31,12 @@
 	],
 	"subPackages": [ {
 		"root": "packageA",
-		"plugins" : {
-		    "qyssdk-plugin" : {
-		        "version" : "1.0.20",
-		        "provider" : "wxaf8f505686ddf66a"
-		    }
-		},
+		// "plugins" : {
+		//     "qyssdk-plugin" : {
+		//         "version" : "1.0.23",
+		//         "provider" : "wxaf8f505686ddf66a"
+		//     }
+		// },
 		"pages": [ {
 			"path": "pages/car/CarDetail",
 			"style": {
@@ -103,6 +103,12 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "pages/center/Exchange",
+			"style": {
+				"navigationBarTitleText": "兑换",
+				"enablePullDownRefresh": false
+			}
 		} ]
 	} ],
 	"tabBar": {
@@ -141,6 +147,6 @@
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": []
+		"list": [ "paackageA/pages/center/Exchange" ]
 	}
 }

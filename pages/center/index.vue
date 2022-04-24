@@ -1,7 +1,7 @@
 <template>
 	<view class="content" style="align-items: center;">
 		<view class="top_box">
-			<image src="../../static/img/center_bg.png" class="center_bg"></image>
+			<image src="https://xd.qiantur.com/minio/xdcloud/center_bg.png" class="center_bg"></image>
 			<view class="info_box">
 				<image src="../../static/img/defalut_head.png" class="head_img"></image>
 				<view class="info">
@@ -61,7 +61,7 @@
 				<text class="verify_box_info_title">个人信息</text>
 				<text class="verify_box_info_text">验证快速租车>></text>
 			</view>
-			<image src="../../static/img/perason.png" class="verify_box_info_img"></image>
+			<image src="https://xd.qiantur.com/minio/perason.png" class="verify_box_info_img"></image>
 			<u-button type="primary" :custom-style="verify_box_info_btn" @click="toPerson">验证</u-button>
 		</view>
 		<view class="bottom_title">

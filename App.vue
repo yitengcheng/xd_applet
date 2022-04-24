@@ -18,9 +18,4 @@
 	.bg_color {
 		background-color: #f4f4f4;
 	}
-	page {
-		width: 100%;
-		min-height: 100%;
-		background-color: #f4f4f4;
-	}
 </style>

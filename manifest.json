@@ -61,6 +61,12 @@
             "minified" : true,
             "es6" : true
         },
+        "plugins" : {
+            "qyssdk-plugin" : {
+                "version" : "1.0.24",
+                "provider" : "wxaf8f505686ddf66a"
+            }
+        },
         "usingComponents" : true,
         "permission" : {
             "scope.userLocation" : {

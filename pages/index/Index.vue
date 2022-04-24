@@ -9,10 +9,10 @@
 			</view>
 		</view>
 		<view class="serviceBox">
-			<image class="novice_service" src="../../static/img/new_hand.png" mode="aspectFill" @click="toNewbie"></image>
+			<image class="novice_service" src="https://xd.qiantur.com/minio/xdcloud/new_hand.png" mode="aspectFill" @click="toNewbie"></image>
 			<view class="right_box">
-				<image class="right_box_top" src="../../static/img/rent_car.png" @click="toCarPage"></image>
-				<image class="right_box_bottom" src="../../static/img/shop_query.png" @click="toMap"></image>
+				<image class="right_box_top" src="https://xd.qiantur.com/minio/xdcloud/rent_car.png" @click="toCarPage"></image>
+				<image class="right_box_bottom" src="https://xd.qiantur.com/minio/xdcloud/shop_query.png" @click="toMap"></image>
 			</view>
 		</view>
 		<view>
@@ -67,6 +67,8 @@ export default {
 				url && uni.setStorageSync('complanyId', url.split('=')[1]);
 				url.split('=')[2] ? (this.carId = url.split('=')[2]) : (this.carId = '');
 				url.split('=')[3] ? (this.type = url.split('=')[3]) : (this.type = '');
+				url.split('=')[4] ? (this.exchange = url.split('=')[4] * 1): (this.exchange = 0);
+				url.split('=')[4] == 1 && uni.setStorageSync('appletType', 1);
 				if (option.carId) {
 					this.carId = option.carId;
 				}
@@ -123,21 +125,22 @@ export default {
 		return {
 			carId: '',
 			type: '', // 1 线上 2 线下
+			exchange: '', //兑换
 			menus: [
 				{
-					icon: '/static/img/led.png',
+					icon: 'https://xd.qiantur.com/minio/xdcloud/led.png',
 					text: '我要领劵'
 				},
 				{
-					icon: '/static/img/pactScan.png',
+					icon: 'https://xd.qiantur.com/minio/xdcloud/pactScan.png',
 					text: '合同扫码'
 				},
 				{
-					icon: '/static/img/trip.png',
+					icon: 'https://xd.qiantur.com/minio/xdcloud/trip.png',
 					text: '出行宝典'
 				},
 				{
-					icon: '/static/img/accached.png',
+					icon: 'https://xd.qiantur.com/minio/xdcloud/accached.png',
 					text: '挂靠登记'
 				}
 			],
@@ -218,6 +221,12 @@ export default {
 											this.swiperList = ['https://xd.qiantur.com/minio/xdcloud/20211025032454728.jpg'];
 										}
 									});
+									if(this.exchange == 1){
+										uni.navigateTo({
+											url: `/packageA/pages/center/Exchange`
+										});
+										return;
+									}
 									if (this.carId) {
 										uni.navigateTo({
 											url: `/packageA/pages/car/CarDetail?id=${this.carId}&type=index&payment=${this.type}`
@@ -241,7 +250,7 @@ export default {
 					data.forEach(row => {
 						let carPhotos = row.carPhotos.split(',');
 						tmp.push({
-							image: (carPhotos?.[0] !== '[object Object]' && carPhotos?.[0] !== '') ? `${config.IMG_URL}${carPhotos[0]}` : '/static/img/defalut.png',
+							image: (carPhotos?.[0] !== '[object Object]' && carPhotos?.[0] !== '') ? `${config.IMG_URL}${carPhotos[0]}` : `${config.IMG_URL}/xdcloud/defalut.png`,
 							...row
 						});
 					});

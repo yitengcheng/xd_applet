@@ -6,6 +6,7 @@ import order from './modules/order.js'
 import coupons from './modules/coupons.js'
 import collection from './modules/collection.js'
 import qys from './modules/qys.js'
+import exchange from './modules/exchange.js'
 const api = {
 	...user,
 	...car,
@@ -15,5 +16,6 @@ const api = {
 	...coupons,
 	...collection,
 	...qys,
+	...exchange,
 }
 export default api

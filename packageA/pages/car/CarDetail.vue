@@ -54,11 +54,7 @@
 <script>
 	import api from '../../../api/index.js';
 	import config from '../../../common/config.js';
-	import SelectSwitch from "../../components/xuan-switch/xuan-switch.vue";
 	export default {
-		components: {
-			SelectSwitch,
-		},
 		onLoad(option) {
 			uni.getSystemInfo({
 				success: (e) => {
